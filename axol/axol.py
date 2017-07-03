@@ -1,11 +1,32 @@
 import config
 import telebot
+import random
 
 bot = telebot.TeleBot(config.token)
 
+random.seed(0)
+
+@bot.message_handler(content_types=["sticker"])
+def sticker_parsing(message): 
+    if message.from_user.username == "Deepwarrior":
+        bot.send_message(message.chat.id, "Hello creator")
+    elif message.from_user.username == "random_answer":
+        for w in config.hi_stickers[:]:
+            if message.sticker.file_id == w:
+                bot.send_message(message.chat.id, random.choice(config.hi_citrus))
+    bot.send_message(message.chat.id, message.sticker.file_id)
+
 @bot.message_handler(content_types=["text"])
-def repeat_all_messages(message): # Название функции не играет никакой роли, в принципе
-    bot.send_message(message.chat.id, message.text)
+def message_parsing(message):
+    if message.text == '/get_task':
+        task = random.choice(config.tasks)
+        bot.send_sticker(message.chat.id, task[0])
+        bot.send_message(message.chat.id, task[1])
+    if message.text == 'РњРћР›РћР”Р•Р¦!':
+        if message.reply_to_message:
+            for w in config.root[:]:
+                if message.from_user.username == w:
+                    bot.send_message(message.chat.id, "РўР« Р’Р«РџРћР›РќРР› Р—РђР”РђРќРР•!", reply_to_message_id = message.reply_to_message.message_id)
 
 if __name__ == '__main__':
     bot.polling(none_stop=True)
