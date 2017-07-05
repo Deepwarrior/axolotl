@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import config
 import telebot
 import random
@@ -10,7 +11,7 @@ active_players = []
 @bot.message_handler(content_types=["sticker"])
 def sticker_parsing(message): 
     if message.from_user.username == "sverhmassivnaya":
-        if message.sticker.file_id == CAADAgADHgAD6gKUEl9xLyPpAAFHBgI:
+        if message.sticker.file_id == 'CAADAgADHgAD6gKUEl9xLyPpAAFHBgI':
             bot.send_message(message.chat.id, "Погоди, сейчас выдам Дипа")
     elif message.from_user.username == "random_answer":
         for w in config.hi_stickers[:]:
@@ -31,14 +32,14 @@ def findplayer(id):
 @bot.message_handler(commands=["get_task"])
 def task_send(message):
     player = findplayer(message.from_user.id)
-    if time.time() -  player.last_task > seconds_in_day:
+    if time.time() -  player.last_task > config.seconds_in_day:
         player.task_status = 0
     if player.task_status == 1:
         bot.send_message(message.chat.id, "ТЫ УЖЕ ЧТО-ТО ДЕЛАЕШЬ!", reply_to_message_id = message.message_id)
     elif player.task_status == 2:
         bot.send_message(message.chat.id, "ТЫ УЖЕ НЕ СМОГ!", reply_to_message_id = message.message_id)
     elif player.task_status == 0:
-        if time.time() -  player.last_task < seconds_in_day:
+        if time.time() -  player.last_task < config.seconds_in_day:
              bot.send_message(message.chat.id, "НОВОЕ ЗАДАНИЕ БУДЕТ ЗАВТРА!", reply_to_message_id = message.message_id)
         else:
             player.task_status = 1
