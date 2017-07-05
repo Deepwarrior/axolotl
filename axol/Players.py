@@ -1,5 +1,3 @@
-import time
-
 class Player_state :
     def __init__(self, id):
         self.id = id

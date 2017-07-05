@@ -2,6 +2,8 @@
 token = '409875476:AAGHNcCsWsB4RhreN7qRKQZK8S_I90A9938'
 root = ['random_answer', 'Deepwarrior']
 
+seconds_in_day = 60 #86000
+
 hi_stickers = ['CAADAgADWwQAAm4y2AABD38IAooC_j4C', 'CAADAgADhAEAAjZ2IA7YnALZRRvJMwI']
 hi_citrus = ['/DELITAPELSIN', 'ГРЕЙПФРУКТ!', 'ОПРИВЕТ', 'ЦИТРУС!', 'Я ЗНАЮ ЭТУ ДЕВЧОНКУ!', 'ЧТО НОВЕНЬКОГО', 'СПОЙ ПЕСЕНКУ!', 'НУ МАААААМ!']
 
