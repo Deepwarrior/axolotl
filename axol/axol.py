@@ -9,8 +9,9 @@ active_players = []
 
 @bot.message_handler(content_types=["sticker"])
 def sticker_parsing(message): 
-    if message.from_user.username == "Deepwarrior":
-        bot.send_message(message.chat.id, "#РОЧИТАЛЕСЬАТ")
+    if message.from_user.username == "sverhmassivnaya":
+        if message.sticker.file_id == CAADAgADHgAD6gKUEl9xLyPpAAFHBgI:
+            bot.send_message(message.chat.id, "Погоди, сейчас выдам Дипа")
     elif message.from_user.username == "random_answer":
         for w in config.hi_stickers[:]:
             if message.sticker.file_id == w:
@@ -45,6 +46,14 @@ def task_send(message):
             task = random.choice(config.tasks)
             bot.send_sticker(message.chat.id, task[0])
             bot.send_message(message.chat.id, task[1])
+
+@bot.message_handler(commands=["help"])
+def task_send(message):
+    bot.send_message(message.chat.id, random.choice(config.help_list), reply_to_message_id = message.message_id)
+
+@bot.message_handler(commands=["donate"])
+def task_send(message):
+    bot.send_message(message.chat.id, random.choice(config.donate_list), reply_to_message_id = message.message_id)
 
 @bot.message_handler(content_types=["text"])
 def message_parsing(message):
