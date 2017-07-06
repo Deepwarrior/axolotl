@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-token = '409875476:AAGHNcCsWsB4RhreN7qRKQZK8S_I90A99'
+token = 
 root = ['random_answer', 'Deepwarrior']
 
 seconds_in_day = 60 #86000

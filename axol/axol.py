@@ -20,18 +20,18 @@ def sticker_parsing(message):
     bot.send_message(message.chat.id, message.sticker.file_id)
 
 #find and append players
-def findplayer(id):
+def findplayer(user):
      for w in active_players[:]:
-        if w.id == id:
+        if w.user.id == user.id:
             return w
-     player = Players.Player_state(id)
+     player = Players.Player_state(user)
      active_players.append(player)
      return player
 
 #collect players and give them tasks
 @bot.message_handler(commands=["get_task"])
 def task_send(message):
-    player = findplayer(message.from_user.id)
+    player = findplayer(message.from_user)
     if time.time() -  player.last_task > config.seconds_in_day:
         player.task_status = 0
     if player.task_status == 1:
@@ -48,6 +48,15 @@ def task_send(message):
             bot.send_sticker(message.chat.id, task[0])
             bot.send_message(message.chat.id, task[1])
 
+# root command. See all players with tasks.
+@bot.message_handler(commands=["all_tasks"])
+def task_send(message):
+    for w in config.root[:]:
+        if message.from_user.username == w:
+            for x in active_players[:]:
+                if x.task_status == 1:
+                   bot.send_message(message.chat.id, x.to_string()) 
+
 @bot.message_handler(commands=["help"])
 def task_send(message):
     bot.send_message(message.chat.id, random.choice(config.help_list), reply_to_message_id = message.message_id)
@@ -56,13 +65,17 @@ def task_send(message):
 def task_send(message):
     bot.send_message(message.chat.id, random.choice(config.donate_list), reply_to_message_id = message.message_id)
 
+@bot.message_handler(commands=["roll"])
+def task_send(message):
+    bot.send_message(message.chat.id, random.randint(1,6), reply_to_message_id = message.message_id)
+
 @bot.message_handler(content_types=["text"])
 def message_parsing(message):
     if message.text == 'МОЛОДЕЦ!':
         if message.reply_to_message:
             for w in config.root[:]:
                 if message.from_user.username == w:
-                    player = findplayer(message.reply_to_message.from_user.id)
+                    player = findplayer(message.reply_to_message.from_user)
                     if player.task_status == 1:
                         player.task_status = 0
                         player.task_completed += 1
@@ -71,7 +84,7 @@ def message_parsing(message):
         if message.reply_to_message:
             for w in config.root[:]:
                 if message.from_user.username == w: 
-                    player = findplayer(message.reply_to_message.from_user.id)
+                    player = findplayer(message.reply_to_message.from_user)
                     if player.task_status == 1:
                         player.task_status = 2
                         bot.send_message(message.chat.id, "ЗАДАНИЕ ПРОВАЛЕНО!", reply_to_message_id = message.reply_to_message.message_id)
