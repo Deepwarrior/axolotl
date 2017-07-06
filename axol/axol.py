@@ -57,6 +57,13 @@ def task_send(message):
                 if x.task_status == 1:
                    bot.send_message(message.chat.id, x.to_string()) 
 
+# root debug command. reset players
+@bot.message_handler(commands=["refresh"])
+def task_send(message):
+    for w in config.root[:]:
+        if message.from_user.username == w:
+            active_players[:] = []
+
 @bot.message_handler(commands=["help"])
 def task_send(message):
     bot.send_message(message.chat.id, random.choice(config.help_list), reply_to_message_id = message.message_id)
