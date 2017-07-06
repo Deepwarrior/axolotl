@@ -3,6 +3,7 @@ import config
 import telebot
 import random
 import Players
+import tasks
 import time
 
 bot = telebot.TeleBot(config.token)
@@ -47,6 +48,7 @@ def task_send(message):
             task = random.choice(config.tasks)
             bot.send_sticker(message.chat.id, task[0])
             bot.send_message(message.chat.id, task[1])
+            player.task = tasks.Task(*task)
 
 # root command. See all players with tasks.
 @bot.message_handler(commands=["all_tasks"])
