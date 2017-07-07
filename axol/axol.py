@@ -2,12 +2,24 @@
 import config
 import telebot
 import random
-import Players
+import players
 import tasks
 import time
+import json
 
 bot = telebot.TeleBot(config.token)
 active_players = []
+
+def jsonDefault(object):
+    return object.__dict__
+
+class obj(object):
+    def __init__(self, d):
+        for a, b in d.items():
+            if isinstance(b, (list, tuple)):
+               setattr(self, a, [obj(x) if isinstance(x, dict) else x for x in b])
+            else:
+               setattr(self, a, obj(b) if isinstance(b, dict) else b)
 
 @bot.message_handler(content_types=["sticker"])
 def sticker_parsing(message): 
@@ -25,7 +37,7 @@ def findplayer(user):
      for w in active_players[:]:
         if w.user.id == user.id:
             return w
-     player = Players.Player_state(user)
+     player = players.Player_state(user)
      active_players.append(player)
      return player
 
@@ -57,7 +69,7 @@ def task_send(message):
         if message.from_user.username == w:
             for x in active_players[:]:
                 if x.task_status == 1:
-                   bot.send_message(message.chat.id, x.to_string()) 
+                   bot.send_message(message.chat.id, players.to_string(x)) 
 
 # root debug command. reset players
 @bot.message_handler(commands=["refresh"])
@@ -76,6 +88,8 @@ def task_send(message):
 
 @bot.message_handler(commands=["roll"])
 def task_send(message):
+    f = open('players.json', 'w')
+    json.dump(active_players, f, default=jsonDefault)
     bot.send_message(message.chat.id, random.randint(1,6), reply_to_message_id = message.message_id)
 
 @bot.message_handler(content_types=["text"])
@@ -100,5 +114,8 @@ def message_parsing(message):
                     
 
 if __name__ == '__main__':
+    f = open('players.json', 'r')
+    active_players[:] = json.load(f, object_hook=obj)
+    f.close()
     random.seed()
     bot.polling(none_stop=True)

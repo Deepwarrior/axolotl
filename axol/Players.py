@@ -9,9 +9,9 @@ class Player_state :
         self.task_completed = 0
         self.task = None
 
-    def to_string(self):
-        res = str(self.user.first_name) + ' ' + str(self.user.last_name) + ' @' + str(self.user.username) + '\n'
-        secs = time.time() - self.last_task
-        res += 'Time: ' + str(secs // 3600) +'h ' + str(secs // 60 % 60) +'m ' + str(secs // 1 % 60) +'s\n'
-        res += self.task.text
-        return res
+def to_string(self):
+    res = str(self.user.first_name) + ' ' + str(self.user.last_name) + ' @' + str(self.user.username) + '\n'
+    secs = time.time() - self.last_task
+    res += 'Time: ' + str(secs // 3600) +'h ' + str(secs // 60 % 60) +'m ' + str(secs // 1 % 60) +'s\n'
+    res += self.task.text
+    return res

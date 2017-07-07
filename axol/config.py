@@ -3,7 +3,7 @@ token =
 root = ['random_answer', 'Deepwarrior']
 deep_chat = 150029429 #need to check it on release version
 
-seconds_in_day = 60 #86000
+seconds_in_day = 86000
 
 hi_stickers = ['CAADAgADWwQAAm4y2AABD38IAooC_j4C', 'CAADAgADhAEAAjZ2IA7YnALZRRvJMwI']
 hi_citrus = ['/DELITAPELSIN', 'ГРЕЙПФРУКТ!', 'ОПРИВЕТ', 'ЦИТРУС!', 'Я ЗНАЮ ЭТУ ДЕВЧОНКУ!', 'ЧТО НОВЕНЬКОГО', 'СПОЙ ПЕСЕНКУ!', 'НУ МАААААМ!']
