@@ -34,6 +34,18 @@ def findplayer(user):
      active_players.append(player)
      return player
 
+@bot.message_handler(content_types=["new_chat_member"])                  
+def new_member(message):
+    if message.new_chat_member.id in config.whitelist:
+        bot.send_message(message.chat.id, "ОУРА!", reply_to_message_id = message.message_id)
+    else: bot.send_message(message.chat.id, "ОНЕТ!", reply_to_message_id = message.message_id)
+
+@bot.message_handler(content_types=["left_chat_member"])                  
+def left_member(message):
+    if message.left_chat_member.id in config.whitelist:
+        bot.send_message(message.chat.id, "ОНЕТ!", reply_to_message_id = message.message_id)
+    else: bot.send_message(message.chat.id, "ОУРА!", reply_to_message_id = message.message_id)
+
 #collect players and give them tasks
 @bot.message_handler(commands=["get_task"])
 def task_send(message):
@@ -60,7 +72,7 @@ def task_send(message):
 
 # root command. See all players with tasks.
 @bot.message_handler(commands=["all_tasks"])
-def task_send(message):
+def all_tasks(message):
     for w in config.root[:]:
         if message.from_user.username == w:
             for x in active_players[:]:
@@ -69,22 +81,21 @@ def task_send(message):
 
 # root debug command. reset players
 @bot.message_handler(commands=["refresh"])
-def task_send(message):
+def refresh(message):
     for w in config.root[:]:
         if message.from_user.username == w:
             active_players[:] = []
 
 @bot.message_handler(commands=["help"])
-def task_send(message):
+def help(message):
     bot.send_message(message.chat.id, random.choice(config.help_list), reply_to_message_id = message.message_id)
-    bot.send_message(message.chat.id, message.message_id)
 
 @bot.message_handler(commands=["donate"])
-def task_send(message):
+def donate(message):
     bot.send_message(message.chat.id, random.choice(config.donate_list), reply_to_message_id = message.message_id)
 
 @bot.message_handler(commands=["backup"])
-def task_send(message):
+def backup(message):
     f = open('players.json', 'w')
     json.dump(active_players, f, default=jsonDefault)
     f.close()
@@ -153,7 +164,6 @@ def message_parsing(message):
                     if player.task_status == 1:
                         player.task_status = 2
                         bot.send_message(message.chat.id, "ЗАДАНИЕ ПРОВАЛЕНО!", reply_to_message_id = message.reply_to_message.message_id)
-                    
 
 if __name__ == '__main__':
     f = open('players.json', 'r')
