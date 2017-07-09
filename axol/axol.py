@@ -118,7 +118,10 @@ def sticker_parsing(message):
                         player.task_status = 1
                         player.task_completed -= 1
                         bot.send_message(message.chat.id, "НЕ, АДМИНАМ НЕ НРАВИТСЯ")
-    else: bot.send_message(message.chat.id, message.sticker.file_id, reply_to_message_id = message.message_id) #del
+    elif message.sticker.file_id == 'CAADAgADZgADhzHUD8vWtQEsl3zaAg':
+        bot.send_message(message.chat.id, 'УЛЕЙ')
+    if message.chat.id == debug_chat_id: 
+        bot.send_message(debug_chat_id, message.sticker.file_id, reply_to_message_id = message.message_id)
 
 @bot.message_handler(content_types=["text"])
 def message_parsing(message):
