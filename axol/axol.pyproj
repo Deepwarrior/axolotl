@@ -34,6 +34,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="chat.txt" />
     <Content Include="players.json" />
   </ItemGroup>
   <PropertyGroup>
