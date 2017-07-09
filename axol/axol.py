@@ -10,7 +10,7 @@ import json
 bot = telebot.TeleBot(config.token)
 active_players = []
 
-vip_chat_id = -1001107497089 #now it`s debug chat replace with: -1001090074308  #check.
+vip_chat_id = -1001090074308  #check.
 debug_chat_id = -1001107497089
 
 
