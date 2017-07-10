@@ -6,11 +6,12 @@ import players
 import tasks
 import time
 import json
+import os
 
-bot = telebot.TeleBot(config.token)
+bot = telebot.TeleBot(str(os.environ['TOKEN']))
 active_players = []
 
-vip_chat_id = -1001090074308  #check.
+vip_chat_id = -1001090074308
 debug_chat_id = -1001107497089
 
 
@@ -50,7 +51,7 @@ def left_member(message):
 @bot.message_handler(commands=["get_task"])
 def task_send(message):
     if message.chat.id != vip_chat_id and  message.chat.id != debug_chat_id:
-        bot.send_message(message.chat.id, "ПО ЛИЧКАМ ШУШУКАЕТЕСЬ? НЕ ТОТ ЧЯТИК!", reply_to_message_id = message.message_id) #check!!! # IMPORTANT
+        bot.send_message(message.chat.id, "ПО ЛИЧКАМ ШУШУКАЕТЕСЬ? НЕ ТОТ ЧЯТИК!", reply_to_message_id = message.message_id)
     else:
         player = findplayer(message.from_user)
         if time.time() -  player.last_task_time > config.seconds_in_day:
@@ -63,8 +64,12 @@ def task_send(message):
             if time.time() -  player.last_task_time < config.seconds_in_day:
                 bot.send_message(message.chat.id, "НОВОЕ ЗАДАНИЕ БУДЕТ ЗАВТРА!", reply_to_message_id = message.message_id)
             else:
+                f = open('players.json', 'w')
+                json.dump(active_players, f, default=jsonDefault)
+                f.close()
                 player.task_status = 1
                 player.last_task_time = time.time()
+                player.last_task_mssg = message.message_id
                 task = random.choice(config.tasks)
                 bot.send_sticker(message.chat.id, task[0])
                 bot.send_message(message.chat.id, task[1])
@@ -76,15 +81,8 @@ def all_tasks(message):
     for w in config.root[:]:
         if message.from_user.username == w:
             for x in active_players[:]:
-                if x.task_status == 1:
-                   bot.send_message(message.chat.id, players.to_string(x)) 
-
-# root debug command. reset players
-@bot.message_handler(commands=["refresh"])
-def refresh(message):
-    for w in config.root[:]:
-        if message.from_user.username == w:
-            active_players[:] = []
+                if x.task and x.task_status == 1:
+                    bot.send_message(message.chat.id, players.to_string(x)) 
 
 @bot.message_handler(commands=["help"])
 def help(message):
@@ -103,7 +101,7 @@ def backup(message):
 @bot.message_handler(content_types=["sticker"])
 def sticker_parsing(message):
     for w in active_players[:]:
-        if w.informed == False:
+        if w.task and not w.informed:
             if w.task.time:
                 if time.time() - w.last_task_time >  w.task.time * 3600:
                     bot.send_message(debug_chat_id, players.to_string(w) + '\nВремя задания истекло! Оцените!')
@@ -137,7 +135,7 @@ def sticker_parsing(message):
 @bot.message_handler(content_types=["text"])
 def message_parsing(message):
     for w in active_players[:]:
-        if w.informed == False:
+        if w.task and  not w.informed:
             if w.task.time:
                 if time.time() - w.last_task_time >  w.task.time * 3600:
                     bot.send_message(debug_chat_id, players.to_string(w) + '\nВремя задания истекло! Оцените!')

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-token = '
-root = ['random_answer', 'Deepwarrior']
+root = ['random_answer', 'Deepwarrior', 'kstera']
 deep_chat = 150029429 #need to check it on release version
 
 seconds_in_day = 86000
