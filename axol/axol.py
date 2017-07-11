@@ -1,19 +1,18 @@
 # -*- coding: utf-8 -*-
 import config
+import os
 import telebot
 import random
 import players
 import tasks
 import time
 import json
-import os
 
 bot = telebot.TeleBot(str(os.environ['TOKEN']))
 active_players = []
 
 vip_chat_id = -1001090074308
 debug_chat_id = -1001107497089
-
 
 def jsonDefault(object):
     return object.__dict__
@@ -62,7 +61,7 @@ def task_send(message):
             bot.send_message(message.chat.id, "ТЫ УЖЕ НЕ СМОГ!", reply_to_message_id = message.message_id)
         elif player.task_status == 0:
             if time.time() -  player.last_task_time < config.seconds_in_day:
-                bot.send_message(message.chat.id, "НОВОЕ ЗАДАНИЕ БУДЕТ ЗАВТРА!", reply_to_message_id = message.message_id)
+                bot.send_message(message.chat.id, "НОВОЕ ЗАДАНИЕ БУДЕТ НЕСКОРО!", reply_to_message_id = message.message_id)
             else:
                 f = open('players.json', 'w')
                 json.dump(active_players, f, default=jsonDefault)
@@ -74,6 +73,7 @@ def task_send(message):
                 bot.send_sticker(message.chat.id, task[0])
                 bot.send_message(message.chat.id, task[1])
                 player.task = tasks.Task(*task)
+                player.informed = False
 
 # root command. See all players with tasks.
 @bot.message_handler(commands=["all_tasks"])
