@@ -46,6 +46,13 @@ def left_member(message):
         bot.send_message(message.chat.id, "ОНЕТ!", reply_to_message_id = message.message_id)
     else: bot.send_message(message.chat.id, "ОУРА!", reply_to_message_id = message.message_id)
 
+@bot.message_handler(commands=["mess", "MESS"])
+def axol_voice(message):
+    if message.from_user.username in config.root:
+        text = str(message.text[6:])
+        if text:
+            bot.send_message(vip_chat_id, str(message.text[6:])) #replace with vip_chat_id
+
 #collect players and give them tasks
 @bot.message_handler(commands=["get_task"])
 def task_send(message):
