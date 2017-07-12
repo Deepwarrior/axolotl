@@ -152,8 +152,11 @@ def sticker_parsing(message):
                         player.task_status = 1
                         player.task_completed -= 1
                         bot.send_message(message.chat.id, "НЕ, АДМИНАМ НЕ НРАВИТСЯ")
-    elif message.sticker.file_id == 'CAADAgADZgADhzHUD8vWtQEsl3zaAg':
+    elif message.sticker.file_id in ['CAADAgADZgADhzHUD8vWtQEsl3zaAg', 'CAADAgADCQADO9HBD09qppDfqW_HAg']:
         bot.send_message(message.chat.id, 'УЛЕЙ')
+    elif message.sticker.file_id == 'CAADAgADHQADO9HBD8DTsJ6PcoXXAg':
+        if message.from_user.id == 264360251:
+            bot.send_message(message.chat.id, 'О, РИНЕЙКА.\nЗАКИДЫВАТЬ МОЛНИЯМИ!')
     if message.chat.id == debug_chat_id: 
         bot.send_message(debug_chat_id, message.sticker.file_id, reply_to_message_id = message.message_id)
 
@@ -170,7 +173,7 @@ def message_parsing(message):
                     bot.send_message(debug_chat_id, players.to_string(w) + '\nВсе сообщения написаны! Оцените!')
                     w.informed = True
 
-    if message.text == 'МОЛОДЕЦ!':
+    if message.text in ['МОЛОДЕЦ!', 'ЛАДНО, ЗАСЧИТАЮ']:
         if message.reply_to_message:
             for w in config.root[:]:
                 if message.from_user.username == w:
@@ -179,7 +182,7 @@ def message_parsing(message):
                         player.task_status = 0
                         player.task_completed += 1
                         bot.send_message(message.chat.id, "ЗАДАНИЕ ВЫПОЛНЕНО!\nВСЕГО СДЕЛАНО " + str(player.task_completed) + " ЗАДАНИЙ", reply_to_message_id = message.reply_to_message.message_id)
-    elif message.text == 'ТЫ ДУРА?':
+    elif message.text in ['ТЫ ДУРА?', 'ПРОИГРАЛ']:
         if message.reply_to_message:
             for w in config.root[:]:
                 if message.from_user.username == w: 
