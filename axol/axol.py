@@ -53,6 +53,24 @@ def axol_voice(message):
         if text:
             bot.send_message(vip_chat_id, str(message.text[6:])) #replace with vip_chat_id
 
+@bot.message_handler(commands=["my_task"])
+def task_status(message):
+    player = findplayer(message.from_user)
+    answer = ""
+    if player.task_status == 1:
+        if player.task:
+            answer += player.task.text + "\n"
+            if player.task.time:
+                tm = player.task.time * 60 - ((time.time() - player.last_task_time)// 60)
+                answer += "Осталось времени: " + str('{:.0f}'.format(tm // 60)) + " часов и " + str('{:.0f}'.format(tm % 60)) + " минут\n"
+#            if player.task.messages:
+#                answer += "Осталось около " + str(player.last_task_mssg + player.task.messages - message.message_id) + " сообщений чата.\n"
+    answer += "Всего сделано: " + str(player.task_completed) +".\n"
+    tm = config.seconds_in_day // 60 - ((time.time() - player.last_task_time)// 60)
+    if tm > 0:
+        answer += "До следующего задания: " + str('{:.0f}'.format(tm // 60)) + " часов и " + str('{:.0f}'.format(tm % 60)) + " минут\n"
+    bot.send_message(message.chat.id, answer)
+
 #collect players and give them tasks
 @bot.message_handler(commands=["get_task"])
 def task_send(message):
