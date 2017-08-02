@@ -62,7 +62,9 @@ def task_status(message):
             answer += player.task.text + "\n"
             if player.task.time:
                 tm = player.task.time * 60 - ((time.time() - player.last_task_time)// 60)
-                answer += "Осталось времени: " + str('{:.0f}'.format(tm // 60)) + " часов и " + str('{:.0f}'.format(tm % 60)) + " минут\n"
+                if tm > 0:
+                    answer += "Осталось времени: " + str('{:.0f}'.format(tm // 60)) + " часов и " + str('{:.0f}'.format(tm % 60)) + " минут\n"
+                else: answer += "ВЫПОЛНЯЙ ПОКА НЕ ЗАСЧИТАЮТ!\n"
 #            if player.task.messages:
 #                answer += "Осталось около " + str(player.last_task_mssg + player.task.messages - message.message_id) + " сообщений чата.\n"
     answer += "Всего сделано: " + str(player.task_completed) +".\n"
@@ -73,7 +75,7 @@ def task_status(message):
 
 #collect players and give them tasks
 @bot.message_handler(commands=["get_task"])
-def task_send(message):
+def get_task(message):
     if message.chat.id != vip_chat_id and  message.chat.id != debug_chat_id:
         bot.send_message(message.chat.id, "ПО ЛИЧКАМ ШУШУКАЕТЕСЬ? НЕ ТОТ ЧЯТИК!", reply_to_message_id = message.message_id)
     else:
@@ -145,7 +147,7 @@ def sticker_parsing(message):
                 bot.send_message(message.chat.id, random.choice(config.hi_citrus), reply_to_message_id = message.message_id)
     if message.sticker.file_id == 'CAADAgADpgEAAmDrzgNSIT8rlE3K0AI':
         for w in config.root[:]:
-            if message.from_user.username == w:
+            if message.from_user.username == w and message.reply_to_message:
                 player = findplayer(message.reply_to_message.from_user)
                 if player.task:
                     if player.task_status == 0:
@@ -173,7 +175,7 @@ def message_parsing(message):
                     bot.send_message(debug_chat_id, players.to_string(w) + '\nВсе сообщения написаны! Оцените!')
                     w.informed = True
 
-    if message.text in ['МОЛОДЕЦ!', 'ЛАДНО, ЗАСЧИТАЮ']:
+    if message.text in ['МОЛОДЕЦ!', 'ЛАДНО, ЗАСЧИТАЮ', 'MOLODETC!', 'МЛДЦ!', 'ЦЕДОЛОМ']:
         if message.reply_to_message:
             for w in config.root[:]:
                 if message.from_user.username == w:
@@ -182,6 +184,9 @@ def message_parsing(message):
                         player.task_status = 0
                         player.task_completed += 1
                         bot.send_message(message.chat.id, "ЗАДАНИЕ ВЫПОЛНЕНО!\nВСЕГО СДЕЛАНО " + str(player.task_completed) + " ЗАДАНИЙ", reply_to_message_id = message.reply_to_message.message_id)
+                        if player.task_completed == 20:
+                            stick =  random.choice(config.bonus_20)
+                            bot.send_sticker(player.user.id, stick)
     elif message.text in ['ТЫ ДУРА?', 'ПРОИГРАЛ']:
         if message.reply_to_message:
             for w in config.root[:]:
