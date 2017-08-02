@@ -186,6 +186,7 @@ def message_parsing(message):
                         bot.send_message(message.chat.id, "ЗАДАНИЕ ВЫПОЛНЕНО!\nВСЕГО СДЕЛАНО " + str(player.task_completed) + " ЗАДАНИЙ", reply_to_message_id = message.reply_to_message.message_id)
                         if player.task_completed == 20:
                             stick =  random.choice(config.bonus_20)
+                            bot.send_message(player.user.id, "ПОЗДРАВЛЯЮ! \n МНОГО ЗАДАНИЙ УЖЕ СДЕЛАНО, НО МНОГО БУДЕТ И ВПЕРЕДИ \n А ПОКА ТЫ ВЫИГРАЛ СЕКРЕТНЫЙ ДУРНИРНЫЙ СТИКЕР, ИСПОЛЬЗУЙ ЕГО С УМОМ")
                             bot.send_sticker(player.user.id, stick)
     elif message.text in ['ТЫ ДУРА?', 'ПРОИГРАЛ']:
         if message.reply_to_message:
@@ -195,6 +196,10 @@ def message_parsing(message):
                     if player.task_status == 1:
                         player.task_status = 2
                         bot.send_message(message.chat.id, "ЗАДАНИЕ ПРОВАЛЕНО!", reply_to_message_id = message.reply_to_message.message_id)
+    elif message.text.upper() in ['КОГО?', 'КОГО']:
+        bot.send_message(message.chat.id, "МИРАКЛЮ", reply_to_message_id = message.message_id)
+    elif message.text == "МИРАКЛЮ":
+        bot.send_message(message.chat.id, "КОГО?", reply_to_message_id = message.message_id)
 
 if __name__ == '__main__':
     f = open('players.json', 'r')
