@@ -175,27 +175,29 @@ def message_parsing(message):
                     bot.send_message(debug_chat_id, players.to_string(w) + '\nВсе сообщения написаны! Оцените!')
                     w.informed = True
 
-    if message.text in ['МОЛОДЕЦ!', 'ЛАДНО, ЗАСЧИТАЮ', 'MOLODETC!', 'МЛДЦ!', 'ЦЕДОЛОМ']:
-        if message.reply_to_message:
-            for w in config.root[:]:
-                if message.from_user.username == w:
-                    player = findplayer(message.reply_to_message.from_user)
-                    if player.task_status == 1:
-                        player.task_status = 0
-                        player.task_completed += 1
-                        bot.send_message(message.chat.id, "ЗАДАНИЕ ВЫПОЛНЕНО!\nВСЕГО СДЕЛАНО " + str(player.task_completed) + " ЗАДАНИЙ", reply_to_message_id = message.reply_to_message.message_id)
-                        if player.task_completed == 20:
-                            stick =  random.choice(config.bonus_20)
-                            bot.send_message(player.user.id, "ПОЗДРАВЛЯЮ! \n МНОГО ЗАДАНИЙ УЖЕ СДЕЛАНО, НО МНОГО БУДЕТ И ВПЕРЕДИ \n А ПОКА ТЫ ВЫИГРАЛ СЕКРЕТНЫЙ ДУРНИРНЫЙ СТИКЕР, ИСПОЛЬЗУЙ ЕГО С УМОМ")
-                            bot.send_sticker(player.user.id, stick)
-    elif message.text in ['ТЫ ДУРА?', 'ПРОИГРАЛ']:
-        if message.reply_to_message:
-            for w in config.root[:]:
-                if message.from_user.username == w: 
-                    player = findplayer(message.reply_to_message.from_user)
-                    if player.task_status == 1:
-                        player.task_status = 2
-                        bot.send_message(message.chat.id, "ЗАДАНИЕ ПРОВАЛЕНО!", reply_to_message_id = message.reply_to_message.message_id)
+    if message.text in ['МОЛОДЕЦ!', 'ЛАДНО, ЗАСЧИТАЮ', 'MOLODETC!', 'МЛДЦ!', 'ЦЕДОЛОМ'] and message.reply_to_message and message.from_user.username in config.root[:]:
+         player = findplayer(message.reply_to_message.from_user)
+         if player.task_status == 1:
+             player.task_status = 0
+             player.task_completed += 1
+             bot.send_message(message.chat.id, "ЗАДАНИЕ ВЫПОЛНЕНО!\nВСЕГО СДЕЛАНО " + str(player.task_completed) + " ЗАДАНИЙ", reply_to_message_id = message.reply_to_message.message_id)
+             if player.task_completed == 20:
+                 stick =  random.choice(config.bonus_20)
+                 bot.send_message(player.user.id, "ПОЗДРАВЛЯЮ! \n МНОГО ЗАДАНИЙ УЖЕ СДЕЛАНО, НО МНОГО БУДЕТ И ВПЕРЕДИ \n А ПОКА ТЫ ВЫИГРАЛ СЕКРЕТНЫЙ ДУРНИРНЫЙ СТИКЕР, ИСПОЛЬЗУЙ ЕГО С УМОМ")
+                 bot.send_sticker(player.user.id, stick)
+    elif message.text == 'КЛАЦ!' and message.reply_to_message and message.from_user.username in config.root[:]:
+        player = findplayer(message.reply_to_message.from_user)
+        player.task_completed += 1
+        bot.send_message(message.chat.id, "ДОПОЛНИТЕЛЬНОЕ ЗАДАНИЕ ВЫПОЛНЕНО!", reply_to_message_id = message.reply_to_message.message_id)
+        if player.task_completed == 20:
+            stick =  random.choice(config.bonus_20)
+            bot.send_message(player.user.id, "ПОЗДРАВЛЯЮ! \n МНОГО ЗАДАНИЙ УЖЕ СДЕЛАНО, НО МНОГО БУДЕТ И ВПЕРЕДИ \n А ПОКА ТЫ ВЫИГРАЛ СЕКРЕТНЫЙ ДУРНИРНЫЙ СТИКЕР, ИСПОЛЬЗУЙ ЕГО С УМОМ")
+            bot.send_sticker(player.user.id, stick)
+    elif message.text in ['ТЫ ДУРА?', 'ПРОИГРАЛ'] and message.reply_to_message and message.from_user.username in config.root[:]:
+        player = findplayer(message.reply_to_message.from_user)
+        if player.task_status == 1:
+            player.task_status = 2
+            bot.send_message(message.chat.id, "ЗАДАНИЕ ПРОВАЛЕНО!", reply_to_message_id = message.reply_to_message.message_id)
     elif message.text.upper() in ['КОГО?', 'КОГО']:
         bot.send_message(message.chat.id, "МИРАКЛЮ", reply_to_message_id = message.message_id)
     elif message.text == "МИРАКЛЮ":
