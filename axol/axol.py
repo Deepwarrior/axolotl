@@ -64,7 +64,7 @@ def task_status(message):
                 tm = player.task.time * 60 - ((time.time() - player.last_task_time)// 60)
                 if tm > 0:
                     answer += "Осталось времени: " + str('{:.0f}'.format(tm // 60)) + " часов и " + str('{:.0f}'.format(tm % 60)) + " минут\n"
-                else: answer += "ВЫПОЛНЯЙ ПОКА НЕ ЗАСЧИТАЮТ!\n"
+                else: answer += "ВЫПОЛНЯЙ, ПОКА НЕ ЗАСЧИТАЮТ!\n"
 #            if player.task.messages:
 #                answer += "Осталось около " + str(player.last_task_mssg + player.task.messages - message.message_id) + " сообщений чата.\n"
     answer += "Всего сделано: " + str(player.task_completed) +".\n"
@@ -200,7 +200,7 @@ def message_parsing(message):
             bot.send_message(message.chat.id, "ЗАДАНИЕ ПРОВАЛЕНО!", reply_to_message_id = message.reply_to_message.message_id)
     elif message.text.upper() in ['КОГО?', 'КОГО']:
         bot.send_message(message.chat.id, "МИРАКЛЮ", reply_to_message_id = message.message_id)
-    elif message.text == "МИРАКЛЮ":
+    elif message.text.upper() in ["МИРАКЛЮ", "МИРАКЛЮ."]:
         bot.send_message(message.chat.id, "КОГО?", reply_to_message_id = message.message_id)
 
 if __name__ == '__main__':
