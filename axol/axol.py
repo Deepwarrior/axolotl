@@ -54,7 +54,7 @@ def axol_voice(message):
             bot.send_message(vip_chat_id, str(message.text[6:]))
 
 @bot.message_handler(commands=["panteon"])
-def axol_voice(message):
+def panteon(message):
     answer = ""
     top = []
     max = 0
@@ -68,6 +68,10 @@ def axol_voice(message):
                 top.append(w)
                 break;
     bot.send_message(message.chat.id, answer)
+
+@bot.message_handler(commands=["top_pozora"])
+def pozor(message):
+    bot.send_message(message.chat.id, "ТОП ПОЗОРА: \n1. Перпендикулярный")
 
 @bot.message_handler(commands=["my_task"])
 def task_status(message):
