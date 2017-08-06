@@ -51,7 +51,23 @@ def axol_voice(message):
     if message.from_user.username in config.root:
         text = str(message.text[6:])
         if text:
-            bot.send_message(vip_chat_id, str(message.text[6:])) #replace with vip_chat_id
+            bot.send_message(vip_chat_id, str(message.text[6:]))
+
+@bot.message_handler(commands=["panteon"])
+def axol_voice(message):
+    answer = ""
+    top = []
+    max = 0
+    for i in range(1, 10):
+        for w in active_players[:]:
+            if w not in top and w.task_completed >= max:
+                max = w.task_completed;
+        for w in active_players[:]:
+            if w not in top and w.task_completed == max:
+                answer += str(i) + '.\t' + str(w.user.first_name) + '\t' + str(w.user.last_name) + '\t@' + str(w.user.username) + '.\tСделано:' + str(max) + '\n'
+                top.append(w)
+                break;
+    bot.send_message(message.chat.id, answer)
 
 @bot.message_handler(commands=["my_task"])
 def task_status(message):
