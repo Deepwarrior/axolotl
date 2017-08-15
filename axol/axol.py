@@ -57,36 +57,37 @@ def axol_voice(message):
 def panteon(message):
     answer = ""
     top = []
-    max = 0
     for i in range(1, 10):
+        max = 0
         for w in active_players[:]:
             if w not in top and w.task_completed >= max:
                 max = w.task_completed;
         for w in active_players[:]:
             if w not in top and w.task_completed == max:
-                answer += str(i) + '.\t' + str(w.user.first_name) + '\t' + str(w.user.last_name) + '\t@' + str(w.user.username) + '.\tСделано:' + str(max) + '\n'
+                answer += str(i) + '.\t'
+                if w.user.first_name: answer += str(w.user.first_name) + '\t' 
+                if w.user.last_name: answer += str(w.user.last_name) + '\t'
+                if w.user.username: answer += '@' + str(w.user.username) + '.\t'
+                answer += 'Сделано:' + str(max) + '\n'
                 top.append(w)
                 break;
     bot.send_message(message.chat.id, answer)
 
 @bot.message_handler(commands=["top_pozora"])
 def pozor(message):
-    bot.send_message(message.chat.id, "ТОП ПОЗОРА: \n1. Перпендикулярный")
+    bot.send_message(message.chat.id, "ТОП ПОЗОРА: \n1. Перпендикулярный\n2. ХАМПЕР")
 
 @bot.message_handler(commands=["my_task"])
 def task_status(message):
     player = findplayer(message.from_user)
     answer = ""
-    if player.task_status == 1:
-        if player.task:
-            answer += player.task.text + "\n"
-            if player.task.time:
-                tm = player.task.time * 60 - ((time.time() - player.last_task_time)// 60)
-                if tm > 0:
-                    answer += "Осталось времени: " + str('{:.0f}'.format(tm // 60)) + " часов и " + str('{:.0f}'.format(tm % 60)) + " минут\n"
-                else: answer += "ВЫПОЛНЯЙ, ПОКА НЕ ЗАСЧИТАЮТ!\n"
-#            if player.task.messages:
-#                answer += "Осталось около " + str(player.last_task_mssg + player.task.messages - message.message_id) + " сообщений чата.\n"
+    if player.task_status == 1 and player.task:
+        answer += player.task.text + "\n"
+        if player.task.time:
+            tm = player.task.time * 60 - ((time.time() - player.last_task_time)// 60)
+            if tm > 0:
+                answer += "Осталось времени: " + str('{:.0f}'.format(tm // 60)) + " часов и " + str('{:.0f}'.format(tm % 60)) + " минут\n"
+            else: answer += "ВЫПОЛНЯЙ, ПОКА НЕ ЗАСЧИТАЮТ!\n"
     answer += "Всего сделано: " + str(player.task_completed) +".\n"
     tm = config.seconds_in_day // 60 - ((time.time() - player.last_task_time)// 60)
     if tm > 0:
@@ -110,17 +111,19 @@ def get_task(message):
             if time.time() -  player.last_task_time < config.seconds_in_day:
                 bot.send_message(message.chat.id, "НОВОЕ ЗАДАНИЕ БУДЕТ НЕСКОРО!", reply_to_message_id = message.message_id)
             else:
-                f = open('players.json', 'w')
-                json.dump(active_players, f, default=jsonDefault)
-                f.close()
                 player.task_status = 1
                 player.last_task_time = time.time()
                 player.last_task_mssg = message.message_id
-                task = random.choice(config.tasks)
+                rand = random.randint(1, 500)
+                if rand == 237: task = ['CAADAgADaQADP_vRD78igQttLbufAg', 'КОЛДУЮ, КОЛДУЮ... ВЖУХ! И ТЫ ПИДОР ДНЯ.', 0, 0]
+                else: task = random.choice(config.tasks)
                 bot.send_sticker(message.chat.id, task[0])
                 bot.send_message(message.chat.id, task[1])
                 player.task = tasks.Task(*task)
                 player.informed = False
+                f = open('players.json', 'w')
+                json.dump(active_players, f, default=jsonDefault)
+                f.close()
 
 # root command. See all players with tasks.
 @bot.message_handler(commands=["all_tasks"])
@@ -228,4 +231,10 @@ if __name__ == '__main__':
     active_players[:] = json.load(f, object_hook=obj)
     f.close()
     random.seed()
-    bot.polling(none_stop=True)
+    while True:
+        try:
+            bot.polling(none_stop=True)
+        except ReadTimeout: 
+            print("die?")
+        finally:
+            backup()
