@@ -82,7 +82,8 @@ def task_status(message):
     player = findplayer(message.from_user)
     answer = ""
     if player.task_status == 1 and player.task:
-        answer += player.task.text + "\n"
+        if player.task_completed < 40: 
+            answer += player.task.text + "\n"
         if player.task.time:
             tm = player.task.time * 60 - ((time.time() - player.last_task_time)// 60)
             if tm > 0:
@@ -118,7 +119,10 @@ def get_task(message):
                 if rand == 237: task = ['CAADAgADaQADP_vRD78igQttLbufAg', 'КОЛДУЮ, КОЛДУЮ... ВЖУХ! И ТЫ ПИДОР ДНЯ.', 0, 0]
                 else: task = random.choice(config.tasks)
                 bot.send_sticker(message.chat.id, task[0])
-                bot.send_message(message.chat.id, task[1])
+                if player.task_completed < 40:
+                    bot.send_message(message.chat.id, task[1])
+                else:
+                    bot.send_message(message.chat.id, "ТЫ УЖЕ БОЛЬШОЙ, САМ РАЗБРЕШЬСЯ")
                 player.task = tasks.Task(*task)
                 player.informed = False
                 f = open('players.json', 'w')
@@ -216,7 +220,7 @@ def message_parsing(message):
             stick =  random.choice(config.bonus_20)
             bot.send_message(player.user.id, "ПОЗДРАВЛЯЮ! \n МНОГО ЗАДАНИЙ УЖЕ СДЕЛАНО, НО МНОГО БУДЕТ И ВПЕРЕДИ \n А ПОКА ТЫ ВЫИГРАЛ СЕКРЕТНЫЙ ДУРНИРНЫЙ СТИКЕР, ИСПОЛЬЗУЙ ЕГО С УМОМ")
             bot.send_sticker(player.user.id, stick)
-    elif message.text in ['ТЫ ДУРА?', 'ПРОИГРАЛ'] and message.reply_to_message and message.from_user.username in config.root[:]:
+    elif message.text in ['ТЫ ДУРА?', 'ПРОИГРАЛ', 'БАЯЗИД.'] and message.reply_to_message and message.from_user.username in config.root[:]:
         player = findplayer(message.reply_to_message.from_user)
         if player.task_status == 1:
             player.task_status = 2
