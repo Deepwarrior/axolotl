@@ -53,6 +53,19 @@ def axol_voice(message):
         if text:
             bot.send_message(vip_chat_id, str(message.text[6:]))
 
+@bot.message_handler(commands=["on"])
+def messages_on(message):
+    if message.from_user.id == message.chat.id:
+        player = findplayer(message.from_user)
+        player.mess_sended = False
+        player.mess_from_bot = True
+
+@bot.message_handler(commands=["off"])
+def messages_on(message):
+    if message.from_user.id == message.chat.id:
+        player = findplayer(message.from_user)
+        player.mess_from_bot = False
+
 @bot.message_handler(commands=["panteon"])
 def panteon(message):
     answer = ""
@@ -75,7 +88,13 @@ def panteon(message):
 
 @bot.message_handler(commands=["top_pozora"])
 def pozor(message):
-    bot.send_message(message.chat.id, "ТОП ПОЗОРА: \n1. Перпендикулярный\n2. ХАМПЕР")
+    bot.send_message(message.chat.id, "ТОП ПОЗОРА: \n1. ХАМПЕР\n2.САРАСТИ")
+
+@bot.message_handler(commands=["top_sarasti"])
+def sarasti(message):
+    bot.send_message(message.chat.id, "ТОП САРАСТИ: \n1. САРАСТИ")
+
+
 
 @bot.message_handler(commands=["my_task"])
 def task_status(message):
@@ -125,6 +144,7 @@ def get_task(message):
                     bot.send_message(message.chat.id, "ТЫ УЖЕ БОЛЬШОЙ, САМ РАЗБРЕШЬСЯ")
                 player.task = tasks.Task(*task)
                 player.informed = False
+                player.mess_sended = False
                 f = open('players.json', 'w')
                 json.dump(active_players, f, default=jsonDefault)
                 f.close()
@@ -201,6 +221,9 @@ def message_parsing(message):
                 if message.message_id - w.last_task_mssg >  w.task.messages:
                     bot.send_message(debug_chat_id, players.to_string(w) + '\nВсе сообщения написаны! Оцените!')
                     w.informed = True
+        if w.mess_from_bot and not w.mess_sended and time.time() -  w.last_task_time > config.seconds_in_day:
+            bot.send_message(player.user.id, "МОЖНО ВЗЯТЬ И СДЕЛАТЬ НОВОЕ ЗАДАНИЕ!")
+            w.mess_sended = True
 
     if message.text in ['МОЛОДЕЦ!', 'ЛАДНО, ЗАСЧИТАЮ', 'MOLODETC!', 'МЛДЦ!', 'ЦЕДОЛОМ'] and message.reply_to_message and message.from_user.username in config.root[:]:
          player = findplayer(message.reply_to_message.from_user)
@@ -208,6 +231,8 @@ def message_parsing(message):
              player.task_status = 0
              player.task_completed += 1
              bot.send_message(message.chat.id, "ЗАДАНИЕ ВЫПОЛНЕНО!\nВСЕГО СДЕЛАНО " + str(player.task_completed) + " ЗАДАНИЙ", reply_to_message_id = message.reply_to_message.message_id)
+             if player.mess_from_bot:
+                 bot.send_message(player.user.id, "ХЭЭЭЙ! ТЕБЕ ЗАСЧИТАЛИ!")
              if player.task_completed == 20:
                  stick =  random.choice(config.bonus_20)
                  bot.send_message(player.user.id, "ПОЗДРАВЛЯЮ! \n МНОГО ЗАДАНИЙ УЖЕ СДЕЛАНО, НО МНОГО БУДЕТ И ВПЕРЕДИ \n А ПОКА ТЫ ВЫИГРАЛ СЕКРЕТНЫЙ ДУРНИРНЫЙ СТИКЕР, ИСПОЛЬЗУЙ ЕГО С УМОМ")
@@ -225,6 +250,8 @@ def message_parsing(message):
         if player.task_status == 1:
             player.task_status = 2
             bot.send_message(message.chat.id, "ЗАДАНИЕ ПРОВАЛЕНО!", reply_to_message_id = message.reply_to_message.message_id)
+            if player.mess_from_bot:
+                 bot.send_message(player.user.id, "К СОЖАЛЕНИЮ, ЗАДАНИЕ ПРОВАЛЕНО.")
     elif message.text.upper() in ['КОГО?', 'КОГО']:
         bot.send_message(message.chat.id, "МИРАКЛЮ", reply_to_message_id = message.message_id)
     elif message.text.upper() in ["МИРАКЛЮ", "МИРАКЛЮ."]:
@@ -241,4 +268,4 @@ if __name__ == '__main__':
         except ReadTimeout: 
             print("die?")
         finally:
-            backup()
+            backup(None)

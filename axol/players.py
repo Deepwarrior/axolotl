@@ -10,6 +10,8 @@ class Player_state :
         self.task_completed = 0
         self.task = None
         self.informed = False
+        self.mess_from_bot = False
+        self.mess_sended = False
 
 def to_string(self):
     res = str(self.user.first_name) + ' ' + str(self.user.last_name) + ' @' + str(self.user.username) + '\n'
