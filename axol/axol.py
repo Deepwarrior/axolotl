@@ -60,6 +60,7 @@ def messages_on(message):
         player = findplayer(message.from_user)
         player.mess_sended = False
         player.mess_from_bot = True
+        bot.send_message(message.chat.id, "ПОЛУЧИЛОСЬ")
 
 
 @bot.message_handler(commands=["off"])
@@ -67,6 +68,7 @@ def messages_on(message):
     if message.from_user.id == message.chat.id:
         player = findplayer(message.from_user)
         player.mess_from_bot = False
+        bot.send_message(message.chat.id, "ВЕРНИ КАК БЫЛО")
 
 
 @bot.message_handler(commands=["panteon"])
@@ -76,10 +78,10 @@ def panteon(message):
     for i in range(1, 10):
         max_tasks = 0
         for player in active_players:
-            if player not in top and player.task_completed >= max_tasks:
-                max_tasks = player.task_completed
+            if player not in top and player.task_completed % 50 >= max_tasks:
+                max_tasks = player.task_completed % 50
         for player in active_players:
-            if player not in top and player.task_completed == max_tasks:
+            if player not in top and player.task_completed % 50 == max_tasks:
                 answer += str(i) + '.\t'
                 if player.user.first_name:
                     answer += str(player.user.first_name) + '\t'
@@ -115,7 +117,7 @@ def task_status(message):
             if tm > 0:
                 answer += "Осталось времени: " + str('{:.0f}'.format(tm // 60)) + " часов и " + str('{:.0f}'.format(tm % 60)) + " минут\n"
             else: answer += "ВЫПОЛНЯЙ, ПОКА НЕ ЗАСЧИТАЮТ!\n"
-    answer += "Всего сделано: " + str(player.task_completed) + ".\n"
+    answer += "Всего сделано: " + str(player.task_completed % 50) + ".\n"
     tm = config.seconds_in_day // 60 - ((time.time() - player.last_task_time) // 60)
     if tm > 0:
         answer += "До следующего задания: " + str('{:.0f}'.format(tm // 60)) + " часов и " + str('{:.0f}'.format(tm % 60)) + " минут\n"
@@ -151,7 +153,8 @@ def get_task(message):
                 if player.task_completed < 40:
                     bot.send_message(message.chat.id, task[1])
                 else:
-                    bot.send_message(message.chat.id, "ТЫ УЖЕ БОЛЬШОЙ, САМ РАЗБРЕШЬСЯ")
+                    text = random.choice(["ТЫ УЖЕ БОЛЬШОЙ, САМ РАЗБЕРЕШЬСЯ", "<СПОЙЛЕРЫ>", "Я ПОЗАБЫЛ ВСЕ СЛОВА", "ЗДЕСЬ БЫЛО ЧТО-ТО ДЛИННОЕ ЕЩЁ"])
+                    bot.send_message(message.chat.id, text)
                 player.task = tasks.Task(*task)
                 player.informed = False
                 player.mess_sended = False
@@ -241,13 +244,15 @@ def message_parsing(message):
         if player.task_status == 1:
             player.task_status = 0
             player.task_completed += 1
-            bot.send_message(message.chat.id, "ЗАДАНИЕ ВЫПОЛНЕНО!\nВСЕГО СДЕЛАНО " + str(player.task_completed) + " ЗАДАНИЙ", reply_to_message_id=message.reply_to_message.message_id)
+            bot.send_message(message.chat.id, "ЗАДАНИЕ ВЫПОЛНЕНО!\nВСЕГО СДЕЛАНО " + str(player.task_completed % 50) + " ЗАДАНИЙ", reply_to_message_id=message.reply_to_message.message_id)
             if player.mess_from_bot:
                 bot.send_message(player.user.id, "ХЭЭЭЙ! ТЕБЕ ЗАСЧИТАЛИ!")
             if player.task_completed == 20:
                 stick = random.choice(config.bonus_20)
                 bot.send_message(player.user.id, "ПОЗДРАВЛЯЮ! \n МНОГО ЗАДАНИЙ УЖЕ СДЕЛАНО, НО МНОГО БУДЕТ И ВПЕРЕДИ \n А ПОКА ТЫ ВЫИГРАЛ СЕКРЕТНЫЙ ДУРНИРНЫЙ СТИКЕР, ИСПОЛЬЗУЙ ЕГО С УМОМ")
                 bot.send_sticker(player.user.id, stick)
+            elif player.task_completed == 50:
+                bot.send_message(player.user.id, "АЗАЗА, ТЫ УМИР")
     elif message.text == 'КЛАЦ!' and message.reply_to_message and message.from_user.username in config.root:
         player = findplayer(message.reply_to_message.from_user)
         player.task_completed += 1
