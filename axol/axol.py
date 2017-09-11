@@ -236,7 +236,7 @@ def message_parsing(message):
                     bot.send_message(debug_chat_id, players.to_string(player) + '\nВсе сообщения написаны! Оцените!')
                     player.informed = True
         if player.mess_from_bot and not player.mess_sended and time.time() - player.last_task_time > config.seconds_in_day:
-            #bot.send_message(player.user.id, "МОЖНО ВЗЯТЬ И СДЕЛАТЬ НОВОЕ ЗАДАНИЕ!")
+            bot.send_message(player.user.id, "МОЖНО ВЗЯТЬ И СДЕЛАТЬ НОВОЕ ЗАДАНИЕ!")
             player.mess_sended = True
 
     if message.text in ['МОЛОДЕЦ!', 'ЛАДНО, ЗАСЧИТАЮ', 'MOLODETC!', 'МЛДЦ!', 'ЦЕДОЛОМ'] and message.reply_to_message and message.from_user.username in config.root:
