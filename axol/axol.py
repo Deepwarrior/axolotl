@@ -272,8 +272,12 @@ def message_parsing(message):
                     player.informed = True
                     bot.send_message(debug_chat_id, players.to_string(player) + '\nВсе сообщения написаны! Оцените!')
         if player.mess_from_bot and not player.mess_sended and time.time() - player.last_task_time > config.seconds_in_day:
-            player.mess_sended = True
-            bot.send_message(player.user.id, "МОЖНО ВЗЯТЬ И СДЕЛАТЬ НОВОЕ ЗАДАНИЕ!")
+            try:
+                bot.send_message(player.user.id, "МОЖНО ВЗЯТЬ И СДЕЛАТЬ НОВОЕ ЗАДАНИЕ!")
+            except telebot.apihelper.ApiException:
+                player.mess_from_bot = False
+            finally:
+                player.mess_sended = True
 
 
     if message.text in ['МОЛОДЕЦ!', 'ЛАДНО, ЗАСЧИТАЮ', 'MOLODETC!', 'МЛДЦ!', 'ЦЕДОЛОМ'] and message.reply_to_message and message.from_user.username in config.root:
