@@ -12,7 +12,7 @@ from requests.exceptions import ReadTimeout
 bot = telebot.TeleBot(str(os.environ['TOKEN']))
 active_players = []
 
-vip_chat_id = -1001090074308
+vip_chat_id = -1001145739506
 debug_chat_id = -1001107497089
 
 
@@ -51,7 +51,43 @@ def axol_voice(message):
     if message.from_user.username in config.root:
         text = str(message.text[6:])
         if text:
-            bot.send_message(vip_chat_id, str(message.text[6:]))
+            bot.send_message(vip_chat_id, text)
+
+
+@bot.message_handler(commands=["send_deep"])
+def send_deep(message):
+    text = str(message.text[10:])
+    text = ': ' + text
+    if message.from_user.last_name:
+        text = message.from_user.last_name + text
+    if message.from_user.first_name:
+        text = message.from_user.first_name + ' ' + text
+    if text:
+        bot.send_message(config.deep_chat, text)
+
+
+@bot.message_handler(commands=["send_uhi"])
+def send_uhi(message):
+    text = str(message.text[9:])
+    text = ': ' + text
+    if message.from_user.last_name:
+        text = message.from_user.last_name + text
+    if message.from_user.first_name:
+        text = message.from_user.first_name + ' ' + text
+    if text:
+        bot.send_message(287819651, text)
+
+
+@bot.message_handler(commands=["send"])
+def send(message):
+    text = str(message.text[6:])
+    text = ': ' + text
+    if message.from_user.last_name:
+        text = message.from_user.last_name + text
+    if message.from_user.first_name:
+        text = message.from_user.first_name + ' ' + text
+    if text:
+        bot.send_message(debug_chat_id, text)
 
 
 @bot.message_handler(commands=["on"])
@@ -64,7 +100,7 @@ def messages_on(message):
 
 
 @bot.message_handler(commands=["off"])
-def messages_on(message):
+def messages_off(message):
     if message.from_user.id == message.chat.id:
         player = findplayer(message.from_user)
         player.mess_from_bot = False
@@ -131,7 +167,7 @@ def get_task(message):
         bot.send_message(message.chat.id, "ПО ЛИЧКАМ ШУШУКАЕТЕСЬ? НЕ ТОТ ЧЯТИК!", reply_to_message_id=message.message_id)
     else:
         player = findplayer(message.from_user)
-        if time.time() -  player.last_task_time > config.seconds_in_day:
+        if time.time() - player.last_task_time > config.seconds_in_day:
             player.task_status = 0
         if player.task_status == 1:
             bot.send_message(message.chat.id, "ТЫ УЖЕ ЧТО-ТО ДЕЛАЕШЬ!", reply_to_message_id=message.message_id)
@@ -229,15 +265,16 @@ def message_parsing(message):
         if player.task and not player.informed:
             if player.task.time:
                 if time.time() - player.last_task_time > player.task.time * 3600:
-                    bot.send_message(debug_chat_id, players.to_string(player) + '\nВремя задания истекло! Оцените!')
                     player.informed = True
+                    bot.send_message(debug_chat_id, players.to_string(player) + '\nВремя задания истекло! Оцените!')
             if player.task.messages:
                 if message.message_id - player.last_task_mssg > player.task.messages:
-                    bot.send_message(debug_chat_id, players.to_string(player) + '\nВсе сообщения написаны! Оцените!')
                     player.informed = True
+                    bot.send_message(debug_chat_id, players.to_string(player) + '\nВсе сообщения написаны! Оцените!')
         if player.mess_from_bot and not player.mess_sended and time.time() - player.last_task_time > config.seconds_in_day:
-            bot.send_message(player.user.id, "МОЖНО ВЗЯТЬ И СДЕЛАТЬ НОВОЕ ЗАДАНИЕ!")
             player.mess_sended = True
+            bot.send_message(player.user.id, "МОЖНО ВЗЯТЬ И СДЕЛАТЬ НОВОЕ ЗАДАНИЕ!")
+
 
     if message.text in ['МОЛОДЕЦ!', 'ЛАДНО, ЗАСЧИТАЮ', 'MOLODETC!', 'МЛДЦ!', 'ЦЕДОЛОМ'] and message.reply_to_message and message.from_user.username in config.root:
         player = findplayer(message.reply_to_message.from_user)
