@@ -14,7 +14,7 @@ active_players = []
 
 vip_chat_id = -1001145739506
 debug_chat_id = -1001107497089
-
+allow_chats = [vip_chat_id, debug_chat_id, -1001149068208]
 
 def jsonDefault(object):
     return object.__dict__
@@ -156,7 +156,8 @@ def task_status(message):
             if tm > 0:
                 answer += "Осталось времени: " + str('{:.0f}'.format(tm // 60)) + " часов и " + \
                           str('{:.0f}'.format(tm % 60)) + " минут\n"
-            else: answer += "ВЫПОЛНЯЙ, ПОКА НЕ ЗАСЧИТАЮТ!\n"
+            else:
+                answer += "ВЫПОЛНЯЙ, ПОКА НЕ ЗАСЧИТАЮТ!\n"
     answer += "Всего сделано: " + str(player.task_completed % 50) + ".\n"
     tm = config.seconds_in_day // 60 - ((time.time() - player.last_task_time) // 60)
     if tm > 0:
@@ -168,7 +169,7 @@ def task_status(message):
 # collect players and give them tasks
 @bot.message_handler(commands=["get_task"])
 def get_task(message):
-    if message.chat.id != vip_chat_id and message.chat.id != debug_chat_id:
+    if message.chat.id not in allow_chats:
         bot.send_message(message.chat.id, "ПО ЛИЧКАМ ШУШУКАЕТЕСЬ? НЕ ТОТ ЧЯТИК!",
                          reply_to_message_id=message.message_id)
     else:
@@ -216,12 +217,12 @@ def all_tasks(message):
 
 @bot.message_handler(commands=["help"])
 def help(message):
-    bot.send_message(message.chat.id, random.choice(config.help_list), reply_to_message_id = message.message_id)
+    bot.send_message(message.chat.id, random.choice(config.help_list), reply_to_message_id=message.message_id)
 
 
 @bot.message_handler(commands=["donate"])
 def donate(message):
-    bot.send_message(message.chat.id, random.choice(config.donate_list), reply_to_message_id = message.message_id)
+    bot.send_message(message.chat.id, random.choice(config.donate_list), reply_to_message_id=message.message_id)
 
 
 @bot.message_handler(commands=["backup"])
@@ -250,6 +251,9 @@ def sticker_parsing(message):
     elif message.from_user.username == "random_answer":
         if message.sticker.file_id in config.hi_stickers:
             bot.send_message(message.chat.id, random.choice(config.hi_citrus), reply_to_message_id=message.message_id)
+    elif message.from_user.username == "test_name":
+        if message.sticker.file_id == 'CAADAQADpwADQPhSDLndcqosubnnAg':
+            bot.send_message(message.chat.id, random.choice(config.hi_cifr), reply_to_message_id=message.message_id)
     if message.sticker.file_id == 'CAADAgADpgEAAmDrzgNSIT8rlE3K0AI':
         if message.from_user.username in config.root and message.reply_to_message:
             player = findplayer(message.reply_to_message.from_user)
@@ -279,8 +283,8 @@ def message_parsing(message):
                 if message.message_id - player.last_task_mssg > player.task.messages:
                     player.informed = True
                     bot.send_message(debug_chat_id, players.to_string(player) + '\nВсе сообщения написаны! Оцените!')
-        if player.mess_from_bot and not player.mess_sended and \
-                                time.time() - player.last_task_time > config.seconds_in_day:
+        if player.mess_from_bot and not player.mess_sended \
+                and time.time() - player.last_task_time > config.seconds_in_day:
             try:
                 bot.send_message(player.user.id, "МОЖНО ВЗЯТЬ И СДЕЛАТЬ НОВОЕ ЗАДАНИЕ!")
             except telebot.apihelper.ApiException:
@@ -288,8 +292,7 @@ def message_parsing(message):
             finally:
                 player.mess_sended = True
 
-
-    if message.text in ['МОЛОДЕЦ!', 'ЛАДНО, ЗАСЧИТАЮ', 'MOLODETC!', 'МЛДЦ!', 'ЦЕДОЛОМ'] and message.reply_to_message and message.from_user.username in config.root:
+    if message.text in config.approve_phrase and message.reply_to_message and message.from_user.username in config.root:
         player = findplayer(message.reply_to_message.from_user)
         if player.task_status == 1:
             player.task_status = 0
@@ -328,7 +331,7 @@ def message_parsing(message):
             bot.send_message(player.user.id, "ПОЗДРАВЛЯЮ! \n МНОГО ЗАДАНИЙ УЖЕ СДЕЛАНО, НО МНОГО БУДЕТ И ВПЕРЕДИ \n "
                                              "А ПОКА ТЫ ВЫИГРАЛ СЕКРЕТНЫЙ ДУРНИРНЫЙ СТИКЕР, ИСПОЛЬЗУЙ ЕГО С УМОМ")
             bot.send_sticker(player.user.id, stick)
-    elif message.text in ['ТЫ ДУРА?', 'ПРОИГРАЛ', 'БАЯЗИД.'] and message.reply_to_message and message.from_user.username in config.root:
+    elif message.text in config.fail_phrase and message.reply_to_message and message.from_user.username in config.root:
         player = findplayer(message.reply_to_message.from_user)
         if player.task_status == 1:
             player.task_status = 2
@@ -340,6 +343,7 @@ def message_parsing(message):
         bot.send_message(message.chat.id, "МИРАКЛЮ", reply_to_message_id=message.message_id)
     elif message.text.upper() in ["МИРАКЛЮ", "МИРАКЛЮ."]:
         bot.send_message(message.chat.id, "КОГО?", reply_to_message_id=message.message_id)
+
 
 if __name__ == '__main__':
     f = open('players.json', 'r')
