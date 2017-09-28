@@ -237,7 +237,8 @@ def react(reaction, message):
     if rand > len(reaction[3]):
         rand -= len(reaction[3])
         bot.send_sticker(message.chat.id, reaction[4][rand - 1], reply_to_message_id=message.message_id)
-    bot.send_message(message.chat.id, reaction[3][rand - 1], reply_to_message_id=message.message_id)
+    else:
+        bot.send_message(message.chat.id, reaction[3][rand - 1], reply_to_message_id=message.message_id)
 
 
 @bot.message_handler(content_types=["sticker"])

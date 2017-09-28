@@ -27,8 +27,11 @@ reactions = [[[], hi_stickers, citrus_chat, hi_citrus, []],
              [[], ['CAADAgADZgADhzHUD8vWtQEsl3zaAg', 'CAADAgADCQADO9HBD09qppDfqW_HAg'], 0, ['УЛЕЙ'], []],
              [['КОГО?', 'КОГО'], [], 0, ["МИРАКЛЮ"], []],
              [["МИРАКЛЮ", "МИРАКЛЮ."], [], 0, ["КОГО?"], []],
+             [['D:', 'ВЖ'], [], 0, ['/UTYUG'], ['CAADAgADAQADjW7LE45SqDkRKtyzAg']],
+             [['D: D: D:', 'ВЖ ВЖ ВЖ'], [], 0, [], ['CAADAgADAgADjW7LE_v50VPsaKSvAg']],
+             [['D: D: D: D: D: D: D: D: D: D:'], [], 0, [], ['CAADAgADHQADjW7LE5T5heR8tu6uAg']],
              [[], ['CAADAgADHQADO9HBD8DTsJ6PcoXXAg'], rinneko_chat, ['О, РИНЕЙКА.\nЗАКИДЫВАТЬ МОЛНИЯМИ!'], []]
-]
+             ]
 
 fail_phrase = ['ТЫ ДУРА?', 'ПРОИГРАЛ', 'БАЯЗИД.']
 help_list = ['см. /donate', 'А ЧТО ТУТ НЕПОНЯТНОГО?', 'АЙ НИД СОМБАДИ', '8-800-555-35-35', ';)',
