@@ -232,6 +232,14 @@ def backup(message):
     file.close()
 
 
+def react(reaction, message):
+    rand = random.randint(1, len(reaction[3]) + len(reaction[4]))
+    if rand > len(reaction[3]):
+        rand -= len(reaction[3])
+        bot.send_sticker(message.chat.id, reaction[4][rand - 1], reply_to_message_id=message.message_id)
+    bot.send_message(message.chat.id, reaction[3][rand - 1], reply_to_message_id=message.message_id)
+
+
 @bot.message_handler(content_types=["sticker"])
 def sticker_parsing(message):
     for player in active_players:
@@ -245,15 +253,11 @@ def sticker_parsing(message):
                     bot.send_message(debug_chat_id, players.to_string(player) + '\nВсе сообщения написаны! Оцените!')
                     player.informed = True
 
-    if message.from_user.username == "sverhmassivnaya":
-        if message.sticker.file_id == 'CAADAgADHgAD6gKUEl9xLyPpAAFHBgI':
-            bot.send_message(message.chat.id, "Погоди, сейчас выдам Дипа", reply_to_message_id=message.message_id)
-    elif message.from_user.username == "random_answer":
-        if message.sticker.file_id in config.hi_stickers:
-            bot.send_message(message.chat.id, random.choice(config.hi_citrus), reply_to_message_id=message.message_id)
-    elif message.from_user.username == "test_name":
-        if message.sticker.file_id == 'CAADAQADpwADQPhSDLndcqosubnnAg':
-            bot.send_message(message.chat.id, random.choice(config.hi_cifr), reply_to_message_id=message.message_id)
+    for reaction in config.reactions:
+        if not reaction[2] or message.from_user.id == reaction[2]:
+            if message.sticker.file_id in reaction[1]:
+                react(reaction, message)
+
     if message.sticker.file_id == 'CAADAgADpgEAAmDrzgNSIT8rlE3K0AI':
         if message.from_user.username in config.root and message.reply_to_message:
             player = findplayer(message.reply_to_message.from_user)
@@ -262,11 +266,6 @@ def sticker_parsing(message):
                     player.task_status = 1
                     player.task_completed -= 1
                     bot.send_message(message.chat.id, "НЕ, АДМИНАМ НЕ НРАВИТСЯ")
-    elif message.sticker.file_id in ['CAADAgADZgADhzHUD8vWtQEsl3zaAg', 'CAADAgADCQADO9HBD09qppDfqW_HAg']:
-        bot.send_message(message.chat.id, 'УЛЕЙ')
-    elif message.sticker.file_id == 'CAADAgADHQADO9HBD8DTsJ6PcoXXAg':
-        if message.from_user.id == 264360251:
-            bot.send_message(message.chat.id, 'О, РИНЕЙКА.\nЗАКИДЫВАТЬ МОЛНИЯМИ!')
     if message.chat.id == debug_chat_id: 
         bot.send_message(debug_chat_id, message.sticker.file_id, reply_to_message_id=message.message_id)
 
@@ -291,6 +290,11 @@ def message_parsing(message):
                 player.mess_from_bot = False
             finally:
                 player.mess_sended = True
+
+    for reaction in config.reactions:
+        if not reaction[2] or message.from_user.id == reaction[2]:
+            if message.text.upper() in reaction[0]:
+                react(reaction, message)
 
     if message.text in config.approve_phrase and message.reply_to_message and message.from_user.username in config.root:
         player = findplayer(message.reply_to_message.from_user)
@@ -339,10 +343,6 @@ def message_parsing(message):
                              reply_to_message_id=message.reply_to_message.message_id)
             if player.mess_from_bot:
                 bot.send_message(player.user.id, "К СОЖАЛЕНИЮ, ЗАДАНИЕ ПРОВАЛЕНО.")
-    elif message.text.upper() in ['КОГО?', 'КОГО']:
-        bot.send_message(message.chat.id, "МИРАКЛЮ", reply_to_message_id=message.message_id)
-    elif message.text.upper() in ["МИРАКЛЮ", "МИРАКЛЮ."]:
-        bot.send_message(message.chat.id, "КОГО?", reply_to_message_id=message.message_id)
 
 
 if __name__ == '__main__':
