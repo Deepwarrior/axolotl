@@ -6,6 +6,7 @@ citrus_chat = 287819651
 cifr_chat = 206787289
 zoloto_chat = 311689962
 rinneko_chat = 264360251
+undo_chat = 332099213
 
 seconds_in_day = 85000
 
@@ -19,19 +20,27 @@ approve_phrase = ['МОЛОДЕЦ!', "ЧИТЕР!", 'ЛАДНО, ЗАСЧИТА�
                   "ВЫ ТОЛЬКО ПОСМОТРИТЕ НА ЭТО УТОНЧЕННОЕ ВЫПОЛНЕНИЕ ЗАДАНИЯ, НА ЭТО СТАРАНИЕ И УПОРСТВО! Я СЧИТАЮ," +
                   " ЧТО ТАКОЙ ИГРОК НЕПРЕМЕННО ЗАСЛУЖИВАЕТ МОЛОДЦА."]
 
-# format: message_list, sticker_list, user, reaction_messages_list, reaction_stickers_list "[[], [], 0, [], []],"
-reactions = [[[], hi_stickers, citrus_chat, hi_citrus, []],
-             [[], ['CAADAQADpwADQPhSDLndcqosubnnAg'], cifr_chat, hi_cifr, ['CAADAgADjAADg8cnEZz_9rSktUkNAg']],
-             [['🐬🐬🐬'], ['CAADAgADiQADP_vRD4cJCxtGkwY0Ag'], 0, ["О, ИТАЛИЯ НАЧАЛАСЬ"], []],
-             [[], ['CAADAgADHgAD6gKUEl9xLyPpAAFHBgI'], zoloto_chat, ["Погоди, сейчас выдам Дипа"], []],
-             [[], ['CAADAgADZgADhzHUD8vWtQEsl3zaAg', 'CAADAgADCQADO9HBD09qppDfqW_HAg'], 0, ['УЛЕЙ'], []],
-             [['КОГО?', 'КОГО'], [], 0, ["МИРАКЛЮ"], []],
-             [["МИРАКЛЮ", "МИРАКЛЮ."], [], 0, ["КОГО?"], []],
-             [['D:', 'ВЖ'], [], 0, ['/UTYUG'], ['CAADAgADAQADjW7LE45SqDkRKtyzAg']],
-             [['D: D: D:', 'ВЖ ВЖ ВЖ'], [], 0, [], ['CAADAgADAgADjW7LE_v50VPsaKSvAg']],
-             [['D: D: D: D: D: D: D: D: D: D:'], [], 0, [], ['CAADAgADHQADjW7LE5T5heR8tu6uAg']],
-             [[], ['CAADAgADHQADO9HBD8DTsJ6PcoXXAg'], rinneko_chat, ['О, РИНЕЙКА.\nЗАКИДЫВАТЬ МОЛНИЯМИ!'], []]
-             ]
+# format: message_list, sticker_list, user, reaction_messages_list, reaction_stickers_list, func for executing
+# "[[], [], 0, [], [], None],"
+reactions = [
+    [[], hi_stickers, citrus_chat, hi_citrus, []],
+    [[], ['CAADAQADpwADQPhSDLndcqosubnnAg'], cifr_chat, hi_cifr, ['CAADAgADjAADg8cnEZz_9rSktUkNAg']],
+    [['🐬🐬🐬'], ['CAADAgADiQADP_vRD4cJCxtGkwY0Ag'], 0, ["О, ИТАЛИЯ НАЧАЛАСЬ"], []],
+    [[], ['CAADAgADHgAD6gKUEl9xLyPpAAFHBgI'], zoloto_chat, ["Погоди, сейчас выдам Дипа"], []],
+    [[], ['CAADAgADZgADhzHUD8vWtQEsl3zaAg', 'CAADAgADCQADO9HBD09qppDfqW_HAg'], 0, ['УЛЕЙ'], []],
+    [['КОГО?', 'КОГО'], [], 0, ["МИРАКЛЮ"], []],
+    [["МИРАКЛЮ", "МИРАКЛЮ."], [], 0, ["КОГО?"], []],
+    [['D:', 'ВЖ'], [], 0, ['/UTYUG'], ['CAADAgADAQADjW7LE45SqDkRKtyzAg']],
+    [[], ['CAADAgADAQADjW7LE45SqDkRKtyzAg'], undo_chat, ["УНДЮЖОЧЕК!"], ["CAADAgADMgADg8cnEWp3ie4jNHg-Ag"]],
+    [['D: D: D:', 'ВЖ ВЖ ВЖ'], [], 0, [], ['CAADAgADAgADjW7LE_v50VPsaKSvAg']],
+    [['D: D: D: D: D: D: D: D: D: D:'], [], 0, [], ['CAADAgADHQADjW7LE5T5heR8tu6uAg']],
+    [[], ['CAADAgADHQADO9HBD8DTsJ6PcoXXAg'], rinneko_chat, ['О, РИНЕЙКА.\nЗАКИДЫВАТЬ МОЛНИЯМИ!',
+                                                            'О, РИННЕКО.\nЗАКИДЫВАТЬ МОЛНИЯМИ!',
+                                                            'О, КОТЕЙКА.\nЗАКИДЫВАТЬ МОЛНИЯМИ!'], []],
+    [["НАТАЛЬЯ?"], ['CAADAgADIwADP_vRD4CXRh4oYhhXAg', "CAADAgADHwADP_vRD3g8MWNndtchAg"], 0,
+        ['НАТАЛЬЯ 29', 'НАТАЛЬЯ 17','НАТАЛЬЯ 42', 'НАТАЛЬЯ 6', 'НАТАЛИРУЙ', "@Abi_Abigale"],
+        ["CAADAgADJAADP_vRDykJokH6fiyLAg"]]
+    ]
 
 fail_phrase = ['ТЫ ДУРА?', 'ПРОИГРАЛ', 'БАЯЗИД.']
 help_list = ['см. /donate', 'А ЧТО ТУТ НЕПОНЯТНОГО?', 'АЙ НИД СОМБАДИ', '8-800-555-35-35', ';)',

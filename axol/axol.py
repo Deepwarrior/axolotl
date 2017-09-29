@@ -255,7 +255,9 @@ def sticker_parsing(message):
                     player.informed = True
 
     for reaction in config.reactions:
-        if not reaction[2] or message.from_user.id == reaction[2]:
+        if len(reaction) > 5:
+            reaction[5](reaction, message)
+        elif not reaction[2] or message.from_user.id == reaction[2]:
             if message.sticker.file_id in reaction[1]:
                 react(reaction, message)
 
