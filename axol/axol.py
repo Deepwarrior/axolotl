@@ -14,7 +14,10 @@ active_players = []
 
 vip_chat_id = -1001145739506
 debug_chat_id = -1001107497089
-allow_chats = [vip_chat_id, debug_chat_id, -1001149068208]
+igroklub_chat = -1001108031278
+allow_chats = [vip_chat_id, debug_chat_id, -1001149068208, igroklub_chat]
+
+
 
 def jsonDefault(object):
     return object.__dict__
@@ -241,6 +244,19 @@ def react(reaction, message):
         bot.send_message(message.chat.id, reaction[3][rand - 1], reply_to_message_id=message.message_id)
 
 
+def task_rework(reaction, message):
+    if message.from_user.username in config.root and message.reply_to_message:
+        player = findplayer(message.reply_to_message.from_user)
+        if player.task:
+            if player.task_status == 0:
+                player.task_status = 1
+                player.task_completed -= 1
+                bot.send_message(message.chat.id, "НЕ, АДМИНАМ НЕ НРАВИТСЯ")
+
+
+reaction_funcs = [task_rework]
+
+
 @bot.message_handler(content_types=["sticker"])
 def sticker_parsing(message):
     for player in active_players:
@@ -256,19 +272,11 @@ def sticker_parsing(message):
 
     for reaction in config.reactions:
         if len(reaction) > 5:
-            reaction[5](reaction, message)
+            reaction_funcs[reaction[5]](reaction, message)
         elif not reaction[2] or message.from_user.id == reaction[2]:
             if message.sticker.file_id in reaction[1]:
                 react(reaction, message)
 
-    if message.sticker.file_id == 'CAADAgADpgEAAmDrzgNSIT8rlE3K0AI':
-        if message.from_user.username in config.root and message.reply_to_message:
-            player = findplayer(message.reply_to_message.from_user)
-            if player.task:
-                if player.task_status == 0:
-                    player.task_status = 1
-                    player.task_completed -= 1
-                    bot.send_message(message.chat.id, "НЕ, АДМИНАМ НЕ НРАВИТСЯ")
     if message.chat.id == debug_chat_id: 
         bot.send_message(debug_chat_id, message.sticker.file_id, reply_to_message_id=message.message_id)
 

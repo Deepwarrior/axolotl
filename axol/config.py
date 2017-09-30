@@ -27,12 +27,14 @@ reactions = [
     [[], ['CAADAQADpwADQPhSDLndcqosubnnAg'], cifr_chat, hi_cifr, ['CAADAgADjAADg8cnEZz_9rSktUkNAg']],
     [['🐬🐬🐬'], ['CAADAgADiQADP_vRD4cJCxtGkwY0Ag'], 0, ["О, ИТАЛИЯ НАЧАЛАСЬ"], []],
     [[], ['CAADAgADHgAD6gKUEl9xLyPpAAFHBgI'], zoloto_chat, ["Погоди, сейчас выдам Дипа"], []],
-    [[], ['CAADAgADZgADhzHUD8vWtQEsl3zaAg', 'CAADAgADCQADO9HBD09qppDfqW_HAg'], 0, ['УЛЕЙ'], []],
+    [[], ['CAADAgADZgADhzHUD8vWtQEsl3zaAg', 'CAADAgADCQADO9HBD09qppDfqW_HAg', 'CAADAgADcAADhzHUD82gOZvLAAFdEAI'],
+     0, ['УЛЕЙ'], []],
     [['КОГО?', 'КОГО'], [], 0, ["МИРАКЛЮ"], []],
     [["МИРАКЛЮ", "МИРАКЛЮ."], [], 0, ["КОГО?"], []],
     [['D:', 'ВЖ'], [], 0, ['/UTYUG'], ['CAADAgADAQADjW7LE45SqDkRKtyzAg']],
     [[], ['CAADAgADAQADjW7LE45SqDkRKtyzAg'], undo_chat, ["УНДЮЖОЧЕК!"], ["CAADAgADMgADg8cnEWp3ie4jNHg-Ag"]],
     [['D: D: D:', 'ВЖ ВЖ ВЖ'], [], 0, [], ['CAADAgADAgADjW7LE_v50VPsaKSvAg']],
+    [[], ['CAADAgADpgEAAmDrzgNSIT8rlE3K0AI'], 0, [], [], 0],
     [['D: D: D: D: D: D: D: D: D: D:'], [], 0, [], ['CAADAgADHQADjW7LE5T5heR8tu6uAg']],
     [[], ['CAADAgADHQADO9HBD8DTsJ6PcoXXAg'], rinneko_chat, ['О, РИНЕЙКА.\nЗАКИДЫВАТЬ МОЛНИЯМИ!',
                                                             'О, РИННЕКО.\nЗАКИДЫВАТЬ МОЛНИЯМИ!',
@@ -79,7 +81,8 @@ tasks = [['CAADAgADSgADP_vRD6EHNhBBV7W_Ag', 'ТЫ ДИП. ИСПОЛЬЗУЙ Д�
          ['CAADAgADXwADP_vRD-j0lU68FiFsAg', 'ТЫ ГОДВИЛЛЬ. ЭКОНОМЬ ВИРТУАЛЬНОЕ ПРОСТРАНСТВО, ПИШИ БЗ ГЛСНХ.', 3, 300],
          ['CAADAgADdQADP_vRDwPTSwahmq5oAg', 'ТЫ ИИОО. НЕ СДЕРЖИВАЙ СВОЮ НЕНАВИСТЬ К СОГЛАСНЫМ, ПИШИ ИХ НЕ БОЛЕЕ'
                                             ' ДВУХ ШТУК В СЛОВЕ.', 3, 300],
-         ['CAADAgADWQADP_vRDxArNUvEnLZiAg', 'ТЫ БАГ. СЛОМАЙ ГОДВИЛЛЬ, МЕНЯ ИЛИ ЛЮБОГО ДРУГОГО БОТА.', 23, 0],
+         ['CAADAgADWQADP_vRDxArNUvEnLZiAg', 'ТЫ БАГ. СЛОМАЙ ГОДВИЛЛЬ, МЕНЯ ИЛИ ЛЮБОГО ДРУГОГО БОТА. ИЛИ НАЙДИ '
+                                            'НОВУЮ ФИЧУ В ИЗВЕСТНОМ БОТЕ', 23, 0],
          ['CAADAgADagADP_vRDy9WxzZxe_NUAg', 'ТЫ ЭЛЕКСОРИЕН. ПЕРЕИМЕНУЙСЯ НА ВЕСЬ ДЕНЬ И ПОМЕНЯЙ ПОЛ.', 23, 0], 
          ['CAADAgADbAADP_vRD6Xn7qb5y-9YAg', 'ТЫ АНАЛЕПТИК. ПОСТАВЬ КОМУ-НИБУДЬ АНАЛИЗ ПО АВАТАРКЕ.', 23, 0],
          ['CAADAgADSwADP_vRD5Fg55OC3EGYAg', 'ТЫ ПУШИСТЫЙ ТРИББЛ. ставь точки. и не забывай писать всё с '
