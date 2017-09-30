@@ -271,11 +271,12 @@ def sticker_parsing(message):
                     player.informed = True
 
     for reaction in config.reactions:
-        if len(reaction) > 5:
-            reaction_funcs[reaction[5]](reaction, message)
-        elif not reaction[2] or message.from_user.id == reaction[2]:
+        if not reaction[2] or message.from_user.id == reaction[2]:
             if message.sticker.file_id in reaction[1]:
-                react(reaction, message)
+                if len(reaction) > 5:
+                    reaction_funcs[reaction[5]](reaction, message)
+                else:
+                    react(reaction, message)
 
     if message.chat.id == debug_chat_id: 
         bot.send_message(debug_chat_id, message.sticker.file_id, reply_to_message_id=message.message_id)
