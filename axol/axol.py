@@ -254,61 +254,19 @@ def task_rework(reaction, message):
                 bot.send_message(message.chat.id, "НЕ, АДМИНАМ НЕ НРАВИТСЯ")
 
 
-reaction_funcs = [task_rework]
+def task_fail(reaction, message):
+    if message.reply_to_message and message.from_user.username in config.root:
+        player = findplayer(message.reply_to_message.from_user)
+        if player.task_status == 1:
+            player.task_status = 2
+            bot.send_message(message.chat.id, "ЗАДАНИЕ ПРОВАЛЕНО!",
+                             reply_to_message_id=message.reply_to_message.message_id)
+            if player.mess_from_bot:
+                bot.send_message(player.user.id, "К СОЖАЛЕНИЮ, ЗАДАНИЕ ПРОВАЛЕНО.")
 
 
-@bot.message_handler(content_types=["sticker"])
-def sticker_parsing(message):
-    for player in active_players:
-        if player.task and not player.informed:
-            if player.task.time:
-                if time.time() - player.last_task_time > player.task.time * 3600:
-                    bot.send_message(debug_chat_id, players.to_string(player) + '\nВремя задания истекло! Оцените!')
-                    player.informed = True
-            if player.task.messages:
-                if message.message_id - player.last_task_mssg > player.task.messages:
-                    bot.send_message(debug_chat_id, players.to_string(player) + '\nВсе сообщения написаны! Оцените!')
-                    player.informed = True
-
-    for reaction in config.reactions:
-        if not reaction[2] or message.from_user.id == reaction[2]:
-            if message.sticker.file_id in reaction[1]:
-                if len(reaction) > 5:
-                    reaction_funcs[reaction[5]](reaction, message)
-                else:
-                    react(reaction, message)
-
-    if message.chat.id == debug_chat_id: 
-        bot.send_message(debug_chat_id, message.sticker.file_id, reply_to_message_id=message.message_id)
-
-
-@bot.message_handler(content_types=["text"])
-def message_parsing(message):
-    for player in active_players:
-        if player.task and not player.informed:
-            if player.task.time:
-                if time.time() - player.last_task_time > player.task.time * 3600:
-                    player.informed = True
-                    bot.send_message(debug_chat_id, players.to_string(player) + '\nВремя задания истекло! Оцените!')
-            if player.task.messages:
-                if message.message_id - player.last_task_mssg > player.task.messages:
-                    player.informed = True
-                    bot.send_message(debug_chat_id, players.to_string(player) + '\nВсе сообщения написаны! Оцените!')
-        if player.mess_from_bot and not player.mess_sended \
-                and time.time() - player.last_task_time > config.seconds_in_day:
-            try:
-                bot.send_message(player.user.id, "МОЖНО ВЗЯТЬ И СДЕЛАТЬ НОВОЕ ЗАДАНИЕ!")
-            except telebot.apihelper.ApiException:
-                player.mess_from_bot = False
-            finally:
-                player.mess_sended = True
-
-    for reaction in config.reactions:
-        if not reaction[2] or message.from_user.id == reaction[2]:
-            if message.text.upper() in reaction[0]:
-                react(reaction, message)
-
-    if message.text in config.approve_phrase and message.reply_to_message and message.from_user.username in config.root:
+def task_complete(reaction, message):
+    if message.reply_to_message and message.from_user.username in config.root:
         player = findplayer(message.reply_to_message.from_user)
         if player.task_status == 1:
             player.task_status = 0
@@ -337,7 +295,10 @@ def message_parsing(message):
                 bot.send_sticker(player.user.id, stick)
             if player.task_completed == 60:
                 bot.send_message(message.chat.id, "ТЕБЯ ВЕДЬ УЖЕ ОБНУЛИЛИ... ЗАЧЕМ ТЫ ПРОДОЛЖАЕШЬ ИХ ДЕЛАТЬ?")
-    elif message.text == 'КЛАЦ!' and message.reply_to_message and message.from_user.username in config.root:
+
+
+def task_extra(reaction, message):
+    if message.text == 'КЛАЦ!' and message.reply_to_message and message.from_user.username in config.root:
         player = findplayer(message.reply_to_message.from_user)
         player.task_completed += 1
         bot.send_message(message.chat.id, "ДОПОЛНИТЕЛЬНОЕ ЗАДАНИЕ ВЫПОЛНЕНО!",
@@ -347,14 +308,69 @@ def message_parsing(message):
             bot.send_message(player.user.id, "ПОЗДРАВЛЯЮ! \n МНОГО ЗАДАНИЙ УЖЕ СДЕЛАНО, НО МНОГО БУДЕТ И ВПЕРЕДИ \n "
                                              "А ПОКА ТЫ ВЫИГРАЛ СЕКРЕТНЫЙ ДУРНИРНЫЙ СТИКЕР, ИСПОЛЬЗУЙ ЕГО С УМОМ")
             bot.send_sticker(player.user.id, stick)
-    elif message.text in config.fail_phrase and message.reply_to_message and message.from_user.username in config.root:
-        player = findplayer(message.reply_to_message.from_user)
-        if player.task_status == 1:
-            player.task_status = 2
-            bot.send_message(message.chat.id, "ЗАДАНИЕ ПРОВАЛЕНО!",
-                             reply_to_message_id=message.reply_to_message.message_id)
-            if player.mess_from_bot:
-                bot.send_message(player.user.id, "К СОЖАЛЕНИЮ, ЗАДАНИЕ ПРОВАЛЕНО.")
+
+
+def natalka(reaction, message):
+    cur_time = time.localtime(time.time())
+    minutes = cur_time.tm_min
+    rand = random.randint(0, 4)
+    if rand:
+        text = 'НАТАЛЬЯ '
+        if ((minutes + rand + 1) % 60) < 10:
+            text += '0'
+        text += str((minutes + rand + 1) % 60)
+        bot.send_message(message.chat.id, text, reply_to_message_id=message.message_id)
+    else:
+        react(reaction, message)
+
+reaction_funcs = [task_rework, task_fail, task_complete, task_extra, natalka]
+    
+
+def notify():
+    for player in active_players:
+        if player.task and not player.informed:
+            if player.task.time:
+                if time.time() - player.last_task_time > player.task.time * 3600:
+                    player.informed = True
+                    bot.send_message(debug_chat_id, players.to_string(player) + '\nВремя задания истекло! Оцените!')
+            if player.task.messages:
+                if message.message_id - player.last_task_mssg > player.task.messages:
+                    player.informed = True
+                    bot.send_message(debug_chat_id, players.to_string(player) + '\nВсе сообщения написаны! Оцените!')
+        if player.mess_from_bot and not player.mess_sended \
+                and time.time() - player.last_task_time > config.seconds_in_day:
+            try:
+                bot.send_message(player.user.id, "МОЖНО ВЗЯТЬ И СДЕЛАТЬ НОВОЕ ЗАДАНИЕ!")
+            except telebot.apihelper.ApiException:
+                player.mess_from_bot = False
+            finally:
+                player.mess_sended = True
+
+
+@bot.message_handler(content_types=["sticker"])
+def sticker_parsing(message):
+    notify()
+    for reaction in config.reactions:
+        if not reaction[2] or message.from_user.id == reaction[2]:
+            if message.sticker.file_id in reaction[1]:
+                if len(reaction) > 5:
+                    reaction_funcs[reaction[5]](reaction, message)
+                else:
+                    react(reaction, message)
+    if message.chat.id == debug_chat_id:
+        bot.send_message(debug_chat_id, message.sticker.file_id, reply_to_message_id=message.message_id)
+
+
+@bot.message_handler(content_types=["text"])
+def message_parsing(message):
+    notify()
+    for reaction in config.reactions:
+        if not reaction[2] or message.from_user.id == reaction[2]:
+            if message.text.upper() in reaction[0]:
+                if len(reaction) > 5:
+                    reaction_funcs[reaction[5]](reaction, message)
+                else:
+                    react(reaction, message)
 
 
 if __name__ == '__main__':
