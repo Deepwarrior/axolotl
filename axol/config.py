@@ -23,7 +23,8 @@ fail_phrase = ['ТЫ ДУРА?', 'ПРОИГРАЛ', 'БАЯЗИД.']
 dlinnohead = \
     ['CAADAgADAQAD2VJTDEk_XDdN8vEQAg', 'CAADAgADCAAD2VJTDLigLyUY7D8aAg', 'CAADAgADEwAD2VJTDHU9kKWQCF0wAg',
      'CAADAgADKgAD2VJTDATKb5Sl68OnAg', 'CAADAgADHAAD2VJTDLu-Mx44yFUuAg', 'CAADBAADZQMAAuJy2QABJ1cx-fQb77sC',
-     'CAADBAADgQMAAuJy2QABf0C0EPLQO0UC', 'CAADBAADawMAAuJy2QABFA81XvWYIZ8C', 'CAADBAADdQMAAuJy2QABt8J1yVBTIQoC']
+     'CAADBAADgQMAAuJy2QABf0C0EPLQO0UC', 'CAADBAADawMAAuJy2QABFA81XvWYIZ8C', 'CAADBAADdQMAAuJy2QABt8J1yVBTIQoC',
+     'CAADAgAD3gMAAtQlfAlfLmgHaL2eTgI']
 # format: message_list, sticker_list, user, reaction_messages_list, reaction_stickers_list, func for executing
 # "[[], [], 0, [], [], None],"
 reactions = [
@@ -38,8 +39,8 @@ reactions = [
     [['D:', 'ВЖ'], [], 0, ['/UTYUG'], ['CAADAgADAQADjW7LE45SqDkRKtyzAg']],
     [[], ['CAADAgADAQADjW7LE45SqDkRKtyzAg'], undo_chat, ["УНДЮЖОЧЕК!"], ["CAADAgADMgADg8cnEWp3ie4jNHg-Ag"]],
     [['D: D: D:', 'ВЖ ВЖ ВЖ'], [], 0, [], ['CAADAgADAgADjW7LE_v50VPsaKSvAg']],
-    [[], dlinnohead, cifr_chat, ['СПАСИБО ЗА ДЛИННОКОТА, СЕРЁЖА!'], ['CAADAgADawADg8cnEX6Ppa2_ElfUAg',
-                                                                     'CAADAgADlgIAAmMr4glN9I0DbTqtTgI']],
+    [[], dlinnohead, cifr_chat, ['СПАСИБО ЗА ДЛИННОКОТА, СЕРЁЖА!'],
+     ['CAADAgADawADg8cnEX6Ppa2_ElfUAg', 'CAADAgADlgIAAmMr4glN9I0DbTqtTgI', 'CAADAgADjAADg8cnEZz_9rSktUkNAg']],
     [[], ['CAADAgADBQAD2VJTDOfoIDVZCU5zAg'], cifr_chat, [], ['CAADAgADAwAD2VJTDHENEIKamV7uAg']],
     [[], ['CAADAgADpgEAAmDrzgNSIT8rlE3K0AI'], 0, [], [], 0],
     [fail_phrase, ['CAADAgADFAADjW7LE9E1TbwjuTk7Ag'], 0, [], [], 1],

@@ -326,7 +326,7 @@ def natalka(reaction, message):
 reaction_funcs = [task_rework, task_fail, task_complete, task_extra, natalka]
     
 
-def notify():
+def notify(message):
     for player in active_players:
         if player.task and not player.informed:
             if player.task.time:
@@ -349,7 +349,7 @@ def notify():
 
 @bot.message_handler(content_types=["sticker"])
 def sticker_parsing(message):
-    notify()
+    notify(message)
     for reaction in config.reactions:
         if not reaction[2] or message.from_user.id == reaction[2]:
             if message.sticker.file_id in reaction[1]:
@@ -363,7 +363,7 @@ def sticker_parsing(message):
 
 @bot.message_handler(content_types=["text"])
 def message_parsing(message):
-    notify()
+    notify(message)
     for reaction in config.reactions:
         if not reaction[2] or message.from_user.id == reaction[2]:
             if message.text.upper() in reaction[0]:
