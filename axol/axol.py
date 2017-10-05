@@ -139,7 +139,7 @@ def panteon(message):
 
 @bot.message_handler(commands=["top_pozora"])
 def pozor(message):
-    bot.send_message(message.chat.id, "ТОП ПОЗОРА: \n1. ХАМПЕР\n2.САРАСТИ")
+    bot.send_message(message.chat.id, "ТОП ПОЗОРА: \n1. ХАМПЕР\n2.САРАСТИ\n3. МАБА")
 
 
 @bot.message_handler(commands=["top_sarasti"])
@@ -151,10 +151,21 @@ def sarasti(message):
 def task_status(message):
     player = findplayer(message.from_user)
     answer = ""
-    if player.task_status == 1 and player.task:
-        if player.task_completed < 40: 
-            answer += player.task.text + "\n"
-        if player.task.time:
+    tm = 0
+    if player.task_status == 1:
+        if player.task_completed < 40:
+            if hasattr(player, "task_id") and len(player.task_id):
+                answer += config.tasks[player.task_id[0]][1] + "\n"
+            else:
+                answer += player.task.text + "\n"
+        else:
+            answer += ")))\n"
+        if hasattr(player, "task_id") and len(player.task_id):
+            for idx in player.task_id:
+                task = config.tasks[idx]
+                if (task[3] * 60 - ((time.time() - player.last_task_time) // 60)) > tm:
+                    tm = task[3] * 60 - ((time.time() - player.last_task_time) // 60)
+        elif player.task.time:
             tm = player.task.time * 60 - ((time.time() - player.last_task_time) // 60)
             if tm > 0:
                 answer += "Осталось времени: " + str('{:.0f}'.format(tm // 60)) + " часов и " + \
@@ -179,6 +190,8 @@ def get_task(message):
         player = findplayer(message.from_user)
         if time.time() - player.last_task_time > config.seconds_in_day:
             player.task_status = 0
+            player.task_id = []
+            player.task = None
         if player.task_status == 1:
             bot.send_message(message.chat.id, "ТЫ УЖЕ ЧТО-ТО ДЕЛАЕШЬ!", reply_to_message_id=message.message_id)
         elif player.task_status == 2:
@@ -194,19 +207,27 @@ def get_task(message):
                 rand = random.randint(1, 500)
                 if rand == 237:
                     task = ['CAADAgADaQADP_vRD78igQttLbufAg', 'КОЛДУЮ, КОЛДУЮ... ВЖУХ! И ТЫ ПИДОР ДНЯ.', 0, 0]
-                else:
-                    task = random.choice(config.tasks)
-                bot.send_sticker(message.chat.id, task[0])
-                if player.task_completed < 40:
+                    bot.send_sticker(message.chat.id, task[0])
                     bot.send_message(message.chat.id, task[1])
                 else:
-                    text = random.choice(["ТЫ УЖЕ БОЛЬШОЙ, САМ РАЗБЕРЕШЬСЯ", "<СПОЙЛЕРЫ>", "Я ПОЗАБЫЛ ВСЕ СЛОВА",
-                                          "ЗДЕСЬ БЫЛО ЧТО-ТО ДЛИННОЕ ЕЩЁ"])
-                    bot.send_message(message.chat.id, text)
-                player.task = tasks.Task(*task)
-                player.informed = False
-                player.mess_sended = False
-                backup(None)
+                    rand = random.randint(0, len(config.tasks) - 1)
+                    task = config.tasks[rand]
+                    player.task_id.append(rand)
+                    bot.send_sticker(message.chat.id, task[0])
+                    if player.task_completed < 40:
+                        bot.send_message(message.chat.id, task[1])
+                    else:
+                        text = random.choice(["ТЫ УЖЕ БОЛЬШОЙ, САМ РАЗБЕРЕШЬСЯ", "<СПОЙЛЕРЫ>", "Я ПОЗАБЫЛ ВСЕ СЛОВА",
+                                              "ЗДЕСЬ БЫЛО ЧТО-ТО ДЛИННОЕ ЕЩЁ"])
+                        bot.send_message(message.chat.id, text)
+                    player.informed = False
+                    player.mess_sended = False
+                    backup(None)
+                    if player.task_completed >= 70:
+                        bot.send_message(message.chat.id, "А ВОТ ЕЩЁ ТЕБЕ...")
+                        rand = random.randint(1, len(config.tasks))
+                        bot.send_sticker(message.chat.id, config.tasks[rand][0])
+                        player.task_id.append(rand)
 
 
 # root command. See all players with tasks.
@@ -214,7 +235,7 @@ def get_task(message):
 def all_tasks(message):
     if message.from_user.username in config.root:
         for player in active_players:
-            if player.task and player.task_status == 1:
+            if player.task or hasattr(player, "task_id") and len(player.task_id) and player.task_status == 1:
                 bot.send_message(message.chat.id, players.to_string(player))
 
 
@@ -247,7 +268,7 @@ def react(reaction, message):
 def task_rework(reaction, message):
     if message.from_user.username in config.root and message.reply_to_message:
         player = findplayer(message.reply_to_message.from_user)
-        if player.task:
+        if player.task or hasattr(player, "task_id") and len(player.task_id):
             if player.task_status == 0:
                 player.task_status = 1
                 player.task_completed -= 1
@@ -385,5 +406,6 @@ if __name__ == '__main__':
             bot.polling(none_stop=True)
         except ReadTimeout:
             print("die?")
+            time.sleep(60)
         finally:
             backup(None)
