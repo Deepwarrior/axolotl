@@ -235,7 +235,7 @@ def get_task(message):
 def all_tasks(message):
     if message.from_user.username in config.root:
         for player in active_players:
-            if player.task or hasattr(player, "task_id") and len(player.task_id) and player.task_status == 1:
+            if (player.task or (hasattr(player, "task_id") and len(player.task_id))) and player.task_status == 1:
                 bot.send_message(message.chat.id, players.to_string(player))
 
 
