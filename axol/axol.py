@@ -87,6 +87,7 @@ def send_uhi(message):
 def send(message):
     text = str(message.text[6:])
     if not text:
+        bot.send_message(message.chat.id, "НЕТ, НЕТ, НУЖНО ПИСАТЬ ПИСЬМО ПРОВЕРЯТОРАМ В ТОМ ЖЕ СООБЩЕНИИ, ЧТО И /send")
         return
     text = ': ' + text
     if message.from_user.last_name:
