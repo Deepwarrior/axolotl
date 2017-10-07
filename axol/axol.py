@@ -402,6 +402,12 @@ if __name__ == '__main__':
         active_players.append(players.Player(**x))
     f.close()
     random.seed()
+    for chat in allow_chats:
+        try:
+            bot.send_sticker(chat, 'CAADAgADhQADP_vRD-Do6Qz0fkeMAg')
+        except telebot.apihelper.ApiException:
+            continue
+
     while True:
         try:
             bot.polling(none_stop=True)
