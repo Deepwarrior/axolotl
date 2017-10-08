@@ -258,6 +258,8 @@ def backup(message):
 
 
 def react(reaction, message):
+    if message.from_user.id == message.chat.id:
+        return
     rand = random.randint(1, len(reaction[3]) + len(reaction[4]))
     if rand > len(reaction[3]):
         rand -= len(reaction[3])
@@ -345,7 +347,19 @@ def natalka(reaction, message):
     else:
         react(reaction, message)
 
-reaction_funcs = [task_rework, task_fail, task_complete, task_extra, natalka]
+
+def kick_bots(reaction, message):
+    targets = [208343353, 88135026, 280982408, 200164142, 226543640, 121913006, 199378994, 110193686, 346903988,
+               29664231, 135069175]
+    for target in targets:
+        try:
+            bot.kick_chat_member(message.chat.id, target)
+            time.sleep(2)
+        except telebot.apihelper.ApiException:
+            time.sleep(1)
+
+
+reaction_funcs = [task_rework, task_fail, task_complete, task_extra, natalka, kick_bots]
     
 
 def notify(message):
@@ -405,9 +419,9 @@ if __name__ == '__main__':
     for chat in allow_chats:
         try:
             bot.send_sticker(chat, 'CAADAgADhQADP_vRD-Do6Qz0fkeMAg')
+            # print('1')
         except telebot.apihelper.ApiException:
             continue
-
     while True:
         try:
             bot.polling(none_stop=True)

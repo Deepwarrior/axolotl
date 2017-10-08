@@ -42,6 +42,7 @@ reactions = [
     [[], dlinnohead, cifr_chat, ['СПАСИБО ЗА ДЛИННОКОТА, СЕРЁЖА!'],
      ['CAADAgADawADg8cnEX6Ppa2_ElfUAg', 'CAADAgADlgIAAmMr4glN9I0DbTqtTgI', 'CAADAgADjAADg8cnEZz_9rSktUkNAg']],
     [[], ['CAADAgADBQAD2VJTDOfoIDVZCU5zAg'], cifr_chat, [], ['CAADAgADAwAD2VJTDHENEIKamV7uAg']],
+    [['ДИТЯ МОЁ!'], [], citrus_chat, ['ЧТО ТАКОЕ, МАМОЧКА?'], []],
     [[], ['CAADAgADpgEAAmDrzgNSIT8rlE3K0AI'], 0, [], [], 0],
     [fail_phrase, ['CAADAgADFAADjW7LE9E1TbwjuTk7Ag'], 0, [], [], 1],
     [approve_phrase, ['CAADAgAD4QADNnYgDo3M52SK-Y3iAg'], 0, [], [], 2],
@@ -51,7 +52,8 @@ reactions = [
                                                             'О, РИННЕКО.\nЗАКИДЫВАТЬ МОЛНИЯМИ!',
                                                             'О, КОТЕЙКА.\nЗАКИДЫВАТЬ МОЛНИЯМИ!'], []],
     [["НАТАЛЬЯ?"], ['CAADAgADIwADP_vRD4CXRh4oYhhXAg', "CAADAgADHwADP_vRD3g8MWNndtchAg"], 0,
-        ['НАТАЛИРУЙ', "@Abi_Abigale"], ["CAADAgADJAADP_vRDykJokH6fiyLAg"], 4]
+        ['НАТАЛИРУЙ', "@Abi_Abigale"], ["CAADAgADJAADP_vRDykJokH6fiyLAg"], 4],
+    [['ВЫГОНИ ПРОЧЬ ЭТИХ НАДОЕДЛИВЫХ БОТОВ!'], [], citrus_chat, [], [], 5]
     ]
 
 help_list = ['см. /donate', 'А ЧТО ТУТ НЕПОНЯТНОГО?', 'АЙ НИД СОМБАДИ', '8-800-555-35-35', ';)',
