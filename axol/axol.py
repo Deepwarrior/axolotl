@@ -70,6 +70,18 @@ def send_deep(message):
     bot.send_message(config.deep_chat, text)
 
 
+@bot.message_handler(commands=["send_all"])
+def send_all(message):
+    text = str(message.text[9:])
+    if not text or message.from_user.username not in config.root:
+        return
+    for player in active_players:
+        try:
+            bot.send_message(player.user.id, text)
+        except telebot.apihelper.ApiException:
+            continue
+
+
 @bot.message_handler(commands=["send_uhi"])
 def send_uhi(message):
     text = str(message.text[9:])
@@ -145,7 +157,7 @@ def pozor(message):
 
 @bot.message_handler(commands=["top_sarasti"])
 def sarasti(message):
-    bot.send_message(message.chat.id, "ТОП САРАСТИ: \n1. САРАСТИ")
+    bot.send_message(message.chat.id, "ТОП САРАСТИ: \n-1. АРУЛУТ\n1. САРАСТИ")
 
 
 @bot.message_handler(commands=["my_task"])
@@ -359,7 +371,15 @@ def kick_bots(reaction, message):
             time.sleep(1)
 
 
-reaction_funcs = [task_rework, task_fail, task_complete, task_extra, natalka, kick_bots]
+def mem_react(reaction, message):
+    rand = random.randint(0, 10)
+    if rand < 10:
+        bot.send_message(message.chat.id, 'МУМЫРИ!', reply_to_message_id=message.message_id)
+    else:
+        react(reaction, message)
+
+
+reaction_funcs = [task_rework, task_fail, task_complete, task_extra, natalka, kick_bots, mem_react]
     
 
 def notify(message):

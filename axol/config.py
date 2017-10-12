@@ -25,6 +25,8 @@ dlinnohead = \
      'CAADAgADKgAD2VJTDATKb5Sl68OnAg', 'CAADAgADHAAD2VJTDLu-Mx44yFUuAg', 'CAADBAADZQMAAuJy2QABJ1cx-fQb77sC',
      'CAADBAADgQMAAuJy2QABf0C0EPLQO0UC', 'CAADBAADawMAAuJy2QABFA81XvWYIZ8C', 'CAADBAADdQMAAuJy2QABt8J1yVBTIQoC',
      'CAADAgAD3gMAAtQlfAlfLmgHaL2eTgI', 'CAADAgADMAAD2VJTDMSYdTjWjmeuAg']
+memory = ["30 ДЕКАБРЯ", "АЗАЗА", "БАЯН", "БУГУЛЬМА", "ДНИЩЕ", "КОМАНДА ТИГРОВ", "КОНЬЯК", "ОПТИЧЕСКАЯ ИНФОРМАТИКА",
+          "ПИРАНЬЯ", "ПОЛЁТ", "ПЯТОЧКИ", "РОБИНЗОН", "САМАРАНГ", "СЕКСИЗМ"]
 # format: message_list, sticker_list, user, reaction_messages_list, reaction_stickers_list, func for executing
 # "[[], [], 0, [], [], None],"
 reactions = [
@@ -43,6 +45,11 @@ reactions = [
      ['CAADAgADawADg8cnEX6Ppa2_ElfUAg', 'CAADAgADlgIAAmMr4glN9I0DbTqtTgI', 'CAADAgADjAADg8cnEZz_9rSktUkNAg']],
     [[], ['CAADAgADBQAD2VJTDOfoIDVZCU5zAg'], cifr_chat, [], ['CAADAgADAwAD2VJTDHENEIKamV7uAg']],
     [['ДИТЯ МОЁ!'], [], citrus_chat, ['ЧТО ТАКОЕ, МАМОЧКА?'], []],
+    [["НА ЛУГУ ПАСУТСЯ КО?"], [], 0, ['РИН-НЕ-КО!'], []],
+    [[], ['CAADAgADFQADjW7LE9KuwWZCfoYDAg'], 53316498, [],
+     ['CAADAgADFwEAAjZ2IA7giFsvKRgOLgI', 'CAADAgADXAQAAuce7AUmmbsbikWzNAI', 'CAADAgADIQEAAlUvqgHwAAEIkuRrIU0C']],
+
+
     [[], ['CAADAgADpgEAAmDrzgNSIT8rlE3K0AI'], 0, [], [], 0],
     [fail_phrase, ['CAADAgADFAADjW7LE9E1TbwjuTk7Ag'], 0, [], [], 1],
     [approve_phrase, ['CAADAgAD4QADNnYgDo3M52SK-Y3iAg'], 0, [], [], 2],
@@ -53,7 +60,8 @@ reactions = [
                                                             'О, КОТЕЙКА.\nЗАКИДЫВАТЬ МОЛНИЯМИ!'], []],
     [["НАТАЛЬЯ?"], ['CAADAgADIwADP_vRD4CXRh4oYhhXAg', "CAADAgADHwADP_vRD3g8MWNndtchAg"], 0,
         ['НАТАЛИРУЙ', "@Abi_Abigale"], ["CAADAgADJAADP_vRDykJokH6fiyLAg"], 4],
-    [['ВЫГОНИ ПРОЧЬ ЭТИХ НАДОЕДЛИВЫХ БОТОВ!'], [], citrus_chat, [], [], 5]
+    [['ВЫГОНИ ПРОЧЬ ЭТИХ НАДОЕДЛИВЫХ БОТОВ!'], [], citrus_chat, [], [], 5],
+    [memory, [], 0, ["МЕМОРИ!", "ОППА!", "ПЕЙ!"], [], 6]
     ]
 
 help_list = ['см. /donate', 'А ЧТО ТУТ НЕПОНЯТНОГО?', 'АЙ НИД СОМБАДИ', '8-800-555-35-35', ';)',
