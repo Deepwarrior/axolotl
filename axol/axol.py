@@ -57,6 +57,16 @@ def axol_voice(message):
             bot.send_message(vip_chat_id, text)
 
 
+@bot.message_handler(commands=["clean"])
+def clean(message):
+    if message.from_user.username in config.root:
+        for player in active_players:
+            if time.time() - player.last_task_time > config.seconds_in_day * 7:
+                player.task_status = 0
+                player.task_id = []
+                player.task = None
+
+
 @bot.message_handler(commands=["send_deep"])
 def send_deep(message):
     text = str(message.text[10:])
@@ -176,15 +186,15 @@ def task_status(message):
         if hasattr(player, "task_id") and len(player.task_id):
             for idx in player.task_id:
                 task = config.tasks[idx]
-                if (task[3] * 60 - ((time.time() - player.last_task_time) // 60)) > tm:
-                    tm = task[3] * 60 - ((time.time() - player.last_task_time) // 60)
+                if (task[2] * 60 - ((time.time() - player.last_task_time) // 60)) > tm:
+                    tm = task[2] * 60 - ((time.time() - player.last_task_time) // 60)
         elif player.task.time:
             tm = player.task.time * 60 - ((time.time() - player.last_task_time) // 60)
-            if tm > 0:
-                answer += "Осталось времени: " + str('{:.0f}'.format(tm // 60)) + " часов и " + \
-                          str('{:.0f}'.format(tm % 60)) + " минут\n"
-            else:
-                answer += "ВЫПОЛНЯЙ, ПОКА НЕ ЗАСЧИТАЮТ!\n"
+        if tm > 0:
+            answer += "Осталось времени: " + str('{:.0f}'.format(tm // 60)) + " часов и " + \
+                        str('{:.0f}'.format(tm % 60)) + " минут\n"
+        else:
+            answer += "ВЫПОЛНЯЙ, ПОКА НЕ ЗАСЧИТАЮТ!\n"
     answer += "Всего сделано: " + str(player.task_completed % 50) + ".\n"
     tm = config.seconds_in_day // 60 - ((time.time() - player.last_task_time) // 60)
     if tm > 0:
@@ -334,7 +344,7 @@ def task_complete(reaction, message):
 
 
 def task_extra(reaction, message):
-    if message.text == 'КЛАЦ!' and message.reply_to_message and message.from_user.username in config.root:
+    if message.reply_to_message and message.from_user.username in config.root:
         player = findplayer(message.reply_to_message.from_user)
         player.task_completed += 1
         bot.send_message(message.chat.id, "ДОПОЛНИТЕЛЬНОЕ ЗАДАНИЕ ВЫПОЛНЕНО!",
@@ -344,6 +354,13 @@ def task_extra(reaction, message):
             bot.send_message(player.user.id, "ПОЗДРАВЛЯЮ! \n МНОГО ЗАДАНИЙ УЖЕ СДЕЛАНО, НО МНОГО БУДЕТ И ВПЕРЕДИ \n "
                                              "А ПОКА ТЫ ВЫИГРАЛ СЕКРЕТНЫЙ ДУРНИРНЫЙ СТИКЕР, ИСПОЛЬЗУЙ ЕГО С УМОМ")
             bot.send_sticker(player.user.id, stick)
+
+
+def anti_task(reaction, message):
+    if message.reply_to_message and message.from_user.username in config.root:
+        player = findplayer(message.reply_to_message.from_user)
+        player.task_completed -= 1
+        bot.send_message(message.chat.id, "ОТМЕНА, ОТМЕНА!", reply_to_message_id=message.reply_to_message.message_id)
 
 
 def natalka(reaction, message):
@@ -379,7 +396,7 @@ def mem_react(reaction, message):
         react(reaction, message)
 
 
-reaction_funcs = [task_rework, task_fail, task_complete, task_extra, natalka, kick_bots, mem_react]
+reaction_funcs = [task_rework, task_fail, task_complete, task_extra, natalka, kick_bots, mem_react, anti_task]
     
 
 def notify(message):
