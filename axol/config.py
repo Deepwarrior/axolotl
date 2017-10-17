@@ -50,6 +50,9 @@ reactions = [
     [["НА ЛУГУ ПАСУТСЯ КО?"], [], 0, ['РИН-НЕ-КО!'], []],
     [[], ['CAADAgADFQADjW7LE9KuwWZCfoYDAg'], 53316498, [],
      ['CAADAgADFwEAAjZ2IA7giFsvKRgOLgI', 'CAADAgADXAQAAuce7AUmmbsbikWzNAI', 'CAADAgADIQEAAlUvqgHwAAEIkuRrIU0C']],
+     [[], ['CAADAgADIQADjW7LE9g1jqY9nf9XAg'], 0, ['https://youtu.be/pzUYYUuk2ys', 'https://youtu.be/Sh85jKmNhaE', 
+     'https://youtu.be/nimqH_NDpdU', 'https://youtu.be/hTaaKpJmt40', 'https://youtu.be/6nY9Cp4WZnI', 
+     'https://youtu.be/8fFrEiKqGEA', 'https://youtu.be/0ZF3rm86Ws4', 'https://youtu.be/3AZ5f_4_t1o'], []],
 
 
     [[], ['CAADAgADpgEAAmDrzgNSIT8rlE3K0AI'], 0, [], [], 0],

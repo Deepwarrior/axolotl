@@ -57,6 +57,12 @@ def axol_voice(message):
             bot.send_message(vip_chat_id, text)
 
 
+@bot.message_handler(commands=["fwd", "FWD"])
+def fwd(message):
+    if message.from_user.username in config.root and message.reply_to_message:
+        bot.send_message(vip_chat_id, message.chat.id, message.reply_to_message.message_id)
+
+
 @bot.message_handler(commands=["clean"])
 def clean(message):
     if message.from_user.username in config.root:
@@ -431,7 +437,7 @@ def sticker_parsing(message):
                 else:
                     react(reaction, message)
     if message.chat.id == debug_chat_id:
-        bot.send_message(debug_chat_id, message.sticker.file_id, reply_to_message_id=message.message_id)
+        bot.send_message(debug_chat_id, '\'' + message.sticker.file_id + '\'', reply_to_message_id=message.message_id)
 
 
 @bot.message_handler(content_types=["text"])
