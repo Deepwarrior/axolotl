@@ -60,7 +60,7 @@ def axol_voice(message):
 @bot.message_handler(commands=["fwd", "FWD"])
 def fwd(message):
     if message.from_user.username in config.root and message.reply_to_message:
-        bot.send_message(vip_chat_id, message.chat.id, message.reply_to_message.message_id)
+        bot.forward_message(vip_chat_id, message.chat.id, message.reply_to_message.message_id)
 
 
 @bot.message_handler(commands=["clean"])
@@ -461,8 +461,8 @@ if __name__ == '__main__':
     random.seed()
     for chat in allow_chats:
         try:
-            bot.send_sticker(chat, 'CAADAgADhQADP_vRD-Do6Qz0fkeMAg')
-            # print('1')
+            # bot.send_sticker(chat, 'CAADAgADhQADP_vRD-Do6Qz0fkeMAg')
+            print('1')
         except telebot.apihelper.ApiException:
             continue
     while True:
