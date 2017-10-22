@@ -8,6 +8,7 @@ import tasks
 import time
 import json
 from requests.exceptions import ReadTimeout
+from threading import Timer
 
 bot = telebot.TeleBot(str(os.environ['TOKEN']))
 active_players = []
@@ -47,6 +48,14 @@ def left_member(message):
         bot.send_message(message.chat.id, "ОНЕТ!", reply_to_message_id=message.message_id)
     else:
         bot.send_message(message.chat.id, "ОУРА!", reply_to_message_id=message.message_id)
+
+
+@bot.message_handler(commands=["IGRO", "igro"])
+def axol_igrovoice(message):
+    if message.from_user.username in config.root:
+        text = str(message.text[6:])
+        if text:
+            bot.send_message(igroklub_chat, text)
 
 
 @bot.message_handler(commands=["mess", "MESS"])
@@ -340,7 +349,7 @@ def task_complete(reaction, message):
 
             if player.mess_from_bot:
                 bot.send_message(player.user.id, "ХЭЭЭЙ! ТЕБЕ ЗАСЧИТАЛИ!")
-            if player.task_completed == 20:
+            if player.task_completed % 50 == 20:
                 stick = random.choice(config.bonus_20)
                 bot.send_message(player.user.id, "ПОЗДРАВЛЯЮ! \n МНОГО ЗАДАНИЙ УЖЕ СДЕЛАНО, НО МНОГО БУДЕТ И ВПЕРЕДИ \n"
                                                  " А ПОКА ТЫ ВЫИГРАЛ СЕКРЕТНЫЙ ДУРНИРНЫЙ СТИКЕР, ИСПОЛЬЗУЙ ЕГО С УМОМ")
@@ -369,9 +378,14 @@ def anti_task(reaction, message):
         bot.send_message(message.chat.id, "ОТМЕНА, ОТМЕНА!", reply_to_message_id=message.reply_to_message.message_id)
 
 
+def vbuena(arg):
+    bot.send_sticker(arg, 'CAADAgADJwADP_vRD_M5_IJz9qzxAg')
+
+
 def natalka(reaction, message):
     cur_time = time.localtime(time.time())
     minutes = cur_time.tm_min
+    seconds = cur_time.tm_sec
     rand = random.randint(0, 4)
     if rand:
         text = 'НАТАЛЬЯ '
@@ -379,6 +393,9 @@ def natalka(reaction, message):
             text += '0'
         text += str((minutes + rand + 1) % 60)
         bot.send_message(message.chat.id, text, reply_to_message_id=message.message_id)
+
+        timer = Timer(60 * rand - seconds, vbuena, [message.chat.id])
+        timer.start()
     else:
         react(reaction, message)
 
@@ -394,6 +411,13 @@ def kick_bots(reaction, message):
             time.sleep(1)
 
 
+def kick_lyuds(reaction, message):
+    try:
+        bot.restrict_chat_member(message.chat.id, message.from_user.id, 2 * 60 * 60, False, False, False, False)
+    except telebot.apihelper.ApiException:
+        time.sleep(1)
+
+
 def mem_react(reaction, message):
     rand = random.randint(0, 10)
     if rand < 10:
@@ -402,7 +426,18 @@ def mem_react(reaction, message):
         react(reaction, message)
 
 
-reaction_funcs = [task_rework, task_fail, task_complete, task_extra, natalka, kick_bots, mem_react, anti_task]
+def set_admin(reaction, message):
+    if message.from_user.username in config.root:
+        try:
+            bot.promote_chat_member(message.chat.id, message.from_user.id,
+                                    True, False, False, True, True, True, True, True)
+            bot.send_message(message.chat.id, 'ЗВЕЗДА У НОГ ТВОИХ!', reply_to_message_id=message.message_id)
+        except telebot.apihelper.ApiException:
+            time.sleep(1)
+
+reaction_funcs = {"task_rework": task_rework, "task_fail": task_fail, "task_complete": task_complete,
+                  "task_extra": task_extra, "natalka": natalka, "kick_bots": kick_bots, "kick_lyuds": kick_lyuds,
+                  "mem_react": mem_react, "anti_task": anti_task, "set_admin": set_admin}
     
 
 def notify(message):
@@ -426,6 +461,10 @@ def notify(message):
                 player.mess_sended = True
 
 
+#def task_check(message):
+
+
+
 @bot.message_handler(content_types=["sticker"])
 def sticker_parsing(message):
     notify(message)
@@ -438,6 +477,7 @@ def sticker_parsing(message):
                     react(reaction, message)
     if message.chat.id == debug_chat_id:
         bot.send_message(debug_chat_id, '\'' + message.sticker.file_id + '\'', reply_to_message_id=message.message_id)
+    #task_check(message)
 
 
 @bot.message_handler(content_types=["text"])
@@ -450,6 +490,7 @@ def message_parsing(message):
                     reaction_funcs[reaction[5]](reaction, message)
                 else:
                     react(reaction, message)
+    #task_check(message)
 
 
 if __name__ == '__main__':
@@ -461,8 +502,8 @@ if __name__ == '__main__':
     random.seed()
     for chat in allow_chats:
         try:
-            # bot.send_sticker(chat, 'CAADAgADhQADP_vRD-Do6Qz0fkeMAg')
-            print('1')
+            bot.send_sticker(chat, 'CAADAgADhQADP_vRD-Do6Qz0fkeMAg')
+            # print('1')
         except telebot.apihelper.ApiException:
             continue
     while True:

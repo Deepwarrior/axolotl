@@ -27,7 +27,8 @@ dlinnohead = \
      'CAADBAADgQMAAuJy2QABf0C0EPLQO0UC', 'CAADBAADawMAAuJy2QABFA81XvWYIZ8C', 'CAADBAADdQMAAuJy2QABt8J1yVBTIQoC',
      'CAADAgAD3gMAAtQlfAlfLmgHaL2eTgI', 'CAADAgADMAAD2VJTDMSYdTjWjmeuAg']
 memory = ["30 ДЕКАБРЯ", "АЗАЗА", "БАЯН", "БУГУЛЬМА", "ДНИЩЕ", "КОМАНДА ТИГРОВ", "КОНЬЯК", "ОПТИЧЕСКАЯ ИНФОРМАТИКА",
-          "ПИРАНЬЯ", "ПОЛЁТ", "ПЯТОЧКИ", "РОБИНЗОН", "САМАРАНГ", "СЕКСИЗМ"]
+          "ПИРАНЬЯ", "ПОЛЁТ", "ПЯТОЧКИ", "РОБИНЗОН", "САМАРАНГ", "СЕКСИЗМ",
+          "КОРМИЛИЦА", "УНХОНЯШЕЧКА ЛОНГУСЕНЬКАЯ", "СИСЕНИКА", "ДИПОЧЕНЬКО", "КАМНЕПАД, ВСЕ УМЕРЛИ"]
 # format: message_list, sticker_list, user, reaction_messages_list, reaction_stickers_list, func for executing
 # "[[], [], 0, [], [], None],"
 reactions = [
@@ -53,21 +54,22 @@ reactions = [
      [[], ['CAADAgADIQADjW7LE9g1jqY9nf9XAg'], 0, ['https://youtu.be/pzUYYUuk2ys', 'https://youtu.be/Sh85jKmNhaE', 
      'https://youtu.be/nimqH_NDpdU', 'https://youtu.be/hTaaKpJmt40', 'https://youtu.be/6nY9Cp4WZnI', 
      'https://youtu.be/8fFrEiKqGEA', 'https://youtu.be/0ZF3rm86Ws4', 'https://youtu.be/3AZ5f_4_t1o'], []],
-
-
-    [[], ['CAADAgADpgEAAmDrzgNSIT8rlE3K0AI'], 0, [], [], 0],
-    [fail_phrase, ['CAADAgADFAADjW7LE9E1TbwjuTk7Ag'], 0, [], [], 1],
-    [approve_phrase, ['CAADAgAD4QADNnYgDo3M52SK-Y3iAg'], 0, [], [], 2],
-    [['КЛАЦ!'], [], 0, [], [], 3],
     [['D: D: D: D: D: D: D: D: D: D:'], [], 0, [], ['CAADAgADHQADjW7LE5T5heR8tu6uAg']],
     [[], ['CAADAgADHQADO9HBD8DTsJ6PcoXXAg'], rinneko_chat, ['О, РИНЕЙКА.\nЗАКИДЫВАТЬ МОЛНИЯМИ!',
                                                             'О, РИННЕКО.\nЗАКИДЫВАТЬ МОЛНИЯМИ!',
                                                             'О, КОТЕЙКА.\nЗАКИДЫВАТЬ МОЛНИЯМИ!'], []],
+
+    [[], ['CAADAgADpgEAAmDrzgNSIT8rlE3K0AI'], 0, [], [], "task_rework"],
+    [fail_phrase, ['CAADAgADFAADjW7LE9E1TbwjuTk7Ag'], 0, [], [], "task_fail"],
+    [approve_phrase, ['CAADAgAD4QADNnYgDo3M52SK-Y3iAg'], 0, [], [], "task_complete"],
+    [['КЛАЦ!'], [], 0, [], [], "task_extra"],
     [["НАТАЛЬЯ?"], ['CAADAgADIwADP_vRD4CXRh4oYhhXAg', "CAADAgADHwADP_vRD3g8MWNndtchAg"], 0,
-        ['НАТАЛИРУЙ', "@Abi_Abigale"], ["CAADAgADJAADP_vRDykJokH6fiyLAg"], 4],
-    [['ВЫГОНИ ПРОЧЬ ЭТИХ НАДОЕДЛИВЫХ БОТОВ!'], [], citrus_chat, [], [], 5],
-    [memory, [], 0, ["МЕМОРИ!", "ОППА!", "ПЕЙ!"], [], 6],
-    [['АНТИКЛАЦ!'], [], 0, [], [], 7]
+        ['НАТАЛИРУЙ', "@Abi_Abigale"], ["CAADAgADJAADP_vRDykJokH6fiyLAg"], "natalka"],
+    [['ВЫГОНИ ПРОЧЬ ЭТИХ НАДОЕДЛИВЫХ БОТОВ!'], [], citrus_chat, [], [], "kick_bots"],
+    [['ЗАБАНЬТЕ МЕНЯ НА ПАРУ ЧАСИКОВ'], [], 0, [], [], "kick_lyuds"],
+    [memory, [], 0, ["МЕМОРИ!", "ОППА!", "ПЕЙ!"], [], "mem_react"],
+    [['АНТИКЛАЦ!'], [], 0, [], [], "anti_task"],
+    [['ДАЙТЕ ЗВЁЗДОЧКУ!', 'ПОДАРИ МНЕ ЗВЕЗДУ!'], [], 0, [], [], "set_admin"]
     ]
 
 help_list = ['см. /donate', 'А ЧТО ТУТ НЕПОНЯТНОГО?', 'АЙ НИД СОМБАДИ', '8-800-555-35-35', ';)',
