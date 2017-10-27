@@ -13,11 +13,37 @@ from threading import Timer
 bot = telebot.TeleBot(str(os.environ['TOKEN']))
 active_players = []
 
+day = 24 * 60 * 60
+
 vip_chat_id = -1001145739506
 debug_chat_id = -1001107497089
 igroklub_chat = -1001108031278
 allow_chats = [vip_chat_id, debug_chat_id, -1001149068208, igroklub_chat]
 
+
+def zrena():
+    bot.send_sticker(vip_chat_id, 'CAADAgADHQADO9HBD8DTsJ6PcoXXAg')
+    timer = Timer(day, zrena)
+    timer.start()
+
+
+def zrena_timers_init():
+    cur_time = time.localtime(time.time())
+    mins = cur_time.tm_min
+    sec = cur_time.tm_sec
+    hours = cur_time.tm_hour
+    tim = (day + 55 * 60 - hours * 3600 - mins * 60 - sec) % day
+    timer = Timer(tim, zrena)
+    timer.start()
+    tim = (day + 40 * 60 + 8 * 3600 - hours * 3600 - mins * 60 - sec) % day
+    timer = Timer(tim, zrena)
+    timer.start()
+    tim = (day + 10 * 60 + 13 * 3600 - hours * 3600 - mins * 60 - sec) % day
+    timer = Timer(tim, zrena)
+    timer.start()
+    tim = (day + 35 * 60 + 19 * 3600 - hours * 3600 - mins * 60 - sec) % day
+    timer = Timer(tim, zrena)
+    timer.start()
 
 
 def jsonDefault(object):
@@ -177,7 +203,7 @@ def panteon(message):
 
 @bot.message_handler(commands=["top_pozora"])
 def pozor(message):
-    bot.send_message(message.chat.id, "ТОП ПОЗОРА: \n1. ХАМПЕР\n2.САРАСТИ\n3. МАБА")
+    bot.send_message(message.chat.id, "ТОП ПОЗОРА: \n1. ХАМПЕР @p_hamper\n2.САРАСТИ @truesarasti\n3. МАБА @MabaKalloh")
 
 
 @bot.message_handler(commands=["top_sarasti"])
@@ -464,7 +490,6 @@ def notify(message):
 #def task_check(message):
 
 
-
 @bot.message_handler(content_types=["sticker"])
 def sticker_parsing(message):
     notify(message)
@@ -499,6 +524,7 @@ if __name__ == '__main__':
     for x in templist:
         active_players.append(players.Player(**x))
     f.close()
+    zrena_timers_init()
     random.seed()
     for chat in allow_chats:
         try:
