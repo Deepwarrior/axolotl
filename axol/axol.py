@@ -221,7 +221,7 @@ def task_status(message):
         if player.task_completed < 40:
             if hasattr(player, "task_id") and len(player.task_id):
                 answer += config.tasks[player.task_id[0]][1] + "\n"
-            else:
+            elif player.task:
                 answer += player.task.text + "\n"
         else:
             answer += ")))\n"
