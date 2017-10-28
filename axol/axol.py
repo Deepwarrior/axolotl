@@ -22,9 +22,8 @@ allow_chats = [vip_chat_id, debug_chat_id, -1001149068208, igroklub_chat]
 
 
 def zrena():
-    bot.send_sticker(vip_chat_id, 'CAADAgADHQADO9HBD8DTsJ6PcoXXAg')
-    text = random.choice(["РИННЕКО", "РИНЕЙКА", "КОТЕЙКА"])
-    bot.send_message(vip_chat_id, 'А ЕСЛИ БЫ ЭТО НАПИСАЛА ' + text + ', Я БЫ ПРЕДЛОЖИЛ ЗАКИДЫВАТЬ МОЛНИЯМИ')
+    bot.send_sticker(vip_chat_id, 'CAADAgADtAADP_vRD1iCbwT85WNIAg')
+    bot.send_message(vip_chat_id, 'ХАЛЯВНЫЙ ЗАРЯД! ГО ПИЛИТЬ РАНДОМЩИКОВ!')
     timer = Timer(day, zrena)
     timer.start()
 
@@ -231,7 +230,7 @@ def task_status(message):
                 task = config.tasks[idx]
                 if (task[2] * 60 - ((time.time() - player.last_task_time) // 60)) > tm:
                     tm = task[2] * 60 - ((time.time() - player.last_task_time) // 60)
-        elif player.task.time:
+        elif player.task and player.task.time:
             tm = player.task.time * 60 - ((time.time() - player.last_task_time) // 60)
         if tm > 0:
             answer += "Осталось времени: " + str('{:.0f}'.format(tm // 60)) + " часов и " + \
