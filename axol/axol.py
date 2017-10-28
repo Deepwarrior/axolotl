@@ -23,6 +23,8 @@ allow_chats = [vip_chat_id, debug_chat_id, -1001149068208, igroklub_chat]
 
 def zrena():
     bot.send_sticker(vip_chat_id, 'CAADAgADHQADO9HBD8DTsJ6PcoXXAg')
+    text = random.choice(["РИННЕКО", "РИНЕЙКА", "КОТЕЙКА"])
+    bot.send_message(vip_chat_id, 'А ЕСЛИ БЫ ЭТО НАПИСАЛА ' + text + ', Я БЫ ПРЕДЛОЖИЛ ЗАКИДЫВАТЬ МОЛНИЯМИ')
     timer = Timer(day, zrena)
     timer.start()
 
@@ -528,8 +530,8 @@ if __name__ == '__main__':
     random.seed()
     for chat in allow_chats:
         try:
-            bot.send_sticker(chat, 'CAADAgADhQADP_vRD-Do6Qz0fkeMAg')
-            # print('1')
+            # bot.send_sticker(chat, 'CAADAgADhQADP_vRD-Do6Qz0fkeMAg')
+            print('1')
         except telebot.apihelper.ApiException:
             continue
     while True:

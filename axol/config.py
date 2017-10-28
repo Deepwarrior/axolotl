@@ -63,7 +63,7 @@ reactions = [
                                                             'О, РИННЕКО.\nЗАКИДЫВАТЬ МОЛНИЯМИ!',
                                                             'О, КОТЕЙКА.\nЗАКИДЫВАТЬ МОЛНИЯМИ!'], []],
     [[], ['CAADAgADjQADP_vRD6t7L9YKnP1eAg'], 44989459,
-     ["https://pp.userapi.com/c639627/v639627599/5b009/flPJ3T4a_o8.jpg"], []],
+     ["https://pp.userapi.com/c639627/v639627599/5b009/flPJ3T4a_o8.jpg"], ['CAADAgADoQADg8cnEW-_9xNR4RKLAg']],
 
     [[], ['CAADAgADpgEAAmDrzgNSIT8rlE3K0AI'], 0, [], [], "task_rework"],
     [fail_phrase, ['CAADAgADFAADjW7LE9E1TbwjuTk7Ag'], 0, [], [], "task_fail"],
