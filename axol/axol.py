@@ -469,21 +469,22 @@ reaction_funcs = {"task_rework": task_rework, "task_fail": task_fail, "task_comp
 
 def notify(message):
     for player in active_players:
-        if player.task and not player.informed:
-            if player.task.time:
-                if time.time() - player.last_task_time > player.task.time * 3600:
-                    player.informed = True
-                    bot.send_message(debug_chat_id, players.to_string(player) + '\nВремя задания истекло! Оцените!')
-            if player.task.messages:
-                if message.message_id - player.last_task_mssg > player.task.messages:
-                    player.informed = True
-                    bot.send_message(debug_chat_id, players.to_string(player) + '\nВсе сообщения написаны! Оцените!')
+        # if player.task and not player.informed:
+        #    if player.task.time:
+        #        if time.time() - player.last_task_time > player.task.time * 3600:
+        #            player.informed = True
+        #           bot.send_message(debug_chat_id, players.to_string(player) + '\nВремя задания истекло! Оцените!')
+        #   if player.task.messages:
+        #       if message.message_id - player.last_task_mssg > player.task.messages:
+        #           player.informed = True
+        #            bot.send_message(debug_chat_id, players.to_string(player) + '\nВсе сообщения написаны! Оцените!')
         if player.mess_from_bot and not player.mess_sended \
                 and time.time() - player.last_task_time > config.seconds_in_day:
             try:
                 bot.send_message(player.user.id, "МОЖНО ВЗЯТЬ И СДЕЛАТЬ НОВОЕ ЗАДАНИЕ!")
             except telebot.apihelper.ApiException:
                 player.mess_from_bot = False
+                print("notify failed.")
             finally:
                 player.mess_sended = True
 
