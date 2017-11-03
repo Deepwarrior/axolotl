@@ -36,13 +36,13 @@ def zrena_timers_init():
     tim = (day + 55 * 60 - hours * 3600 - mins * 60 - sec) % day
     timer = Timer(tim, zrena)
     timer.start()
-    tim = (day + 40 * 60 + 8 * 3600 - hours * 3600 - mins * 60 - sec) % day
+    tim = (day + 40 * 60 + 9 * 3600 - hours * 3600 - mins * 60 - sec) % day
     timer = Timer(tim, zrena)
     timer.start()
-    tim = (day + 10 * 60 + 13 * 3600 - hours * 3600 - mins * 60 - sec) % day
+    tim = (day + 10 * 60 + 20 * 3600 - hours * 3600 - mins * 60 - sec) % day
     timer = Timer(tim, zrena)
     timer.start()
-    tim = (day + 35 * 60 + 19 * 3600 - hours * 3600 - mins * 60 - sec) % day
+    tim = (day + 35 * 60 + 14 * 3600 - hours * 3600 - mins * 60 - sec) % day
     timer = Timer(tim, zrena)
     timer.start()
 
@@ -462,9 +462,16 @@ def set_admin(reaction, message):
         except telebot.apihelper.ApiException:
             time.sleep(1)
 
+
+def whois(reaction, message):
+    if message.reply_to_message and message.from_user.username in config.root:
+        player = findplayer(message.reply_to_message.from_user)
+        if (player.task or (hasattr(player, "task_id") and len(player.task_id))) and player.task_status == 1:
+                bot.send_message(message.chat.id, players.to_string(player))
+
 reaction_funcs = {"task_rework": task_rework, "task_fail": task_fail, "task_complete": task_complete,
                   "task_extra": task_extra, "natalka": natalka, "kick_bots": kick_bots, "kick_lyuds": kick_lyuds,
-                  "mem_react": mem_react, "anti_task": anti_task, "set_admin": set_admin}
+                  "mem_react": mem_react, "anti_task": anti_task, "set_admin": set_admin, "whois":whois}
     
 
 def notify(message):
@@ -530,8 +537,8 @@ if __name__ == '__main__':
     random.seed()
     for chat in allow_chats:
         try:
-            # bot.send_sticker(chat, 'CAADAgADhQADP_vRD-Do6Qz0fkeMAg')
-            print('1')
+            bot.send_sticker(chat, 'CAADAgADhQADP_vRD-Do6Qz0fkeMAg')
+            # print('1')
         except telebot.apihelper.ApiException:
             continue
     while True:
