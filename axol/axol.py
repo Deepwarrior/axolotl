@@ -55,6 +55,7 @@ def jsonDefault(object):
 def findplayer(user):
     for player in active_players:
         if player.user.id == user.id:
+            player.user = user
             return player
     player = players.Player(user)
     active_players.append(player)
@@ -240,6 +241,7 @@ def task_status(message):
     answer += "Всего сделано: " + str(player.task_completed % 50) + ".\n"
     tm = config.seconds_in_day // 60 - ((time.time() - player.last_task_time) // 60)
     if tm > 0:
+        tm += 60                                                                                # 1 min more
         answer += "До следующего задания: " + str('{:.0f}'.format(tm // 60)) + " часов и " + \
                   str('{:.0f}'.format(tm % 60)) + " минут\n"
     bot.send_message(message.chat.id, answer)
@@ -509,7 +511,7 @@ def sticker_parsing(message):
                     reaction_funcs[reaction[5]](reaction, message)
                 else:
                     react(reaction, message)
-    if message.chat.id == debug_chat_id:
+    if message.chat.id == debug_chat_id or message.chat.id == config.cifr_chat:
         bot.send_message(debug_chat_id, '\'' + message.sticker.file_id + '\'', reply_to_message_id=message.message_id)
     #task_check(message)
 
