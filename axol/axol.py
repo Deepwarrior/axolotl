@@ -205,7 +205,26 @@ def panteon(message):
 
 @bot.message_handler(commands=["top_pozora"])
 def pozor(message):
-    bot.send_message(message.chat.id, "ТОП ПОЗОРА: \n1. ХАМПЕР @p_hamper\n2.САРАСТИ @truesarasti\n3. МАБА @MabaKalloh")
+    text = "ТОП ПОЗОРА: \n"
+    i = 1
+
+    for player in active_players:
+        try:
+            user = bot.get_chat_member(message.chat.id, player.user.id)
+        except telebot.apihelper.ApiException:
+            continue
+        if time.time() - player.last_task_time > 3600 * 500 and user and \
+           user.status in ["member", "creator", "administrator"] and not user.user.username == "rakon_bot":
+                text += str(i) + '. '
+                if user.user.first_name:
+                    text += str(user.user.first_name) + ' '
+                if user.user.last_name:
+                    text += str(user.user.last_name) + ' '
+                if user.user.username:
+                    text += '@' + str(user.user.username) + '.\t'
+                text += '\n'
+                i += 1
+    bot.send_message(message.chat.id, text)
 
 
 @bot.message_handler(commands=["top_sarasti"])
