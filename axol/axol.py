@@ -110,6 +110,35 @@ def clean(message):
                 player.task = None
 
 
+@bot.message_handler(commands=["long"])
+def long_cat(message):
+    text = str(message.text[6:])
+    if not text:
+        return
+    try:
+        num = int(text)
+    except ValueError:
+        bot.send_message(message.chat.id, "ТЫ ИЛИ ЦИФЕРКА, ИЛИ ГЛУПЫЙ")
+        return
+
+    if num > 15 and not message.from_user.id == config.cifr_chat:
+        bot.send_message(message.chat.id, "ТЫ НЕ ЦИФЕРКА!")
+        return
+    if num > 100:
+        bot.send_message(message.chat.id, "1", reply_to_message_id=message.message_id)
+        return
+    if num < 2:
+        bot.send_message(message.chat.id, "ЗАЧЕМ ТЕБЕ КОТ-ИНВАЛИД?")
+        return
+    bot.send_sticker(message.chat.id, random.choice(config.cats[0]))
+    for i in range(1, num - 1):
+        bot.send_sticker(message.chat.id, random.choice(config.cats[1]))
+    tail = random.choice(config.cats[2])
+    bot.send_sticker(message.chat.id, tail)
+    if tail == 'CAADAgADeAAD2VJTDNSJtyPtKqeKAg':
+        bot.send_sticker(message.chat.id, 'CAADAgADlgIAAmMr4glN9I0DbTqtTgI')
+
+
 @bot.message_handler(commands=["send_deep"])
 def send_deep(message):
     text = str(message.text[10:])
@@ -209,12 +238,12 @@ def pozor(message):
     i = 1
 
     for player in active_players:
-        try:
-            user = bot.get_chat_member(message.chat.id, player.user.id)
-        except telebot.apihelper.ApiException:
-            continue
-        if time.time() - player.last_task_time > 3600 * 500 and user and \
-           user.status in ["member", "creator", "administrator"] and not user.user.username == "rakon_bot":
+        if time.time() - player.last_task_time > 3600 * 500:
+            try:
+                user = bot.get_chat_member(message.chat.id, player.user.id)
+            except telebot.apihelper.ApiException:
+                continue
+            if user and user.status in ["member", "creator", "administrator"] and not user.user.username == "rakon_bot":
                 text += str(i) + '. '
                 if user.user.first_name:
                     text += str(user.user.first_name) + ' '
@@ -251,7 +280,7 @@ def task_status(message):
                 if (task[2] * 60 - ((time.time() - player.last_task_time) // 60)) > tm:
                     tm = task[2] * 60 - ((time.time() - player.last_task_time) // 60)
         elif player.task and player.task.time:
-            tm = player.task.time * 60 - ((time.time() - player.last_task_time) // 60)
+            tm = player.task.time * 60 - ((time.time() - player.last_task_time) // 60)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
         if tm > 0:
             answer += "Осталось времени: " + str('{:.0f}'.format(tm // 60)) + " часов и " + \
                         str('{:.0f}'.format(tm % 60)) + " минут\n"
@@ -260,7 +289,7 @@ def task_status(message):
     answer += "Всего сделано: " + str(player.task_completed % 50) + ".\n"
     tm = config.seconds_in_day // 60 - ((time.time() - player.last_task_time) // 60)
     if tm > 0:
-        tm += 60                                                                                # 1 min more
+        tm += 1                                                                                # 1 min more
         answer += "До следующего задания: " + str('{:.0f}'.format(tm // 60)) + " часов и " + \
                   str('{:.0f}'.format(tm % 60)) + " минут\n"
     bot.send_message(message.chat.id, answer)
@@ -558,8 +587,8 @@ if __name__ == '__main__':
     random.seed()
     for chat in allow_chats:
         try:
-            bot.send_sticker(chat, 'CAADAgADhQADP_vRD-Do6Qz0fkeMAg')
-            # print('1')
+            # bot.send_sticker(chat, 'CAADAgADhQADP_vRD-Do6Qz0fkeMAg')
+            print('1')
         except telebot.apihelper.ApiException:
             continue
     while True:
