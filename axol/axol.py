@@ -174,13 +174,13 @@ def send_uhi(message):
         text = message.from_user.last_name + text
     if message.from_user.first_name:
         text = message.from_user.first_name + ' ' + text
-    bot.send_message(287819651, text)
+    bot.send_message(config.citrus_chat, text)
 
 
 @bot.message_handler(commands=["send"])
 def send(message):
     text = str(message.text[6:])
-    if not text:
+    if not text or text == "rakon_bot":
         bot.send_message(message.chat.id, "НЕТ, НЕТ, НУЖНО ПИСАТЬ ПИСЬМО ПРОВЕРЯТОРАМ В ТОМ ЖЕ СООБЩЕНИИ, ЧТО И /send")
         return
     text = ': ' + text
@@ -258,7 +258,8 @@ def pozor(message):
 
 @bot.message_handler(commands=["top_sarasti"])
 def sarasti(message):
-    bot.send_message(message.chat.id, "ТОП САРАСТИ: \n-1. АРУЛУТ\n1. САРАСТИ")
+    bot.send_voice(message.chat.id, 'AwADAgAD0QADNxYpSFb3d6KS2tHAAg',
+                   caption="ТОП САРАСТИ:\n-1. АРУЛУТ\n1. САРАСТИ\n2. САРАСТИШЕЧКА\n3. РАСТИШИШКА\n4. s a r A S I S k a")
 
 
 @bot.message_handler(commands=["my_task"])
@@ -266,17 +267,21 @@ def task_status(message):
     player = findplayer(message.from_user)
     answer = ""
     tm = 0
+    if player.task_completed < 100:
+        tasks = config.tasks
+    else:
+        tasks = config.black_tasks
     if player.task_status == 1:
-        if player.task_completed < 40:
+        if player.task_completed % 100 < 40:
             if hasattr(player, "task_id") and len(player.task_id):
-                answer += config.tasks[player.task_id[0]][1] + "\n"
+                answer += tasks[player.task_id[0]][1] + "\n"
             elif player.task:
                 answer += player.task.text + "\n"
         else:
             answer += ")))\n"
         if hasattr(player, "task_id") and len(player.task_id):
             for idx in player.task_id:
-                task = config.tasks[idx]
+                task = tasks[idx]
                 if (task[2] * 60 - ((time.time() - player.last_task_time) // 60)) > tm:
                     tm = task[2] * 60 - ((time.time() - player.last_task_time) // 60)
         elif player.task and player.task.time:
@@ -316,20 +321,24 @@ def get_task(message):
                 bot.send_message(message.chat.id, "НОВОЕ ЗАДАНИЕ БУДЕТ НЕСКОРО!",
                                  reply_to_message_id=message.message_id)
             else:
+                if player.task_completed < 100:
+                    tasks = config.tasks
+                else:
+                    tasks = config.black_tasks
                 player.task_status = 1
                 player.last_task_time = time.time()
                 player.last_task_mssg = message.message_id
                 rand = random.randint(1, 500)
-                if rand == 237:
+                if rand == 237 and player.task_completed < 100:
                     task = ['CAADAgADaQADP_vRD78igQttLbufAg', 'КОЛДУЮ, КОЛДУЮ... ВЖУХ! И ТЫ ПИДОР ДНЯ.', 0, 0]
                     bot.send_sticker(message.chat.id, task[0])
                     bot.send_message(message.chat.id, task[1])
                 else:
-                    rand = random.randint(0, len(config.tasks) - 1)
-                    task = config.tasks[rand]
+                    rand = random.randint(0, len(tasks) - 1)
+                    task = tasks[rand]
                     player.task_id.append(rand)
                     bot.send_sticker(message.chat.id, task[0])
-                    if player.task_completed < 40:
+                    if player.task_completed % 100 < 40:
                         bot.send_message(message.chat.id, task[1])
                     else:
                         text = random.choice(["ТЫ УЖЕ БОЛЬШОЙ, САМ РАЗБЕРЕШЬСЯ", "<СПОЙЛЕРЫ>", "Я ПОЗАБЫЛ ВСЕ СЛОВА",
@@ -338,11 +347,19 @@ def get_task(message):
                     player.informed = False
                     player.mess_sended = False
                     backup(None)
-                    if player.task_completed >= 70:
+                    if player.task_completed % 100 >= 70:
                         bot.send_message(message.chat.id, "А ВОТ ЕЩЁ ТЕБЕ...")
-                        rand = random.randint(1, len(config.tasks))
-                        bot.send_sticker(message.chat.id, config.tasks[rand][0])
+                        rand = random.randint(1, len(tasks))
+                        bot.send_sticker(message.chat.id, tasks[rand][0])
                         player.task_id.append(rand)
+                    if player.task_completed % 100 == 99:
+                        rand = random.randint(1, len(tasks))
+                        bot.send_sticker(message.chat.id, tasks[rand][0])
+                        player.task_id.append(rand)
+                        rand = random.randint(1, len(tasks))
+                        bot.send_sticker(message.chat.id, tasks[rand][0])
+                        player.task_id.append(rand)
+                        bot.send_message(message.chat.id, "АЗАЗА, УДАЧИ")
 
 
 # root command. See all players with tasks.
@@ -411,8 +428,11 @@ def task_complete(reaction, message):
             player.task_completed += 1
             if player.task_completed == 50:
                 bot.send_message(player.user.id, "АЗАЗА, ТЫ УМИР")
-                bot.send_message(message.chat.id, "ЗАДАНИЕ ВЫПОЛНЕНО!\nВСЕГО СДЕЛАНО " + str(player.task_completed) +
-                                 " ЗАДАНИЙ", reply_to_message_id=message.reply_to_message.message_id)
+            if player.task_completed == 100:
+                bot.send_message(player.user.id, "СГОРИ ДОТЛА! КАК И ВСЕ ТВОИ ОЧКИ")
+            if player.task_completed % 50 == 0:
+                bot.send_message(message.chat.id, "ЗАДАНИЕ ВЫПОЛНЕНО!\nВСЕГО СДЕЛАНО 50 ЗАДАНИЙ!",
+                                 reply_to_message_id=message.reply_to_message.message_id)
                 time.sleep(3)
                 bot.send_message(message.chat.id, "ХОТЯЯЯЯ...")
                 time.sleep(1)
@@ -429,7 +449,7 @@ def task_complete(reaction, message):
             if player.task_completed % 50 == 20:
                 stick = random.choice(config.bonus_20)
                 bot.send_message(player.user.id, "ПОЗДРАВЛЯЮ! \n МНОГО ЗАДАНИЙ УЖЕ СДЕЛАНО, НО МНОГО БУДЕТ И ВПЕРЕДИ \n"
-                                                 " А ПОКА ТЫ ВЫИГРАЛ СЕКРЕТНЫЙ ДУРНИРНЫЙ СТИКЕР, ИСПОЛЬЗУЙ ЕГО С УМОМ")
+                                                 "А ПОКА ТЫ ВЫИГРАЛ СЕКРЕТНЫЙ ДУРНИРНЫЙ СТИКЕР, ИСПОЛЬЗУЙ ЕГО С УМОМ")
                 bot.send_sticker(player.user.id, stick)
             if player.task_completed == 60:
                 bot.send_message(message.chat.id, "ТЕБЯ ВЕДЬ УЖЕ ОБНУЛИЛИ... ЗАЧЕМ ТЫ ПРОДОЛЖАЕШЬ ИХ ДЕЛАТЬ?")
@@ -441,7 +461,7 @@ def task_extra(reaction, message):
         player.task_completed += 1
         bot.send_message(message.chat.id, "ДОПОЛНИТЕЛЬНОЕ ЗАДАНИЕ ВЫПОЛНЕНО!",
                          reply_to_message_id=message.reply_to_message.message_id)
-        if player.task_completed == 20:
+        if player.task_completed % 50 == 20:
             stick = random.choice(config.bonus_20)
             bot.send_message(player.user.id, "ПОЗДРАВЛЯЮ! \n МНОГО ЗАДАНИЙ УЖЕ СДЕЛАНО, НО МНОГО БУДЕТ И ВПЕРЕДИ \n "
                                              "А ПОКА ТЫ ВЫИГРАЛ СЕКРЕТНЫЙ ДУРНИРНЫЙ СТИКЕР, ИСПОЛЬЗУЙ ЕГО С УМОМ")
@@ -455,8 +475,14 @@ def anti_task(reaction, message):
         bot.send_message(message.chat.id, "ОТМЕНА, ОТМЕНА!", reply_to_message_id=message.reply_to_message.message_id)
 
 
+def drig(arg):
+    bot.send_message(arg, "ДРЫГАЙТЕ, ЧЕРТИ!")
+
+
 def vbuena(arg):
     bot.send_sticker(arg, 'CAADAgADJwADP_vRD_M5_IJz9qzxAg')
+    timer = Timer(60, drig, [arg])
+    timer.start()
 
 
 def natalka(reaction, message):
@@ -577,6 +603,12 @@ def message_parsing(message):
     #task_check(message)
 
 
+@bot.message_handler(content_types=["voice"])
+def voice_parsing(message):
+    if message.chat.id == debug_chat_id:
+        bot.send_message(message.chat.id, '\'' + message.voice.file_id + '\'', reply_to_message_id=message.message_id)
+
+
 if __name__ == '__main__':
     f = open('players.json', 'r')
     templist = json.load(f)
@@ -587,8 +619,8 @@ if __name__ == '__main__':
     random.seed()
     for chat in allow_chats:
         try:
-            # bot.send_sticker(chat, 'CAADAgADhQADP_vRD-Do6Qz0fkeMAg')
-            print('1')
+            bot.send_sticker(chat, 'CAADAgADhQADP_vRD-Do6Qz0fkeMAg')
+            # print('1')
         except telebot.apihelper.ApiException:
             continue
     while True:

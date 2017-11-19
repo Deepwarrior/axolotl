@@ -23,9 +23,14 @@ def to_string(self):
     secs = time.time() - self.last_task_time
     res += 'Time: ' + str(secs // 3600) + 'h ' + str(secs // 60 % 60) + 'm ' + str(secs // 1 % 60) + 's\n'
 
+    if self.task_completed < 100:
+        tasks = config.tasks
+    else:
+        tasks = config.black_tasks
+
     if hasattr(self, "task_id") and len(self.task_id):
         for idx in self.task_id:
-            res += config.tasks[idx][1] + '\n'
+            res += tasks[idx][1] + '\n'
     elif self.task:
         res += self.task.text + '\n'
     return res
