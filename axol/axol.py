@@ -27,6 +27,30 @@ def zrena():
     timer = Timer(day, zrena)
     timer.start()
 
+def drig(arg):
+    bot.send_message(arg, "ДРЫГАЙТЕ, ЧЕРТИ!")
+
+def sec10():
+    bot.send_message(arg, '10 СЕКУНД!')
+    bot.send_message(53316498, 'ТАМ 10 СЕК ОСТАЛОСЬ, СЛЫЫЫЫШЬ')
+    timer = Timer(10, drig)
+    timer.start()
+
+def prig():
+    bot.send_sticker(vip_chat_id, 'CAADAgADJwADP_vRD_M5_IJz9qzxAg')
+    timer = Timer(50, sec10)
+    timer.start()
+
+def prig_init():
+    cur_time = time.localtime(time.time())
+    mins = cur_time.tm_min
+    sec = cur_time.tm_sec
+    hours = cur_time.tm_hour
+    tim = (day + 59 * 60 + 21 * 3600 - hours * 3600 - mins * 60 - sec) % day
+    timer = Timer(tim, prig)
+    timer.start()
+
+
 
 def zrena_timers_init():
     cur_time = time.localtime(time.time())
@@ -484,8 +508,7 @@ def anti_task(reaction, message):
         bot.send_message(message.chat.id, "ОТМЕНА, ОТМЕНА!", reply_to_message_id=message.reply_to_message.message_id)
 
 
-def drig(arg):
-    bot.send_message(arg, "ДРЫГАЙТЕ, ЧЕРТИ!")
+
 
 
 def vbuena(arg):
@@ -625,6 +648,7 @@ if __name__ == '__main__':
         active_players.append(players.Player(**x))
     f.close()
     zrena_timers_init()
+    prig_init()
     random.seed()
     for chat in allow_chats:
         try:
