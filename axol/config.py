@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-root = ['random_answer', 'Deepwarrior', 'kstera']
+root = ['random_answer', 'Deepwarrior', 'kstera', 'uhi_official']
 
 deep_chat = 150029429
-citrus_chat = 287819651
+citrus_chat = 507917490
+uhi_chat = 287819651
 cifr_chat = 206787289
 zoloto_chat = 311689962
 rinneko_chat = 264360251

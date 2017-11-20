@@ -62,6 +62,14 @@ def findplayer(user):
     return player
 
 
+@bot.message_handler(commands=["cheat"])
+def cheat(message):
+    if message.from_user.id == config.citrus_chat:
+        message.from_user.id = config.uhi_chat
+        player = findplayer(message.from_user)
+        player.user.id = config.citrus_chat
+
+
 @bot.message_handler(content_types=["new_chat_member"])
 def new_member(message):
     if message.new_chat_member.id in config.whitelist:
@@ -259,7 +267,8 @@ def pozor(message):
 @bot.message_handler(commands=["top_sarasti"])
 def sarasti(message):
     bot.send_voice(message.chat.id, 'AwADAgAD0QADNxYpSFb3d6KS2tHAAg',
-                   caption="ТОП САРАСТИ:\n-1. АРУЛУТ\n1. САРАСТИ\n2. САРАСТИШЕЧКА\n3. РАСТИШИШКА\n4. s a r A S I S k a")
+                   caption="ТОП САРАСТИ:\n-1. АРУЛУТ\n1. САРАСТИ\n2. САРАСТИШЕЧКА\n3. РАСТИШИШКА\n4. s a r A S I S k a"
+                   "\n5. СИСЕНИКА\n6. САРАСТАЛО")
 
 
 @bot.message_handler(commands=["my_task"])
@@ -619,8 +628,8 @@ if __name__ == '__main__':
     random.seed()
     for chat in allow_chats:
         try:
-            bot.send_sticker(chat, 'CAADAgADhQADP_vRD-Do6Qz0fkeMAg')
-            # print('1')
+            # bot.send_sticker(chat, 'CAADAgADhQADP_vRD-Do6Qz0fkeMAg')
+            print('1')
         except telebot.apihelper.ApiException:
             continue
     while True:
