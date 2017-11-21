@@ -62,14 +62,6 @@ def findplayer(user):
     return player
 
 
-@bot.message_handler(commands=["cheat"])
-def cheat(message):
-    if message.from_user.id == config.citrus_chat:
-        message.from_user.id = config.uhi_chat
-        player = findplayer(message.from_user)
-        player.user.id = config.citrus_chat
-
-
 @bot.message_handler(content_types=["new_chat_member"])
 def new_member(message):
     if message.new_chat_member.id in config.whitelist:
