@@ -259,8 +259,10 @@ def pozor(message):
 @bot.message_handler(commands=["top_sarastie"])
 def sarasti(message):
     text = "ТОП САРАСТИ:\n-1. АРУЛУТ\n1. САРАСТИ\n2. САРАСТИШЕЧКА\n3. РАСТИШИШКА\n4. s a r A S I S k a\n5. СИСЕНИКА"
-    bot.send_voice(message.chat.id, 'AwADAgAD0QADNxYpSFb3d6KS2tHAAg', caption=text)
-    bot.send_message(message.chat.id, text)
+    try:
+        bot.send_voice(message.chat.id, 'AwADAgAD0QADNxYpSFb3d6KS2tHAAg', caption=text)
+    except telebot.apihelper.ApiException:
+        bot.send_message(message.chat.id, text)
 
 @bot.message_handler(commands=["my_task"])
 def task_status(message):
