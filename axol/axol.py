@@ -260,7 +260,7 @@ def pozor(message):
 def sarasti(message):
     bot.send_voice(message.chat.id, 'AwADAgAD0QADNxYpSFb3d6KS2tHAAg',
                    caption="ТОП САРАСТИ:\n-1. АРУЛУТ\n1. САРАСТИ\n2. САРАСТИШЕЧКА\n3. РАСТИШИШКА\n4. s a r A S I S k a"
-                   "\n5. СИСЕНИКА\n6. САРАСТАЛО")
+                   "\n5. СИСЕНИКА\n6. САРАСТАТАЛО")
 
 
 @bot.message_handler(commands=["my_task"])
