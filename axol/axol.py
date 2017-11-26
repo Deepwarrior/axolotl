@@ -264,6 +264,7 @@ def sarasti(message):
     except telebot.apihelper.ApiException:
         bot.send_message(message.chat.id, text)
 
+
 @bot.message_handler(commands=["my_task"])
 def task_status(message):
     player = findplayer(message.from_user)
