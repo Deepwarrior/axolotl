@@ -108,7 +108,7 @@ bonus_20 = ['CAADAgADRwADg8cnEQnjFdN51tf-Ag', 'CAADAgADSAADg8cnEUsVYGZANO6ZAg', 
             'CAADAgADSgADg8cnES219ZCNMV1_Ag', 'CAADAgADSwADg8cnEYi0EfNZVz9OAg', 'CAADAgADVAADg8cnEcm03ptpBsCDAg',
             'CAADAgADXwADg8cnEYHrjnqlQhTxAg', 'CAADAgADYgADg8cnEdE4AfXc_eRPAg', 'CAADAgADrAADg8cnEVlHYI9p1ns9Ag',
             'CAADAgADZgADg8cnEZrVXf7N7QlVAg', 'CAADAgADbgADg8cnEYURWan1h4-0Ag', 'CAADAgADtgADg8cnEajz_hf3D4kDAg',
-            'CAADAgADtwADg8cnEfE3BUFfws6pAg']
+            'CAADAgADtwADg8cnEfE3BUFfws6pAg', 'CAADAgADBgADsjRGHsWkhlxIc8GWAg']
 
 cats = [
 ['CAADAgADRgAD2VJTDCSJuBLsA8EXAg', 'CAADAgADWgAD2VJTDKL0iSC-44aLAg', 'CAADAgADWwAD2VJTDOndp5isfAvfAg',
@@ -151,7 +151,7 @@ tasks = [['CAADAgADSgADP_vRD6EHNhBBV7W_Ag', 'ТЫ ДИП. ИСПОЛЬЗУЙ Д�
          ['CAADAgADQQADP_vRD5i0jEorKyN1Ag', 'ТЫ ЛИИРА. НАРИСУЙ КРАСИВУЮ КАРТИНКУ И ПОКАЖИ НАМ', 23, 0],
          ['CAADAgADcgADP_vRD2nt1nzmOx8JAg', 'ТЫ О ЖИ. БУМАГА! НАЙДИ, КОГО ТЫ ЕЮ МОЖЕШЬ ПОБЕДИТЬ!', 23, 0],
          ['CAADAgADYAADP_vRD1pLEzSHlvVlAg', 'ТЫ МИХЕЙ. ТЫ ПОЙМАЛ САЧКОМ КАМЕНЬ. НАЙДИ, КОГО ТЫ ИМ МОЖЕШЬ ПОБЕДИТЬ!', 23, 0],
-         ['CAADAgADAQEAAjZ2IA6wVfmQOycjlwI', 'ТЫ СДЕЛАЛ РУКАМИ НОЖНИЦЫ, ПОТОМУ ЧТО НИКТО НЕ РИСУЕТ АКСОЛОТЛЕЙ С НИМИ. '
+         ['CAADAgADDQADsjRGHk6CZzMf4hDyAg', 'ТЫ ВЗЯЛ В РУКИ НОЖНИЦЫ ДЛЯ МЕДИЦИНСКИХ ИССЛЕДОВАНИЙ. '
                                              'НАЙДИ, КОГО ТЫ ИМИ МОЖЕШЬ ПОБЕДИТЬ.', 23, 0],
          ['CAADAgADRAADP_vRD1MBUKl5_67DAg', 'ТЫ ФИЛАШТЕКЬЮ. ПИШИ TRANSLITOM.', 3, 300],
          ['CAADAgADcwADP_vRD2eyQ2jFa1PFAg', 'ТЫ ХЕЛЕНАК. ЗАПИРАТЬ КОГО-ТО В МОРЕ И ПОКИНЬ ЕГО С СОКРОВИЩЕМ.'
