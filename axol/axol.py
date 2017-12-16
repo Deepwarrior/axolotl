@@ -626,7 +626,10 @@ if __name__ == '__main__':
     templist = json.load(f)
     for x in templist:
         active_players.append(players.Player(**x))
-        print(x)
+        try:
+            print(x)
+        except UnicodeEncodeError:
+            print(x.encode('utf-8'))
     f.close()
     zrena_timers_init()
     random.seed()
