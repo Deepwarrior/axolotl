@@ -353,14 +353,14 @@ def get_task(message):
                     backup(None)
                     if player.task_completed % 100 >= 70:
                         bot.send_message(message.chat.id, "А ВОТ ЕЩЁ ТЕБЕ...")
-                        rand = random.randint(1, len(tasks))
+                        rand = random.randint(0, len(tasks) - 1)
                         bot.send_sticker(message.chat.id, tasks[rand][0])
                         player.task_id.append(rand)
                     if player.task_completed % 100 == 99:
-                        rand = random.randint(1, len(tasks))
+                        rand = random.randint(0, len(tasks) - 1)
                         bot.send_sticker(message.chat.id, tasks[rand][0])
                         player.task_id.append(rand)
-                        rand = random.randint(1, len(tasks))
+                        rand = random.randint(0, len(tasks) - 1)
                         bot.send_sticker(message.chat.id, tasks[rand][0])
                         player.task_id.append(rand)
                         bot.send_message(message.chat.id, "АЗАЗА, УДАЧИ")
