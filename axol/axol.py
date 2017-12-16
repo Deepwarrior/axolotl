@@ -626,9 +626,8 @@ if __name__ == '__main__':
     templist = json.load(f)
     for x in templist:
         active_players.append(players.Player(**x))
+        print(x)
     f.close()
-    for player in active_players:
-        print(player.__dict__)
     zrena_timers_init()
     random.seed()
     for chat in allow_chats:
