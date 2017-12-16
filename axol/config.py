@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-root = ['random_answer', 'Deepwarrior', 'kstera', 'uhi_official']
+root = ['random_answer', 'Deepwarrior', 'kstera', 'uhi_official', 'alukr', 'Kotokotokotova']
 
 deep_chat = 150029429
 citrus_chat = 507917490

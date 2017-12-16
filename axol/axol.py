@@ -21,6 +21,7 @@ igroklub_chat = -1001108031278
 allow_chats = [vip_chat_id, debug_chat_id, -1001149068208, igroklub_chat]
 all_timers = []
 
+
 def zrena():
     bot.send_sticker(vip_chat_id, 'CAADAgADtAADP_vRD1iCbwT85WNIAg')
     bot.send_message(vip_chat_id, 'ХАЛЯВНЫЙ ЗАРЯД! ГО ПИЛИТЬ РАНДОМЩИКОВ!')
@@ -62,6 +63,28 @@ def findplayer(user):
     return player
 
 
+root_log = ""
+def logging(message):
+    global root_log
+    cur_time = time.localtime(time.time())
+    root_log += str(cur_time.tm_hour) + ':' + str(cur_time.tm_min) + ' '
+    root_log += message.from_user.username + ' сделал '
+    if message.text:
+        root_log += message.text + ' на '
+    else:
+        root_log += message.sticker.file_id + ' на '
+    if message.reply_to_message:
+        root_log += message.reply_to_message.from_user.username
+    root_log += '\n'
+
+@bot.message_handler(commands=["get_logs"])
+def log_output(message):
+    global root_log
+    if message.from_user.username in config.root and root_log:
+        bot.send_message(debug_chat_id, root_log)
+        root_log = ""
+
+
 @bot.message_handler(content_types=["new_chat_member"])
 def new_member(message):
     if message.new_chat_member.id in config.whitelist:
@@ -92,12 +115,14 @@ def axol_voice(message):
         text = str(message.text[6:])
         if text:
             bot.send_message(vip_chat_id, text)
+            logging(message)
 
 
 @bot.message_handler(commands=["fwd", "FWD"])
 def fwd(message):
     if message.from_user.username in config.root and message.reply_to_message:
         bot.forward_message(vip_chat_id, message.chat.id, message.reply_to_message.message_id)
+        logging(message)
 
 
 @bot.message_handler(commands=["clean"])
@@ -373,6 +398,7 @@ def all_tasks(message):
         for player in active_players:
             if (player.task or (hasattr(player, "task_id") and len(player.task_id))) and player.task_status == 1:
                 bot.send_message(message.chat.id, players.to_string(player))
+        logging(message)
 
 
 @bot.message_handler(commands=["help"])
@@ -411,6 +437,7 @@ def task_rework(reaction, message):
                 player.task_status = 1
                 player.task_completed -= 1
                 bot.send_message(message.chat.id, "НЕ, АДМИНАМ НЕ НРАВИТСЯ")
+        logging(message)
 
 
 def task_fail(reaction, message):
@@ -422,10 +449,12 @@ def task_fail(reaction, message):
                              reply_to_message_id=message.reply_to_message.message_id)
             if player.mess_from_bot:
                 bot.send_message(player.user.id, "К СОЖАЛЕНИЮ, ЗАДАНИЕ ПРОВАЛЕНО.")
+        logging(message)
 
 
 def task_complete(reaction, message):
     if message.reply_to_message and message.from_user.username in config.root:
+        logging(message)
         player = findplayer(message.reply_to_message.from_user)
         if player.task_status == 1:
             player.task_status = 0
@@ -461,6 +490,7 @@ def task_complete(reaction, message):
 
 def task_extra(reaction, message):
     if message.reply_to_message and message.from_user.username in config.root:
+        logging(message)
         player = findplayer(message.reply_to_message.from_user)
         player.task_completed += 1
         bot.send_message(message.chat.id, "ДОПОЛНИТЕЛЬНОЕ ЗАДАНИЕ ВЫПОЛНЕНО!",
@@ -474,6 +504,7 @@ def task_extra(reaction, message):
 
 def anti_task(reaction, message):
     if message.reply_to_message and message.from_user.username in config.root:
+        logging(message)
         player = findplayer(message.reply_to_message.from_user)
         player.task_completed -= 1
         bot.send_message(message.chat.id, "ОТМЕНА, ОТМЕНА!", reply_to_message_id=message.reply_to_message.message_id)
@@ -538,6 +569,7 @@ def set_admin(reaction, message):
             bot.promote_chat_member(message.chat.id, message.from_user.id,
                                     True, False, False, True, True, True, True, True)
             bot.send_message(message.chat.id, 'ЗВЕЗДА У НОГ ТВОИХ!', reply_to_message_id=message.message_id)
+            logging(message)
         except telebot.apihelper.ApiException:
             time.sleep(1)
 
