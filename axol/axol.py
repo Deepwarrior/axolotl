@@ -243,7 +243,8 @@ def pozor(message):
                 user = bot.get_chat_member(message.chat.id, player.user.id)
             except telebot.apihelper.ApiException:
                 continue
-            if user and user.status in ["member", "creator", "administrator"] and not user.user.username == "rakon_bot":
+            if user and user.status in ["member", "creator", "administrator"] and not user.user.username == "rakon_bot"\
+                    and not user.user.username == "uhi_official":
                 text += str(i) + '. '
                 if user.user.first_name:
                     text += str(user.user.first_name) + ' '
@@ -553,7 +554,6 @@ def whois(reaction, message):
 def stop_natalka(reaction, message):
     for timer in all_timers:
         timer.cancel()
-    all_timers = []
 
 
 reaction_funcs = {"task_rework": task_rework, "task_fail": task_fail, "task_complete": task_complete,
@@ -626,10 +626,10 @@ if __name__ == '__main__':
     templist = json.load(f)
     for x in templist:
         active_players.append(players.Player(**x))
-        try:
-            print(x)
-        except UnicodeEncodeError:
-            print("nohing!")
+        # try:
+        #    print(x)
+        # except UnicodeEncodeError:
+        #    print("nohing!")
     f.close()
     zrena_timers_init()
     random.seed()
