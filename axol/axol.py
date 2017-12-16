@@ -629,7 +629,7 @@ if __name__ == '__main__':
         try:
             print(x)
         except UnicodeEncodeError:
-            print(x.encode('utf-8'))
+            print("ой!")
     f.close()
     zrena_timers_init()
     random.seed()
