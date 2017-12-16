@@ -19,7 +19,7 @@ vip_chat_id = -1001145739506
 debug_chat_id = -1001107497089
 igroklub_chat = -1001108031278
 allow_chats = [vip_chat_id, debug_chat_id, -1001149068208, igroklub_chat]
-
+all_timers = []
 
 def zrena():
     bot.send_sticker(vip_chat_id, 'CAADAgADtAADP_vRD1iCbwT85WNIAg')
@@ -486,6 +486,7 @@ def vbuena(arg):
     bot.send_sticker(arg, 'CAADAgADJwADP_vRD_M5_IJz9qzxAg')
     timer = Timer(60, drig, [arg])
     timer.start()
+    all_timers.append(timer)
 
 
 def natalka(reaction, message):
@@ -494,14 +495,12 @@ def natalka(reaction, message):
     seconds = cur_time.tm_sec
     rand = random.randint(0, 4)
     if rand:
-        text = 'НАТАЛЬЯ '
-        if ((minutes + rand + 1) % 60) < 10:
-            text += '0'
-        text += str((minutes + rand + 1) % 60)
-        bot.send_message(message.chat.id, text, reply_to_message_id=message.message_id)
+        bot.send_sticker(message.chat.id, config.numbers[((minutes + rand + 1) % 60) // 10], reply_to_message_id=message.message_id)
+        bot.send_sticker(message.chat.id, config.numbers[((minutes + rand + 1) % 60) % 10], reply_to_message_id=message.message_id)
 
         timer = Timer(60 * rand - seconds, vbuena, [message.chat.id])
         timer.start()
+        all_timers.append(timer)
     else:
         react(reaction, message)
 
@@ -546,11 +545,21 @@ def whois(reaction, message):
     if message.reply_to_message and message.from_user.username in config.root:
         player = findplayer(message.reply_to_message.from_user)
         if (player.task or (hasattr(player, "task_id") and len(player.task_id))) and player.task_status == 1:
-                bot.send_message(message.chat.id, players.to_string(player))
+            bot.send_message(message.chat.id, players.to_string(player))
+        else:
+            bot.send_message(message.chat.id, "ТЫ НИКТО, АЗАЗА")
+
+
+def stop_natalka(reaction, message):
+    for timer in all_timers:
+        timer.cancel()
+    all_timers = []
+
 
 reaction_funcs = {"task_rework": task_rework, "task_fail": task_fail, "task_complete": task_complete,
                   "task_extra": task_extra, "natalka": natalka, "kick_bots": kick_bots, "kick_lyuds": kick_lyuds,
-                  "mem_react": mem_react, "anti_task": anti_task, "set_admin": set_admin, "whois":whois}
+                  "mem_react": mem_react, "anti_task": anti_task, "set_admin": set_admin, "whois": whois,
+                  "stop_natalka": stop_natalka}
     
 
 def notify(message):
@@ -618,6 +627,8 @@ if __name__ == '__main__':
     for x in templist:
         active_players.append(players.Player(**x))
     f.close()
+    for player in active_players:
+        print(player.__dict__)
     zrena_timers_init()
     random.seed()
     for chat in allow_chats:

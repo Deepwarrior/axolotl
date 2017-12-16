@@ -28,8 +28,14 @@ dlinnohead = \
      'CAADBAADgQMAAuJy2QABf0C0EPLQO0UC', 'CAADBAADawMAAuJy2QABFA81XvWYIZ8C', 'CAADBAADdQMAAuJy2QABt8J1yVBTIQoC',
      'CAADAgAD3gMAAtQlfAlfLmgHaL2eTgI', 'CAADAgADMAAD2VJTDMSYdTjWjmeuAg']
 memory = ["30 ДЕКАБРЯ", "АЗАЗА", "БАЯН", "БУГУЛЬМА", "ДНИЩЕ", "КОМАНДА ТИГРОВ", "КОНЬЯК", "ОПТИЧЕСКАЯ ИНФОРМАТИКА",
-          "ПИРАНЬЯ", "ПОЛЁТ", "ПЯТОЧКИ", "РОБИНЗОН", "САМАРАНГ", "СЕКСИЗМ",
+          "ПИРАНЬЯ", "ПОЛЁТ", "ПЯТОЧКИ", "РОБИНЗОН", "САМАРАНГ", "СЕКСИЗМ", "ВЕРЕЩАТЕЛЬ", "29 ДЕКАБРЯ",
+          "АУТОАСФЕКСИОФИЛИЯ",
           "КОРМИЛИЦА", "УНХОНЯШЕЧКА ЛОНГУСЕНЬКАЯ", "СИСЕНИКА", "ДИПОЧЕНЬКО", "КАМНЕПАД, ВСЕ УМЕРЛИ", "МИРТЮЛЯ"]
+numbers = [
+     'CAADAgADHQADsjRGHmICxgflpK-AAg', 'CAADAgADKAADsjRGHteLnmyyI7GCAg', 'CAADAgADIQADsjRGHqrxWWzW0GhKAg',
+     'CAADAgADIgADsjRGHrzBiD52otYrAg', 'CAADAgADIAADsjRGHiEXZ5N3guXYAg', 'CAADAgADDAADsjRGHsDfKDJ9i8kaAg',
+     'CAADAgADCAADsjRGHmLQ31WmM2KfAg', 'CAADAgADKgADsjRGHq-fx19cPlV5Ag', 'CAADAgADLQADsjRGHqK-Yozf6v5mAg',
+     'CAADAgADDwADsjRGHv62n3n405i_Ag']
 # format: message_list, sticker_list, user, reaction_messages_list, reaction_stickers_list, func for executing
 # "[[], [], 0, [], [], None],"
 reactions = [
@@ -42,7 +48,7 @@ reactions = [
      0, ['УЛЕЙ'], []],
     [['КОГО?', 'КОГО'], [], 0, ["МИРАКЛЮ"], []],
     [["МИРАКЛЮ", "МИРАКЛЮ."], [], 0, ["КОГО?"], []],
-    [['D:', 'ВЖ'], [], 0, ['/UTYUG'], ['CAADAgADAQADjW7LE45SqDkRKtyzAg']],
+    [['D:', 'ВЖ'], [], 0, ['/UTYUG'], ['CAADAgADAQADjW7LE45SqDkRKtyzAg', 'CAADAgADGwADsjRGHuBFiQgG41R0Ag']],
     [[], ['CAADAgADAQADjW7LE45SqDkRKtyzAg'], undo_chat, ["УНДЮЖОЧЕК!"], ["CAADAgADMgADg8cnEWp3ie4jNHg-Ag"]],
     [['D: D: D:', 'ВЖ ВЖ ВЖ'], [], 0, [], ['CAADAgADAgADjW7LE_v50VPsaKSvAg']],
     [[], dlinnohead, cifr_chat, ['СПАСИБО ЗА ДЛИННОКОТА, СЕРЁЖА!', '', ''],
@@ -67,6 +73,7 @@ reactions = [
     [[], ['CAADAgADjQADP_vRD6t7L9YKnP1eAg'], 44989459,
      ["https://pp.userapi.com/c639627/v639627599/5b009/flPJ3T4a_o8.jpg"], ['CAADAgADoQADg8cnEW-_9xNR4RKLAg']],
     [[':D:'], [], 0, [], ['CAADAgADGgADjW7LE0g-GMhzIUFiAg']],
+    [['РИННЕКО', 'РИН-НЕ-КО', 'РИННЕКО!', 'РИН-НЕ-КО!'], [], rinneko_chat, [], ['CAADAgADxAADP_vRD-wohLnM0GMRAg']],
 
     [[], ['CAADAgADpgEAAmDrzgNSIT8rlE3K0AI'], 0, [], [], "task_rework"],
     [fail_phrase, ['CAADAgADFAADjW7LE9E1TbwjuTk7Ag'], 0, [], [], "task_fail"],
@@ -79,7 +86,8 @@ reactions = [
     [memory, [], 0, ["МЕМОРИ!", "ОППА!", "ПЕЙ!"], ['CAADAgADKgADjW7LE7-3bb9S-fuoAg'], "mem_react"],
     [['АНТИКЛАЦ!'], [], 0, [], [], "anti_task"],
     [['ДАЙТЕ ЗВЁЗДОЧКУ!', 'ПОДАРИ МНЕ ЗВЕЗДУ!'], [], 0, [], [], "set_admin"],
-    [[], ['CAADAgADnAADg8cnESB0jVNnakYoAg'], 0, [], [], "whois"]
+    [[], ['CAADAgADnAADg8cnESB0jVNnakYoAg'], 0, [], [], "whois"],
+    [["ПЕРЕНОСИМ"], [], 0, [], [], "stop_natalka"]
     ]
 
 help_list = ['см. /donate', 'А ЧТО ТУТ НЕПОНЯТНОГО?', 'АЙ НИД СОМБАДИ', '8-800-555-35-35', ';)',
@@ -104,10 +112,8 @@ donate_list = ['С ТЕБЯ ПИВО', 'С ТЕБЯ ЛИМЕРИК', 'С ТЕБ�
                "ТЕПЕРЬ ТЫ ПОПЛАТИШЬСЯ!", "ОТ РАСПЛАТЫ НЕ УЙДЁШЬ!", "РАБОТАЮ ЗА СПАСИБУ. А ПАПА С МАМОЙ - НЕТ",
                "Я ТЕБЯ ЗАПОМНИЛ!", "ПРОИГРАЛ", 'НАРИСУЙ СТИКЕР С АКСОЛОТЛЕМ. БОЛЬШЕ СТИКЕРОВ — БОЛЬШЕ ЗАДАНИЙ']
 
-bonus_20 = ['CAADAgADRwADg8cnEQnjFdN51tf-Ag', 'CAADAgADSAADg8cnEUsVYGZANO6ZAg', 'CAADAgADSQADg8cnEah9k-_q1qH1Ag',
-            'CAADAgADSgADg8cnES219ZCNMV1_Ag', 'CAADAgADSwADg8cnEYi0EfNZVz9OAg', 'CAADAgADVAADg8cnEcm03ptpBsCDAg',
-            'CAADAgADXwADg8cnEYHrjnqlQhTxAg', 'CAADAgADYgADg8cnEdE4AfXc_eRPAg', 'CAADAgADrAADg8cnEVlHYI9p1ns9Ag',
-            'CAADAgADZgADg8cnEZrVXf7N7QlVAg', 'CAADAgADbgADg8cnEYURWan1h4-0Ag', 'CAADAgADtgADg8cnEajz_hf3D4kDAg',
+bonus_20 = ['CAADAgADVAADg8cnEcm03ptpBsCDAg','CAADAgADYgADg8cnEdE4AfXc_eRPAg', 'CAADAgADrAADg8cnEVlHYI9p1ns9Ag',
+            'CAADAgADZgADg8cnEZrVXf7N7QlVAg', 'CAADAgADtgADg8cnEajz_hf3D4kDAg',
             'CAADAgADtwADg8cnEfE3BUFfws6pAg', 'CAADAgADBgADsjRGHsWkhlxIc8GWAg']
 
 cats = [
@@ -203,7 +209,8 @@ tasks = [['CAADAgADSgADP_vRD6EHNhBBV7W_Ag', 'ТЫ ДИП. ИСПОЛЬЗУЙ Д�
          ['CAADAgADuQADP_vRDyjU3H-1Hhh8Ag', 'ТЫ ЦФР. С ПЕРВОЙ ПОПЫТКИ ОТПРАВЬ ДЛИННОКОТА ИЗ ПЯТИДЕСЯТИ ФРАГМЕНТОВ ПО '
                                             'ОДНОМУ, ЧТОБЫ ТЕБЯ НИКТО НЕ ПЕРЕБИЛ.', 23, 0],
          ['CAADAgADuAADP_vRDz-UigMDJvwcAg', 'ТЫ УНДО. ДОЖДИСЬ ВЕЧЕРА И НАПИШИ УНДОГЛЮКИ ЗА ЭТОТ ДЕНЬ', 23, 0],
-         ['CAADAgADwwADP_vRD2rk840lb64ZAg', 'ТЫ АБИГЕЙЛ. РАССКАЖИ ГРУСТНУЮ ИСТОРИЮ ИЗ СВОЕЙ ЖИЗНИ.', 23, 0]
+         ['CAADAgADwwADP_vRD2rk840lb64ZAg', 'ТЫ АБИГЕЙЛ. РАССКАЖИ ГРУСТНУЮ ИСТОРИЮ ИЗ СВОЕЙ ЖИЗНИ.', 23, 0],
+         ['CAADAgADZgADP_vRDz0QFgOSXd-oAg', 'ТЫ ПЛЕЯНА. ПИШИ ТОЛЬКО ТЕ СЛОВА, КОТОРЫЕ НАЧИНАЮТСЯ НА БУКВУ "П".', 3, 0]
          ]
 
 whitelist = [311689962, 265419583, 150029429, 360910213, 171108866, 325898595, 183217512, 270769101, 53316498, 287819651]
@@ -238,8 +245,9 @@ black_tasks = [
     ['CAADAgADdgADE3yuAvnM94kUvJuoAg', 'ТЫ ЧОРНАЯ АБИГЕЙЛ. РАССКАЖИ ИСТОРИЮ, КАК ТЫ СДЕЛАЛА ГРУСТНО ДРУГИМ.', 23, 0],
     ['CAADAgADiwADE3yuAn3jwtZfXlKdAg', 'ТЫ ЧОРНЫЙ ШИЗИК. УДАЛЯЙ ВООБЩЕ ВСЕ СВОИ СООБЩЕНИЯ И НЕ ЗАБЫВАЙ ПИСАТЬ ГАДОСТИ.',
      5, 0],
-    ['CAADAgADJAADE3yuAjxFLOSG3XccAg', 'ТЫ ЧОРНЫЙ ЭЛЛИОТТ. ВЫВЕДИ НА ВЫХОД ТОЛЬКО ГЛАСАМИ С НЕРАЗБОРЧИВЫМ БОРМОТАНИЕМ',
-     23, 0],
+    ['CAADAgADewADE3yuAs27IAESXQ-SAg', 'ТЫ ЧОРНЫЙ ЭЛЛИОТТ. ПРОШАГАЙ ПО ПОДЗЕМУ СТО ШАГОВ ДО ЭВАКУАТОРА.', 23, 0],
+    ['CAADAgADFwADE3yuAvaXG1CcLdhmAg', 'ТЫ ЧОРНЫЙ ФИЛАТЕШКЬЮ. ПИШИ ВСЁ АНТИТРАНСЛИТОМ -- РУССКИМИ БУКВАМИ, '
+                                       'НО АНГЛИЙСКИМИ СЛОВАМИ.', 4, 0],
     ['CAADAgADOAADE3yuAqgcgIiwiTVzAg', 'ТЫ ЧОРНАЯ ПАТРИСИЯ. ВНИМАТЕЛЬНО ЧИТАЙ ЧАТ И ПОМОГАЙ ИСПРАВЛЯТЬ ВСЕ '
      'ГРАММАТИЧЕСКИЕ ОШИБКИ.', 3, 0],
     ['CAADAgADnAADE3yuAv91Oddj1ZzmAg', 'ТЫ ЗЛОЙ ЧОРНЫЙ АДМИН. ВВЕДИ ПРАВИЛО ДЛЯ ЧАТА И СТРОГО МОДЕРИРУЙ ЕГО. '
