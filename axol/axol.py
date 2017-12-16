@@ -237,13 +237,13 @@ def pozor(message):
     text = "ТОП ПОЗОРА: \n"
     i = 1
 
-    for player in active_players:
-        if time.time() - player.last_task_time > 3600 * 500:
-            try:
-                user = bot.get_chat_member(message.chat.id, player.user.id)
-            except telebot.apihelper.ApiException:
-                continue
-            if user and user.status in ["member", "creator", "administrator"] and not user.user.username == "rakon_bot":
+    for user in active_players:
+        if time.time() - user.last_task_time > 3600 * 500:
+            #try:
+                #user = player.user # = bot.get_chat_member(message.chat.id, player.user.id)
+            #except telebot.apihelper.ApiException:
+             #   continue
+            if user :#and user.status in ["member", "creator", "administrator"] and not user.user.username == "rakon_bot":
                 text += str(i) + '. '
                 if user.user.first_name:
                     text += str(user.user.first_name) + ' '
