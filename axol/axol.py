@@ -18,7 +18,8 @@ day = 24 * 60 * 60
 vip_chat_id = -1001145739506
 debug_chat_id = -1001107497089
 igroklub_chat = -1001108031278
-allow_chats = [vip_chat_id, debug_chat_id, -1001149068208, igroklub_chat]
+alukr_chat = -1001031232765
+allow_chats = [vip_chat_id, debug_chat_id, -1001149068208, igroklub_chat, alukr_chat]
 all_timers = []
 
 
@@ -284,7 +285,8 @@ def pozor(message):
 
 @bot.message_handler(commands=["top_sarastie"])
 def sarasti(message):
-    text = "ТОП САРАСТИ:\n-1. АРУЛУТ\n1. САРАСТИ\n2. САРАСТИШЕЧКА\n3. РАСТИШИШКА\n4. s a r A S I S k a\n5. СИСЕНИКА"
+    text = "ТОП САРАСТИ:\n-1. АРУЛУТ\n1. САРАСТИ\n2.САРАСТИШЕЧКА\n3. РАСТИШИШКА\n4. s a r A S I S k a\n5. СИСЕНИКА\n" \
+           "6. САРАСТАТАЛО"
     try:
         bot.send_voice(message.chat.id, 'AwADAgAD0QADNxYpSFb3d6KS2tHAAg', caption=text)
     except telebot.apihelper.ApiException:
