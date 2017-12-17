@@ -72,11 +72,12 @@ def logging(message):
     root_log += message.from_user.username + ' сделал '
     if message.text:
         root_log += message.text + ' на '
-    else:
+    elif message.sticker:
         root_log += message.sticker.file_id + ' на '
     if message.reply_to_message:
         root_log += message.reply_to_message.from_user.username
     root_log += '\n'
+
 
 @bot.message_handler(commands=["get_logs"])
 def log_output(message):
@@ -117,6 +118,13 @@ def axol_voice(message):
         if text:
             bot.send_message(vip_chat_id, text)
             logging(message)
+
+
+@bot.message_handler(commands=["SAVE", "save"])
+def save(message):
+    if message.from_user.username in config.root and message.reply_to_message:
+        bot.forward_message(debug_chat_id, message.chat.id, message.reply_to_message.message_id)
+        logging(message)
 
 
 @bot.message_handler(commands=["fwd", "FWD"])

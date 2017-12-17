@@ -74,6 +74,7 @@ reactions = [
      ["https://pp.userapi.com/c639627/v639627599/5b009/flPJ3T4a_o8.jpg"], ['CAADAgADoQADg8cnEW-_9xNR4RKLAg']],
     [[':D:'], [], 0, [], ['CAADAgADGgADjW7LE0g-GMhzIUFiAg']],
     [['РИННЕКО', 'РИН-НЕ-КО', 'РИННЕКО!', 'РИН-НЕ-КО!'], [], rinneko_chat, [], ['CAADAgADxAADP_vRD-wohLnM0GMRAg']],
+    [[], ['CAADAgADKwQAAuce7AWo_pyLoNBvLgI'], 196345058, ['О, НАТАЛИЯ НАЧАЛАСЬ'], []],
 
     [[], ['CAADAgADpgEAAmDrzgNSIT8rlE3K0AI'], 0, [], [], "task_rework"],
     [fail_phrase, ['CAADAgADFAADjW7LE9E1TbwjuTk7Ag'], 0, [], [], "task_fail"],
