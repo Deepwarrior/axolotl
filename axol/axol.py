@@ -601,6 +601,7 @@ def stop_natalka(reaction, message):
 def kick_citrus(reaction, message):
     try:
         bot.kick_chat_member(message.chat.id, config.citrus_chat)
+        bot.unban_chat_member(message.chat.id, config.citrus_chat)
         bot.send_sticker(message.chat.id, 'CAADAgADGQADsjRGHmj0-DDbQgexAg')
     except telebot.apihelper.ApiException:
         bot.send_message(message.chat.id, "ТЫ НА КОГО ПАСТЬ ОТКРЫВАЕШЬ, СОБАКА ТРУСЛИВАЯ?!")
