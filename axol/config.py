@@ -88,7 +88,8 @@ reactions = [
     [['АНТИКЛАЦ!'], [], 0, [], [], "anti_task"],
     [['ДАЙТЕ ЗВЁЗДОЧКУ!', 'ПОДАРИ МНЕ ЗВЕЗДУ!'], [], 0, [], [], "set_admin"],
     [[], ['CAADAgADnAADg8cnESB0jVNnakYoAg'], 0, [], [], "whois"],
-    [["ПЕРЕНОСИМ"], [], 0, [], [], "stop_natalka"]
+    [["ПЕРЕНОСИМ"], [], 0, [], [], "stop_natalka"],
+    [[], ['CAADAgADLgADsjRGHsGbRuS2PA26Ag'], 0, [], [], "kick_citrus"]
     ]
 
 help_list = ['см. /donate', 'А ЧТО ТУТ НЕПОНЯТНОГО?', 'АЙ НИД СОМБАДИ', '8-800-555-35-35', ';)',
