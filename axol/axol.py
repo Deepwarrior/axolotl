@@ -222,7 +222,7 @@ def send(message):
         text = message.from_user.last_name + text
     if message.from_user.first_name:
         text = message.from_user.first_name + ' ' + text
-    bot.send_message(debug_chat_id, text)
+    bot.send_message(-1001246951967, text)
 
 
 @bot.message_handler(commands=["on"])
@@ -598,10 +598,18 @@ def stop_natalka(reaction, message):
         timer.cancel()
 
 
+def kick_citrus(reaction, message):
+    try:
+        bot.kick_chat_member(message.chat.id, config.citrus_chat)
+        bot.send_sticker(message.chat.id, 'CAADAgADGQADsjRGHmj0-DDbQgexAg')
+    except telebot.apihelper.ApiException:
+        bot.send_message(message.chat.id, "ТЫ НА КОГО ПАСТЬ ОТКРЫВАЕШЬ, СОБАКА ТРУСЛИВАЯ?!")
+
+
 reaction_funcs = {"task_rework": task_rework, "task_fail": task_fail, "task_complete": task_complete,
                   "task_extra": task_extra, "natalka": natalka, "kick_bots": kick_bots, "kick_lyuds": kick_lyuds,
                   "mem_react": mem_react, "anti_task": anti_task, "set_admin": set_admin, "whois": whois,
-                  "stop_natalka": stop_natalka}
+                  "stop_natalka": stop_natalka, "kick_citrus":kick_citrus}
     
 
 def notify(message):
