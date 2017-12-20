@@ -711,7 +711,7 @@ if __name__ == '__main__':
     for chat in allow_chats:
         try:
             bot.send_sticker(chat, 'CAADAgADhQADP_vRD-Do6Qz0fkeMAg')
-            bot.send_message(message.chat.id, "НАЧАТА РЕГИСТРАЦИЯ! НАПИШИ В ЛИЧКУ БОТУ /new_year")
+            bot.send_message(chat, "НАЧАТА РЕГИСТРАЦИЯ! НАПИШИ В ЛИЧКУ БОТУ /new_year")
             # print('1')
         except telebot.apihelper.ApiException:
             continue
