@@ -242,6 +242,30 @@ def messages_off(message):
         bot.send_message(message.chat.id, "ВЕРНИ КАК БЫЛО")
 
 
+@bot.message_handler(commands=["new_year"])
+def new_year_reg(message):
+    if message.from_user.id == message.chat.id:
+        player = findplayer(message.from_user)
+        player.new_year = True
+        bot.send_message(message.chat.id, "ТЕПЕРЬ ЖДИ НОВОГОДНЕЕ ЗАДАНИЕ")
+
+
+@bot.message_handler(commands=["ng"])
+def new_year_reg_get(message):
+    answer = "СПИСОК ТЕХ, КТО ГОТОВ ПРОВЕСТИ ОСТАТОК СТАРОГО ГОДА В МУЧЕНИЯХ: \n"
+    if message.from_user.username in config.root:
+        for player in active_players:
+            if player.new_year:
+                if player.user.first_name:
+                    answer += str(player.user.first_name) + '\t'
+                if player.user.last_name:
+                    answer += str(player.user.last_name) + '\t'
+                if player.user.username:
+                    answer += '@' + str(player.user.username) + '.\t'
+                answer += '\n'
+        bot.send_message(message.chat.id, answer)
+
+
 @bot.message_handler(commands=["panteon"])
 def panteon(message):
     answer = ""
@@ -686,8 +710,9 @@ if __name__ == '__main__':
     random.seed()
     for chat in allow_chats:
         try:
-            # bot.send_sticker(chat, 'CAADAgADhQADP_vRD-Do6Qz0fkeMAg')
-            print('1')
+            bot.send_sticker(chat, 'CAADAgADhQADP_vRD-Do6Qz0fkeMAg')
+            bot.send_message(message.chat.id, "НАЧАТА РЕГИСТРАЦИЯ! НАПИШИ В ЛИЧКУ БОТУ /new_year")
+            # print('1')
         except telebot.apihelper.ApiException:
             continue
     while True:
