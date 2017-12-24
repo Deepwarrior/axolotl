@@ -630,11 +630,25 @@ def kick_citrus(reaction, message):
     except telebot.apihelper.ApiException:
         bot.send_message(message.chat.id, "ТЫ НА КОГО ПАСТЬ ОТКРЫВАЕШЬ, СОБАКА ТРУСЛИВАЯ?!")
 
+def kick_rels(reaction, message):
+    try:
+        bot.kick_chat_member(message.chat.id, config.rels_chat)
+        bot.unban_chat_member(message.chat.id, config.rels_chat)
+    except telebot.apihelper.ApiException:
+        time.sleep(1)
+
+def kick_misha(reaction, message):
+    try:
+        bot.kick_chat_member(message.chat.id, config.misha_chat)
+        bot.unban_chat_member(message.chat.id, config.misha_chat)
+        bot.send_message(message.chat.id, "МNША ЗАПРЕЩЁН И РЕКРАЩЁН.")
+    except telebot.apihelper.ApiException:
+        bot.send_message(message.chat.id, "ДА КАК ТЫ СМЕЕШЬ ТАК С МАТЕРЬЮ РАЗГОВАРИВАТЬ?!")
 
 reaction_funcs = {"task_rework": task_rework, "task_fail": task_fail, "task_complete": task_complete,
                   "task_extra": task_extra, "natalka": natalka, "kick_bots": kick_bots, "kick_lyuds": kick_lyuds,
                   "mem_react": mem_react, "anti_task": anti_task, "set_admin": set_admin, "whois": whois,
-                  "stop_natalka": stop_natalka, "kick_citrus":kick_citrus}
+                  "stop_natalka": stop_natalka, "kick_citrus":kick_citrus, "kick_rels":kick_rels, "kick_misha": kick_misha}
     
 
 def notify(message):
@@ -708,6 +722,7 @@ if __name__ == '__main__':
     f.close()
     zrena_timers_init()
     random.seed()
+    bot.send_sticker(debug_chat_id, 'CAADAgADMgADsjRGHiKRfQaAeEsnAg')
     for chat in allow_chats:
         try:
             # bot.send_sticker(chat, 'CAADAgADhQADP_vRD-Do6Qz0fkeMAg')

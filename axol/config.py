@@ -8,6 +8,8 @@ cifr_chat = 206787289
 zoloto_chat = 311689962
 rinneko_chat = 264360251
 undo_chat = 332099213
+rels_chat = 44989459
+misha_chat = 53316498
 
 seconds_in_day = 85000
 
@@ -29,7 +31,7 @@ dlinnohead = \
      'CAADAgAD3gMAAtQlfAlfLmgHaL2eTgI', 'CAADAgADMAAD2VJTDMSYdTjWjmeuAg']
 memory = ["30 ДЕКАБРЯ", "АЗАЗА", "БАЯН", "БУГУЛЬМА", "ДНИЩЕ", "КОМАНДА ТИГРОВ", "КОНЬЯК", "ОПТИЧЕСКАЯ ИНФОРМАТИКА",
           "ПИРАНЬЯ", "ПОЛЁТ", "ПЯТОЧКИ", "РОБИНЗОН", "САМАРАНГ", "СЕКСИЗМ", "ВЕРЕЩАТЕЛЬ", "29 ДЕКАБРЯ",
-          "АУТОАСФЕКСИОФИЛИЯ",
+          "АУТОАСФИКСИОФИЛИЯ",
           "КОРМИЛИЦА", "УНХОНЯШЕЧКА ЛОНГУСЕНЬКАЯ", "СИСЕНИКА", "ДИПОЧЕНЬКО", "КАМНЕПАД, ВСЕ УМЕРЛИ", "МИРТЮЛЯ"]
 numbers = [
      'CAADAgADHQADsjRGHmICxgflpK-AAg', 'CAADAgADKAADsjRGHteLnmyyI7GCAg', 'CAADAgADIQADsjRGHqrxWWzW0GhKAg',
@@ -89,8 +91,11 @@ reactions = [
     [['ДАЙТЕ ЗВЁЗДОЧКУ!', 'ПОДАРИ МНЕ ЗВЕЗДУ!'], [], 0, [], [], "set_admin"],
     [[], ['CAADAgADnAADg8cnESB0jVNnakYoAg'], 0, [], [], "whois"],
     [["ПЕРЕНОСИМ"], [], 0, [], [], "stop_natalka"],
-    [[], ['CAADAgADLgADsjRGHsGbRuS2PA26Ag'], 0, [], [], "kick_citrus"]
+    [[], ['CAADAgADLgADsjRGHsGbRuS2PA26Ag'], 0, [], [], "kick_citrus"],
+    [[], ['CAADAgADKAADO9HBD1SvkhGZJT_BAg'], 0, [], [], "kick_rels"],
+    [[], ['CAADAgADLwADsjRGHvSXP4ESf3tIAg'], 0, [], [], "kick_misha"]
     ]
+
 
 help_list = ['см. /donate', 'А ЧТО ТУТ НЕПОНЯТНОГО?', 'АЙ НИД СОМБАДИ', '8-800-555-35-35', ';)',
              'ХОДЯТ СЛУХИ, ЧТО ВЗЯТКА СОЗДАТЕЛЯМ ПОМОГАЕТ В ПРОХОЖДЕНИИ ЗАДАНИЯ',
