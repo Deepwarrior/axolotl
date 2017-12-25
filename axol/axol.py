@@ -361,8 +361,9 @@ def task_status(message):
         answer += "До следующего задания: " + str('{:.0f}'.format(tm // 60)) + " часов и " + \
                   str('{:.0f}'.format(tm % 60)) + " минут\n"
     bot.send_message(message.chat.id, answer)
-
-
+print(len(config.ng_tasks))
+n = random.randint(0, len(config.ng_tasks))
+print(n)
 # collect players and give them tasks
 @bot.message_handler(commands=["get_task"])
 def get_task(message):
@@ -521,6 +522,24 @@ def task_complete(reaction, message):
             if player.task_completed == 60:
                 bot.send_message(message.chat.id, "ТЕБЯ ВЕДЬ УЖЕ ОБНУЛИЛИ... ЗАЧЕМ ТЫ ПРОДОЛЖАЕШЬ ИХ ДЕЛАТЬ?")
 
+@bot.message_handler(commands=["send_ng_tasks"])
+def send_ng_tasks(message):
+    if message.from_user.id == message.chat.id and message.from_user.username in config.root:
+        for player in active_players:
+            if player.new_year:
+                if player.ng_task_status == 0:
+                    try:
+                        player.ng_task_status = 1
+                        n = random.randint(0, len(config.ng_tasks) - 1)
+                        task = config.ng_tasks[n]
+                        player.ng_task_id.append(n)
+                        bot.send_sticker(player.user.id, 'CAADAgADJQADsjRGHuRrNOA7RLqJAg')
+                        bot.send_message(player.user.id, task)
+
+                    except telebot.apihelper.ApiException:
+                        continue
+                elif player.ng_task_status == 1:
+                    continue
 
 def task_extra(reaction, message):
     if message.reply_to_message and message.from_user.username in config.root:
@@ -534,6 +553,8 @@ def task_extra(reaction, message):
             bot.send_message(player.user.id, "ПОЗДРАВЛЯЮ! \n МНОГО ЗАДАНИЙ УЖЕ СДЕЛАНО, НО МНОГО БУДЕТ И ВПЕРЕДИ \n "
                                              "А ПОКА ТЫ ВЫИГРАЛ СЕКРЕТНЫЙ ДУРНИРНЫЙ СТИКЕР, ИСПОЛЬЗУЙ ЕГО С УМОМ")
             bot.send_sticker(player.user.id, stick)
+
+
 
 
 def anti_task(reaction, message):
@@ -708,6 +729,7 @@ def message_parsing(message):
 def voice_parsing(message):
     if message.chat.id == debug_chat_id:
         bot.send_message(message.chat.id, '\'' + message.voice.file_id + '\'', reply_to_message_id=message.message_id)
+
 
 
 if __name__ == '__main__':
