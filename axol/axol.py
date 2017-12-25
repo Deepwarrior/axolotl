@@ -362,7 +362,6 @@ def task_status(message):
                   str('{:.0f}'.format(tm % 60)) + " минут\n"
     bot.send_message(message.chat.id, answer)
 
-
 # collect players and give them tasks
 @bot.message_handler(commands=["get_task"])
 def get_task(message):
@@ -521,6 +520,42 @@ def task_complete(reaction, message):
             if player.task_completed == 60:
                 bot.send_message(message.chat.id, "ТЕБЯ ВЕДЬ УЖЕ ОБНУЛИЛИ... ЗАЧЕМ ТЫ ПРОДОЛЖАЕШЬ ИХ ДЕЛАТЬ?")
 
+@bot.message_handler(commands=["send_ng_tasks"])
+def send_ng_tasks(message):
+    if message.from_user.id == message.chat.id and message.from_user.username in config.root:
+        for player in active_players:
+            if player.new_year:
+                if player.ng_task_status == 0:
+                    try:
+                        player.ng_task_status = 1
+                        n = random.randint(0, len(config.ng_tasks) - 1)
+                        task = config.ng_tasks[n]
+                        player.ng_task_id.append(n)
+                        bot.send_sticker(player.user.id, 'CAADAgADJQADsjRGHuRrNOA7RLqJAg')
+                        bot.send_message(player.user.id, task)
+
+                    except telebot.apihelper.ApiException:
+                        continue
+                elif player.ng_task_status == 1:
+                    continue
+
+@bot.message_handler(commands=["all_ng"])
+def all_ng_tasks(message):
+    if message.from_user.id == message.chat.id and message.from_user.username in config.root:
+        spisok = ""
+        for player in active_players:
+            if player.new_year:
+                if player.ng_task_status == 1:
+                    if player.user.first_name:
+                        spisok += str(player.user.first_name) + '\t'
+                    if player.user.last_name:
+                        spisok += str(player.user.last_name) + '\t'
+                    if player.user.username:
+                        spisok += '@' + str(player.user.username) + '.\t'
+                    spisok  += config.ng_tasks[player.ng_task_id[0]]
+                    spisok += '\n'
+        bot.send_message(message.chat.id, spisok)
+
 
 def task_extra(reaction, message):
     if message.reply_to_message and message.from_user.username in config.root:
@@ -534,6 +569,8 @@ def task_extra(reaction, message):
             bot.send_message(player.user.id, "ПОЗДРАВЛЯЮ! \n МНОГО ЗАДАНИЙ УЖЕ СДЕЛАНО, НО МНОГО БУДЕТ И ВПЕРЕДИ \n "
                                              "А ПОКА ТЫ ВЫИГРАЛ СЕКРЕТНЫЙ ДУРНИРНЫЙ СТИКЕР, ИСПОЛЬЗУЙ ЕГО С УМОМ")
             bot.send_sticker(player.user.id, stick)
+
+
 
 
 def anti_task(reaction, message):
@@ -710,6 +747,7 @@ def voice_parsing(message):
         bot.send_message(message.chat.id, '\'' + message.voice.file_id + '\'', reply_to_message_id=message.message_id)
 
 
+
 if __name__ == '__main__':
     f = open('players.json', 'r')
     templist = json.load(f)
@@ -722,7 +760,7 @@ if __name__ == '__main__':
     f.close()
     zrena_timers_init()
     random.seed()
-    bot.send_sticker(debug_chat_id, 'CAADAgADMgADsjRGHiKRfQaAeEsnAg')
+    #bot.send_sticker(debug_chat_id, 'CAADAgADMgADsjRGHiKRfQaAeEsnAg')
     for chat in allow_chats:
         try:
             # bot.send_sticker(chat, 'CAADAgADhQADP_vRD-Do6Qz0fkeMAg')
