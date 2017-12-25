@@ -361,9 +361,7 @@ def task_status(message):
         answer += "До следующего задания: " + str('{:.0f}'.format(tm // 60)) + " часов и " + \
                   str('{:.0f}'.format(tm % 60)) + " минут\n"
     bot.send_message(message.chat.id, answer)
-print(len(config.ng_tasks))
-n = random.randint(0, len(config.ng_tasks))
-print(n)
+
 # collect players and give them tasks
 @bot.message_handler(commands=["get_task"])
 def get_task(message):
@@ -540,6 +538,24 @@ def send_ng_tasks(message):
                         continue
                 elif player.ng_task_status == 1:
                     continue
+
+@bot.message_handler(commands=["all_ng"])
+def all_ng_tasks(message):
+    if message.from_user.id == message.chat.id and message.from_user.username in config.root:
+        spisok = ""
+        for player in active_players:
+            if player.new_year:
+                if player.ng_task_status == 1:
+                    if player.user.first_name:
+                        spisok += str(player.user.first_name) + '\t'
+                    if player.user.last_name:
+                        spisok += str(player.user.last_name) + '\t'
+                    if player.user.username:
+                        spisok += '@' + str(player.user.username) + '.\t'
+                    spisok  += config.ng_tasks[player.ng_task_id[0]]
+                    spisok += '\n'
+        bot.send_message(message.chat.id, spisok)
+
 
 def task_extra(reaction, message):
     if message.reply_to_message and message.from_user.username in config.root:
@@ -744,7 +760,7 @@ if __name__ == '__main__':
     f.close()
     zrena_timers_init()
     random.seed()
-    bot.send_sticker(debug_chat_id, 'CAADAgADMgADsjRGHiKRfQaAeEsnAg')
+    #bot.send_sticker(debug_chat_id, 'CAADAgADMgADsjRGHiKRfQaAeEsnAg')
     for chat in allow_chats:
         try:
             # bot.send_sticker(chat, 'CAADAgADhQADP_vRD-Do6Qz0fkeMAg')
