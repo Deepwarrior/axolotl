@@ -520,40 +520,60 @@ def task_complete(reaction, message):
             if player.task_completed == 60:
                 bot.send_message(message.chat.id, "ТЕБЯ ВЕДЬ УЖЕ ОБНУЛИЛИ... ЗАЧЕМ ТЫ ПРОДОЛЖАЕШЬ ИХ ДЕЛАТЬ?")
 
+
+secret_santa = [336595041]
+sherif = [347438021]
 @bot.message_handler(commands=["send_ng_tasks"])
 def send_ng_tasks(message):
     if message.from_user.id == message.chat.id and message.from_user.username in config.root:
         for player in active_players:
-            if player.new_year:
-                if player.ng_task_status == 0:
-                    try:
-                        player.ng_task_status = 1
-                        n = random.randint(0, len(config.ng_tasks) - 1)
-                        task = config.ng_tasks[n]
-                        player.ng_task_id.append(n)
-                        bot.send_sticker(player.user.id, 'CAADAgADJQADsjRGHuRrNOA7RLqJAg')
-                        bot.send_message(player.user.id, task)
-
-                    except telebot.apihelper.ApiException:
-                        continue
-                elif player.ng_task_status == 1:
+            if player.new_year and player.user.id not in secret_santa and player.user.id not in sherif:
+                try:
+                    n = random.randint(0, len(config.ng_tasks) - 1)
+                    task = config.ng_tasks[n]
+                    player.ng_task_id = n
+                    bot.send_sticker(player.user.id, 'CAADAgADJQADsjRGHuRrNOA7RLqJAg')
+                    bot.send_message(player.user.id, task)
+                except telebot.apihelper.ApiException:
                     continue
+            elif player.user.id in secret_santa:
+                try:
+                    player.ng_task_id = -1
+                    bot.send_sticker(player.user.id, 'CAADAgADJQADsjRGHuRrNOA7RLqJAg')
+                    bot.send_message(player.user.id, "ТЫ ТАЙНЫЙ САНТА. ПОБЕДИШЬ, ЕСЛИ НИКТО НЕ ОТГАДАЕТ ТВОЮ РОЛЬ ДО "
+                                                     "НОВОГО ГОДА.")
+                except telebot.apihelper.ApiException:
+                    continue
+            elif player.user.id in sherif:
+                try:
+                    player.ng_task_id = -2
+                    bot.send_sticker(player.user.id, 'CAADAgADJQADsjRGHuRrNOA7RLqJAg')
+                    bot.send_message(player.user.id, "ТЫ ОЛЕНЬ. КТО-ТО ИЗ ВЗЯВШИХ НОВОГОДНЕЕ ЗАДАНИЕ - ТАЙНЫЙ САНТА. ТВОЯ "
+                                                     "ЗАДАЧА - ЕГО ОТЫСКАТЬ. У ТЕБЯ ОДНА ПОПЫТКА. ОТВЕТ ПРИСЫЛАТЬ ЧЕРЕЗ В "
+                                                     "ЛИЧКУ @Deepwarrior ИЛИ @Uhi_Official.")
+                except telebot.apihelper.ApiException:
+                    continue
+
 
 @bot.message_handler(commands=["all_ng"])
 def all_ng_tasks(message):
     if message.from_user.id == message.chat.id and message.from_user.username in config.root:
         spisok = ""
         for player in active_players:
-            if player.new_year:
-                if player.ng_task_status == 1:
-                    if player.user.first_name:
-                        spisok += str(player.user.first_name) + '\t'
-                    if player.user.last_name:
-                        spisok += str(player.user.last_name) + '\t'
-                    if player.user.username:
-                        spisok += '@' + str(player.user.username) + '.\t'
-                    spisok  += config.ng_tasks[player.ng_task_id[0]]
-                    spisok += '\n'
+            if player.new_year :
+                if player.user.first_name:
+                    spisok += str(player.user.first_name) + '\t'
+                if player.user.last_name:
+                    spisok += str(player.user.last_name) + '\t'
+                if player.user.username:
+                    spisok += '@' + str(player.user.username) + '.\t'
+                if player.user.id not in secret_santa and player.user.id not in sherif:
+                    spisok += config.ng_tasks[player.ng_task_id]
+                elif player.user.id in secret_santa:
+                    spisok += "ТАЙНЫЙ САНТА"
+                elif player.user.id in sherif:
+                    spisok += "ШЕРИФ"
+                spisok += '\n'
         bot.send_message(message.chat.id, spisok)
 
 
@@ -569,8 +589,6 @@ def task_extra(reaction, message):
             bot.send_message(player.user.id, "ПОЗДРАВЛЯЮ! \n МНОГО ЗАДАНИЙ УЖЕ СДЕЛАНО, НО МНОГО БУДЕТ И ВПЕРЕДИ \n "
                                              "А ПОКА ТЫ ВЫИГРАЛ СЕКРЕТНЫЙ ДУРНИРНЫЙ СТИКЕР, ИСПОЛЬЗУЙ ЕГО С УМОМ")
             bot.send_sticker(player.user.id, stick)
-
-
 
 
 def anti_task(reaction, message):
@@ -661,6 +679,7 @@ def stop_natalka(reaction, message):
 
 def kick_citrus(reaction, message):
     try:
+        time.sleep(7)
         bot.kick_chat_member(message.chat.id, config.citrus_chat)
         bot.unban_chat_member(message.chat.id, config.citrus_chat)
         bot.send_sticker(message.chat.id, 'CAADAgADGQADsjRGHmj0-DDbQgexAg')
