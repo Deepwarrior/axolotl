@@ -71,11 +71,11 @@ def logging(message):
     root_log += str(cur_time.tm_hour) + ':' + str(cur_time.tm_min) + ' '
     root_log += message.from_user.username + ' сделал '
     if message.text:
-        root_log += message.text + ' на '
+        root_log += message.text
     elif message.sticker:
-        root_log += message.sticker.file_id + ' на '
-    if message.reply_to_message:
-        root_log += message.reply_to_message.from_user.username
+        root_log += message.sticker.file_id
+    if message.reply_to_message and message.reply_to_message.from_user.username:
+        root_log += ' на ' + message.reply_to_message.from_user.username
     root_log += '\n'
 
 
