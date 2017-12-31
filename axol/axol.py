@@ -598,6 +598,9 @@ def anti_task(reaction, message):
         player.task_completed -= 1
         bot.send_message(message.chat.id, "ОТМЕНА, ОТМЕНА!", reply_to_message_id=message.reply_to_message.message_id)
 
+def message_above(reaction, message):
+    k = random.randint(0, len(config.mssg_bv)-1)
+    bot.send_message(message.chat.id, config.mssg_bv[k], reply_to_message_id=message.message_id-1)
 
 def drig(arg):
     bot.send_message(arg, "ДРЫГАЙТЕ, ЧЕРТИ!")
@@ -624,7 +627,6 @@ def natalka(reaction, message):
         all_timers.append(timer)
     else:
         react(reaction, message)
-
 
 def kick_bots(reaction, message):
     targets = [208343353, 88135026, 280982408, 200164142, 226543640, 121913006, 199378994, 110193686, 346903988,
@@ -704,7 +706,8 @@ def kick_misha(reaction, message):
 reaction_funcs = {"task_rework": task_rework, "task_fail": task_fail, "task_complete": task_complete,
                   "task_extra": task_extra, "natalka": natalka, "kick_bots": kick_bots, "kick_lyuds": kick_lyuds,
                   "mem_react": mem_react, "anti_task": anti_task, "set_admin": set_admin, "whois": whois,
-                  "stop_natalka": stop_natalka, "kick_citrus":kick_citrus, "kick_rels":kick_rels, "kick_misha": kick_misha}
+                  "stop_natalka": stop_natalka, "kick_citrus":kick_citrus, "kick_rels":kick_rels, "kick_misha": kick_misha,
+                  "message_above": message_above}
     
 
 def notify(message):

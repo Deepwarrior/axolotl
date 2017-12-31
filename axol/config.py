@@ -95,9 +95,10 @@ reactions = [
     [["ПЕРЕНОСИМ"], [], 0, [], [], "stop_natalka"],
     [[], ['CAADAgADLgADsjRGHsGbRuS2PA26Ag'], 0, [], [], "kick_citrus"],
     [[], ['CAADAgADKAADO9HBD1SvkhGZJT_BAg'], 0, [], [], "kick_rels"],
-    [[], ['CAADAgADLwADsjRGHvSXP4ESf3tIAg'], 0, [], [], "kick_misha"]
-    ]
+    [[], ['CAADAgADLwADsjRGHvSXP4ESf3tIAg'], 0, [], [], "kick_misha"],
+    [["ОТВЕТЬ НА СООБЩЕНИЕ НАД ЭТИМ", "ЧАТ ЗАЖЕВАЛО"], [], 0, [], [], "message_above"]]
 
+mssg_bv = ["ДА ННА!", "ДЕРЖЫ", "НИЧЕГО БЕЗ МЕНЯ НЕ МОЖЕШЬ", 'А ЧТО ОТВЕТИТЬ-ТО?']
 
 help_list = ['см. /donate', 'А ЧТО ТУТ НЕПОНЯТНОГО?', 'АЙ НИД СОМБАДИ', '8-800-555-35-35', ';)',
              'ХОДЯТ СЛУХИ, ЧТО ВЗЯТКА СОЗДАТЕЛЯМ ПОМОГАЕТ В ПРОХОЖДЕНИИ ЗАДАНИЯ',
