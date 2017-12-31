@@ -38,13 +38,13 @@ def zrena_timers_init():
     tim = (day + 55 * 60 - hours * 3600 - mins * 60 - sec) % day
     timer = Timer(tim, zrena)
     timer.start()
-    tim = (day + 30 * 60 + 9 * 3600 - hours * 3600 - mins * 60 - sec) % day
+    tim = (day + 40 * 60 + 9 * 3600 - hours * 3600 - mins * 60 - sec) % day
     timer = Timer(tim, zrena)
     timer.start()
-    tim = (day + 20 * 60 + 20 * 3600 - hours * 3600 - mins * 60 - sec) % day
+    tim = (day + 10 * 60 + 20 * 3600 - hours * 3600 - mins * 60 - sec) % day
     timer = Timer(tim, zrena)
     timer.start()
-    tim = (day + 25 * 60 + 14 * 3600 - hours * 3600 - mins * 60 - sec) % day
+    tim = (day + 35 * 60 + 14 * 3600 - hours * 3600 - mins * 60 - sec) % day
     timer = Timer(tim, zrena)
     timer.start()
 
@@ -71,11 +71,11 @@ def logging(message):
     root_log += str(cur_time.tm_hour) + ':' + str(cur_time.tm_min) + ' '
     root_log += message.from_user.username + ' сделал '
     if message.text:
-        root_log += message.text
+        root_log += message.text + ' на '
     elif message.sticker:
-        root_log += message.sticker.file_id
-    if message.reply_to_message and message.reply_to_message.from_user.username:
-        root_log += ' на ' + message.reply_to_message.from_user.username
+        root_log += message.sticker.file_id + ' на '
+    if message.reply_to_message:
+        root_log += message.reply_to_message.from_user.username
     root_log += '\n'
 
 
@@ -598,19 +598,6 @@ def anti_task(reaction, message):
         player.task_completed -= 1
         bot.send_message(message.chat.id, "ОТМЕНА, ОТМЕНА!", reply_to_message_id=message.reply_to_message.message_id)
 
-def message_above(reaction, message):
-    i = 1
-    while i > 0:
-        try:
-            if message.reply_to_message:
-                k = random.randint(0, len(config.mssg_bv)-1)
-                bot.send_message(message.chat.id, config.mssg_bv[k], reply_to_message_id=message.reply_to_message.message_id-i)
-                break
-        except telebot.apihelper.ApiException:
-            i += 1
-
-
-
 
 def drig(arg):
     bot.send_message(arg, "ДРЫГАЙТЕ, ЧЕРТИ!")
@@ -637,6 +624,7 @@ def natalka(reaction, message):
         all_timers.append(timer)
     else:
         react(reaction, message)
+
 
 def kick_bots(reaction, message):
     targets = [208343353, 88135026, 280982408, 200164142, 226543640, 121913006, 199378994, 110193686, 346903988,
@@ -716,8 +704,7 @@ def kick_misha(reaction, message):
 reaction_funcs = {"task_rework": task_rework, "task_fail": task_fail, "task_complete": task_complete,
                   "task_extra": task_extra, "natalka": natalka, "kick_bots": kick_bots, "kick_lyuds": kick_lyuds,
                   "mem_react": mem_react, "anti_task": anti_task, "set_admin": set_admin, "whois": whois,
-                  "stop_natalka": stop_natalka, "kick_citrus":kick_citrus, "kick_rels":kick_rels, "kick_misha": kick_misha,
-                  "message_above": message_above}
+                  "stop_natalka": stop_natalka, "kick_citrus":kick_citrus, "kick_rels":kick_rels, "kick_misha": kick_misha}
     
 
 def notify(message):
