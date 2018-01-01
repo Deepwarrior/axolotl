@@ -599,8 +599,18 @@ def anti_task(reaction, message):
         bot.send_message(message.chat.id, "ОТМЕНА, ОТМЕНА!", reply_to_message_id=message.reply_to_message.message_id)
 
 def message_above(reaction, message):
-    k = random.randint(0, len(config.mssg_bv)-1)
-    bot.send_message(message.chat.id, config.mssg_bv[k], reply_to_message_id=message.message_id-1)
+    i = 1
+    while i > 0:
+        try:
+            if message.reply_to_message:
+                k = random.randint(0, len(config.mssg_bv)-1)
+                bot.send_message(message.chat.id, config.mssg_bv[k], reply_to_message_id=message.reply_to_message.message_id-i)
+                break
+        except telebot.apihelper.ApiException:
+            i += 1
+
+
+
 
 def drig(arg):
     bot.send_message(arg, "ДРЫГАЙТЕ, ЧЕРТИ!")
