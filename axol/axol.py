@@ -65,6 +65,8 @@ def findplayer(user):
 
 
 root_log = ""
+
+
 def logging(message):
     global root_log
     cur_time = time.localtime(time.time())
@@ -241,6 +243,26 @@ def messages_off(message):
         player.mess_from_bot = False
         bot.send_message(message.chat.id, "ВЕРНИ КАК БЫЛО")
 
+@bot.message_handler(commands=["femka"])
+def femka(message):
+    text = str(message.text[7:])
+    if text.islower():
+        text = text.upper()
+    if not text or text == "rakon_bot":
+        bot.send_message(message.chat.id, "ЭАЛЛО, СЛОВО-ТО НАПИШИ")
+        return
+    if " " in text:
+        bot.send_message(message.chat.id, "Я ПРИНЦИПИАЛЬНО НЕ РАБОТАЮ С ТЕКСТОМ, НАПИШИ ОДНО СЛОВО")
+        return
+    if text.endswith("А") or text.endswith("Я"):
+        bot.send_message(message.chat.id, "СЛОВО «" + text + "» ИДЕАЛЬНО!")
+
+ #   if text.endswith("И") or text.endswith("Ы"):
+  #      A = ""
+ #       for i in config.ends:
+ #          if config.ends[0] or config.ends[2] or config.ends[5]:
+
+
 
 @bot.message_handler(commands=["new_year"])
 def new_year_reg(message):
@@ -301,7 +323,7 @@ def pozor(message):
                 user = bot.get_chat_member(message.chat.id, player.user.id)
             except telebot.apihelper.ApiException:
                 continue
-            if user and user.status in ["member", "creator", "administrator"] and not user.user.username == "rakon_bot"\
+            if user and user.status in ["member", "creator", "administrator"] and not user.user.username == "rakon_bot" \
                     and not user.user.username == "uhi_official":
                 text += str(i) + '. '
                 if user.user.first_name:
@@ -348,19 +370,20 @@ def task_status(message):
                 if (task[2] * 60 - ((time.time() - player.last_task_time) // 60)) > tm:
                     tm = task[2] * 60 - ((time.time() - player.last_task_time) // 60)
         elif player.task and player.task.time:
-            tm = player.task.time * 60 - ((time.time() - player.last_task_time) // 60)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+            tm = player.task.time * 60 - ((time.time() - player.last_task_time) // 60)
         if tm > 0:
             answer += "Осталось времени: " + str('{:.0f}'.format(tm // 60)) + " часов и " + \
-                        str('{:.0f}'.format(tm % 60)) + " минут\n"
+                      str('{:.0f}'.format(tm % 60)) + " минут\n"
         else:
             answer += "ВЫПОЛНЯЙ, ПОКА НЕ ЗАСЧИТАЮТ!\n"
     answer += "Всего сделано: " + str(player.task_completed % 50) + ".\n"
     tm = config.seconds_in_day // 60 - ((time.time() - player.last_task_time) // 60)
     if tm > 0:
-        tm += 1                                                                                # 1 min more
+        tm += 1  # 1 min more
         answer += "До следующего задания: " + str('{:.0f}'.format(tm // 60)) + " часов и " + \
                   str('{:.0f}'.format(tm % 60)) + " минут\n"
     bot.send_message(message.chat.id, answer)
+
 
 # collect players and give them tasks
 @bot.message_handler(commands=["get_task"])
@@ -523,6 +546,8 @@ def task_complete(reaction, message):
 
 secret_santa = [336595041]
 sherif = [347438021]
+
+
 @bot.message_handler(commands=["send_ng_tasks"])
 def send_ng_tasks(message):
     if message.from_user.id == message.chat.id and message.from_user.username in config.root:
@@ -548,9 +573,10 @@ def send_ng_tasks(message):
                 try:
                     player.ng_task_id = -2
                     bot.send_sticker(player.user.id, 'CAADAgADJQADsjRGHuRrNOA7RLqJAg')
-                    bot.send_message(player.user.id, "ТЫ ОЛЕНЬ. КТО-ТО ИЗ ВЗЯВШИХ НОВОГОДНЕЕ ЗАДАНИЕ - ТАЙНЫЙ САНТА. ТВОЯ "
-                                                     "ЗАДАЧА - ЕГО ОТЫСКАТЬ. У ТЕБЯ ОДНА ПОПЫТКА. ОТВЕТ ПРИСЫЛАТЬ ЧЕРЕЗ В "
-                                                     "ЛИЧКУ @Deepwarrior ИЛИ @Uhi_Official.")
+                    bot.send_message(player.user.id,
+                                     "ТЫ ОЛЕНЬ. КТО-ТО ИЗ ВЗЯВШИХ НОВОГОДНЕЕ ЗАДАНИЕ - ТАЙНЫЙ САНТА. ТВОЯ "
+                                     "ЗАДАЧА - ЕГО ОТЫСКАТЬ. У ТЕБЯ ОДНА ПОПЫТКА. ОТВЕТ ПРИСЫЛАТЬ ЧЕРЕЗ В "
+                                     "ЛИЧКУ @Deepwarrior ИЛИ @Uhi_Official.")
                 except telebot.apihelper.ApiException:
                     continue
 
@@ -560,7 +586,7 @@ def all_ng_tasks(message):
     if message.from_user.id == message.chat.id and message.from_user.username in config.root:
         spisok = ""
         for player in active_players:
-            if player.new_year :
+            if player.new_year:
                 if player.user.first_name:
                     spisok += str(player.user.first_name) + '\t'
                 if player.user.last_name:
@@ -616,8 +642,10 @@ def natalka(reaction, message):
     seconds = cur_time.tm_sec
     rand = random.randint(0, 4)
     if rand:
-        bot.send_sticker(message.chat.id, config.numbers[((minutes + rand + 1) % 60) // 10], reply_to_message_id=message.message_id)
-        bot.send_sticker(message.chat.id, config.numbers[((minutes + rand + 1) % 60) % 10], reply_to_message_id=message.message_id)
+        bot.send_sticker(message.chat.id, config.numbers[((minutes + rand + 1) % 60) // 10],
+                         reply_to_message_id=message.message_id)
+        bot.send_sticker(message.chat.id, config.numbers[((minutes + rand + 1) % 60) % 10],
+                         reply_to_message_id=message.message_id)
 
         timer = Timer(60 * rand - seconds, vbuena, [message.chat.id])
         timer.start()
@@ -686,12 +714,14 @@ def kick_citrus(reaction, message):
     except telebot.apihelper.ApiException:
         bot.send_message(message.chat.id, "ТЫ НА КОГО ПАСТЬ ОТКРЫВАЕШЬ, СОБАКА ТРУСЛИВАЯ?!")
 
+
 def kick_rels(reaction, message):
     try:
         bot.kick_chat_member(message.chat.id, config.rels_chat)
         bot.unban_chat_member(message.chat.id, config.rels_chat)
     except telebot.apihelper.ApiException:
         time.sleep(1)
+
 
 def kick_misha(reaction, message):
     try:
@@ -701,11 +731,13 @@ def kick_misha(reaction, message):
     except telebot.apihelper.ApiException:
         bot.send_message(message.chat.id, "ДА КАК ТЫ СМЕЕШЬ ТАК С МАТЕРЬЮ РАЗГОВАРИВАТЬ?!")
 
+
 reaction_funcs = {"task_rework": task_rework, "task_fail": task_fail, "task_complete": task_complete,
                   "task_extra": task_extra, "natalka": natalka, "kick_bots": kick_bots, "kick_lyuds": kick_lyuds,
                   "mem_react": mem_react, "anti_task": anti_task, "set_admin": set_admin, "whois": whois,
-                  "stop_natalka": stop_natalka, "kick_citrus":kick_citrus, "kick_rels":kick_rels, "kick_misha": kick_misha}
-    
+                  "stop_natalka": stop_natalka, "kick_citrus": kick_citrus, "kick_rels": kick_rels,
+                  "kick_misha": kick_misha}
+
 
 def notify(message):
     for player in active_players:
@@ -729,7 +761,7 @@ def notify(message):
                 player.mess_sended = True
 
 
-#def task_check(message):
+# def task_check(message):
 
 
 @bot.message_handler(content_types=["sticker"])
@@ -744,7 +776,7 @@ def sticker_parsing(message):
                     react(reaction, message)
     if message.chat.id == debug_chat_id or message.chat.id == config.cifr_chat:
         bot.send_message(message.chat.id, '\'' + message.sticker.file_id + '\'', reply_to_message_id=message.message_id)
-    #task_check(message)
+    # task_check(message)
 
 
 @bot.message_handler(content_types=["text"])
@@ -757,14 +789,13 @@ def message_parsing(message):
                     reaction_funcs[reaction[5]](reaction, message)
                 else:
                     react(reaction, message)
-    #task_check(message)
+    # task_check(message)
 
 
 @bot.message_handler(content_types=["voice"])
 def voice_parsing(message):
     if message.chat.id == debug_chat_id:
         bot.send_message(message.chat.id, '\'' + message.voice.file_id + '\'', reply_to_message_id=message.message_id)
-
 
 
 if __name__ == '__main__':
@@ -779,7 +810,7 @@ if __name__ == '__main__':
     f.close()
     zrena_timers_init()
     random.seed()
-    #bot.send_sticker(debug_chat_id, 'CAADAgADMgADsjRGHiKRfQaAeEsnAg')
+    # bot.send_sticker(debug_chat_id, 'CAADAgADMgADsjRGHiKRfQaAeEsnAg')
     for chat in allow_chats:
         try:
             # bot.send_sticker(chat, 'CAADAgADhQADP_vRD-Do6Qz0fkeMAg')
