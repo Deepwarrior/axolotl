@@ -254,28 +254,40 @@ def femka(message):
     if " " in text:
         bot.send_message(message.chat.id, "Я ЧО, ПОХОЖ НА ПАТРИСИЮ? НАПИШИ ОДНО СЛОВО!")
         return
+
     if text.endswith("А") or text.endswith("Я"):
         bot.send_message(message.chat.id, "СЛОВО «" + text + "» ИДЕАЛЬНО!")
-
-
 
     if text.endswith("И") or text.endswith("Ы"):
         A = []
         w_len = len(text)
         for i in range(len(config.ends)):
            if i == 0 or i == 2 or i == 5:
-               text = text[:w_len-1] + config.ends[i]
-               text = text + "GGG"
-               text = text.upper()
-               A.append(text)
+               text = text[:w_len-1]
            else:
-              text = text + config.ends[i]
-              text = text.upper()
-              A.append(text)
+               text = str(message.text[7:])
+           text = text + config.ends[i]
+           text = text.upper()
+           A.append(text)
         for i in A:
             bot.send_message(message.chat.id, i)
 
-print(config.ends[1])
+    # else:
+    #     if text.endswith("") or text.endswith("Ы"):
+    #         A = []
+    #         w_len = len(text)
+    #         for i in range(len(config.ends)):
+    #             if i == 0 or i == 2 or i == 5:
+    #                 text = text[:w_len-1]
+    #             else:
+    #                 text = str(message.text[7:])
+    #             text = text + config.ends[i]
+    #             text = text.upper()
+    #             A.append(text)
+    #         else:
+    #             text = str(message.text[7:])
+    #         for i in A:
+    #             bot.send_message(message.chat.id, i)
 
 @bot.message_handler(commands=["new_year"])
 def new_year_reg(message):
