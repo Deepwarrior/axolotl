@@ -282,6 +282,11 @@ def femka(message):
                     config.end[1] = "ЧКА"
                 else:
                     text = str(message.text[7:])
+                text = text + config.end[i]
+                text = text.upper()
+                A.append(text)
+            for i in A:
+                bot.send_message(message.chat.id, i)
 
         if text.endswith("О") or text.endswith("Е") or text.endswith("У"):
             for i in range(len(config.ends)):
@@ -289,6 +294,11 @@ def femka(message):
                     text = text[:w_len-1]
                 else:
                     text = str(message.text[7:])
+                text = text + config.end[i]
+                text = text.upper()
+                A.append(text)
+            for i in A:
+                bot.send_message(message.chat.id, i)
 
         if text.endswith("Ь"):
             for i in range(len(config.ends)):
@@ -301,8 +311,7 @@ def femka(message):
                 A.append(text)
             for i in A:
                 bot.send_message(message.chat.id, i)
-            return
-        
+        return
         for i in range(len(config.ends)):
             text = text + config.end[i]
             text = text.upper()
