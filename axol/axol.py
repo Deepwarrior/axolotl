@@ -285,7 +285,6 @@ def femka(message):
                     text = text.upper()
                     ideal_spisok += str(text) + '\n'
                 bot.send_message(message.chat.id, ideal_spisok)
-
             elif text.endswith("О") or text.endswith("Е") or text.endswith("У") or text in config.exception_spisok:
                 for i in range(len(config.ends)):
                     if i == 0 or i == 2 or i == 5:
