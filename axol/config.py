@@ -15,7 +15,7 @@ seconds_in_day = 85000
 
 hi_stickers = ['CAADAgADWwQAAm4y2AABD38IAooC_j4C', 'CAADAgADhAEAAjZ2IA7YnALZRRvJMwI']
 hi_citrus = ['/DELITAPELSIN', 'ГРЕЙПФРУКТ!', 'ОПРИВЕТ', 'ЦИТРУС!', 'Я ЗНАЮ ЭТУ ДЕВЧОНКУ!', 'ЧТО НОВЕНЬКОГО',
-             'СПОЙ ПЕСЕНКУ!', 'НУ МАААААМ!', "КАПИТАН ЛУЧШЕЙ КОМАНДЫ - ДЕВУШКА?"]
+             'СПОЙ ПЕСЕНКУ!', 'НУ МАААААМ!', "КАПИТАН ЛУЧШЕЙ КОМАНДЫ - ДЕВУШКА?", "МОЯ КУРОЧКА :*"]
 hi_cifr = ['1', "НАДЕЮСЬ, ЗАВТРА ТЫ ПРО ДЛИННОКОТА НЕ ЗАБУДЕШЬ.", "ПРИВЕТ, ЦИФЕРКА",
            "1 такую цифру знаешь?💁\nНадеюсь да\nВедь ты не кот🐱", "ЧТО-ТО ДЛИННОЕ ЕЩЁ - ЭТО ПРО ДЛИННОКОТА.",
            "ЗНАЕШЬ, СКОЛЬКО БУДЕТ 0 ФАКТОРИАЛ?", "ОПЯТЬ ТЫ С ЭТИМ СВОИМ СТИКЕРОМ"]
