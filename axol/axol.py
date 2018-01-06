@@ -288,7 +288,7 @@ def femka(message):
             for i in A:
                 bot.send_message(message.chat.id, i)
 
-        if text.endswith("О") or text.endswith("Е") or text.endswith("У"):
+        elif text.endswith("О") or text.endswith("Е") or text.endswith("У"):
             for i in range(len(config.ends)):
                 if i == 0 or i == 2 or i == 5:
                     text = text[:w_len-1]
@@ -300,7 +300,7 @@ def femka(message):
             for i in A:
                 bot.send_message(message.chat.id, i)
 
-        if text.endswith("Ь"):
+        elif text.endswith("Ь"):
             for i in range(len(config.ends)):
                 if i == 2 or i == 4 or i == 5:
                     text = text[:w_len-1]
@@ -311,14 +311,14 @@ def femka(message):
                 A.append(text)
             for i in A:
                 bot.send_message(message.chat.id, i)
-        return
-        for i in range(len(config.ends)):
-            text = text + config.end[i]
-            text = text.upper()
-            A.append(text)
-            text = str(message.text[7:])
-        for i in A:
-            bot.send_message(message.chat.id, i)
+        else:
+             for i in range(len(config.ends)):
+                 text = text + config.end[i]
+                 text = text.upper()
+                 A.append(text)
+                 text = str(message.text[7:])
+             for i in A:
+                 bot.send_message(message.chat.id, i)
 
 @bot.message_handler(commands=["new_year"])
 def new_year_reg(message):
