@@ -272,22 +272,48 @@ def femka(message):
         for i in A:
             bot.send_message(message.chat.id, i)
 
-    # else:
-    #     if text.endswith("") or text.endswith("Ы"):
-    #         A = []
-    #         w_len = len(text)
-    #         for i in range(len(config.ends)):
-    #             if i == 0 or i == 2 or i == 5:
-    #                 text = text[:w_len-1]
-    #             else:
-    #                 text = str(message.text[7:])
-    #             text = text + config.ends[i]
-    #             text = text.upper()
-    #             A.append(text)
-    #         else:
-    #             text = str(message.text[7:])
-    #         for i in A:
-    #             bot.send_message(message.chat.id, i)
+    if text.endswith("К") or text.endswith("Г"):
+        A = []
+        w_len = len(text)
+        for i in range(len(config.ends)):
+            if i == 1:
+                text = text[:w_len-1]
+                config.end[1] = "ЧКА"
+            else:
+                text = str(message.text[7:])
+            text = text + config.end[i]
+            text = text.upper()
+            A.append(text)
+        for i in A:
+            bot.send_message(message.chat.id, i)
+
+    if text.endswith("О") or text.endswith("Е") or text.endswith("У"):
+        A = []
+        w_len = len(text)
+        for i in range(len(config.ends)):
+            if i == 0 or i == 2 or i == 5:
+                text = text[:w_len-1]
+            else:
+                text = str(message.text[7:])
+            text = text + config.end[i]
+            text = text.upper()
+            A.append(text)
+        for i in A:
+            bot.send_message(message.chat.id, i)
+
+    if text.endswith("Ь"):
+        A = []
+        w_len = len(text)
+        for i in range(len(config.ends)):
+            if i == 2 or i == 4 or i == 5:
+                text = text[:w_len-1]
+            else:
+                text = str(message.text[7:])
+            text = text + config.end[i]
+            text = text.upper()
+            A.append(text)
+        for i in A:
+            bot.send_message(message.chat.id, i)
 
 @bot.message_handler(commands=["new_year"])
 def new_year_reg(message):
