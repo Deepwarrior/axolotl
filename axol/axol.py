@@ -243,7 +243,7 @@ def messages_off(message):
         player.mess_from_bot = False
         bot.send_message(message.chat.id, "ВЕРНИ КАК БЫЛО")
 
-@bot.message_handler(commands=["femka"])
+@bot.message_handler(commands=["femka", "FEMKA"])
 def femka(message):
     text = str(message.text[7:])
     if text.islower():
@@ -259,65 +259,61 @@ def femka(message):
         bot.send_message(message.chat.id, "СЛОВО «" + text + "» ИДЕАЛЬНО!")
 
     else:
-        A = []
-        w_len = len(text)
+        ideal_spisok = ""
+        t_len = len(text)
         bot.send_message(message.chat.id, "ДЕРЖИ ИДЕАЛЬНЫЕ СЛОВА:")
-        if text.endswith("И") or text.endswith("Ы"):
+        if (text.endswith("И") or text.endswith("Ы")) and text not in config.exception_spisok:
             for i in range(len(config.ends)):
                if i == 0 or i == 2 or i == 5:
-                   text = text[:w_len-1]
+                   text = text[:t_len-1]
                else:
                    text = str(message.text[7:])
                text = text + config.ends[i]
                text = text.upper()
-               A.append(text)
-            for i in A:
-                bot.send_message(message.chat.id, i)
+               ideal_spisok += str(text) + '\n'
+
+            bot.send_message(message.chat.id, ideal_spisok)
         else:
             if text.endswith("К") or text.endswith("Г"):
                 for i in range(len(config.ends)):
                     if i == 1:
-                        text = text[:w_len-1]
+                        text = text[:t_len-1]
                         config.end[1] = "ЧКА"
                     else:
                         text = str(message.text[7:])
                     text = text + config.end[i]
                     text = text.upper()
-                    A.append(text)
-                for i in A:
-                    bot.send_message(message.chat.id, i)
+                    ideal_spisok += str(text) + '\n'
+                bot.send_message(message.chat.id, ideal_spisok)
 
-            elif text.endswith("О") or text.endswith("Е") or text.endswith("У"):
+            elif text.endswith("О") or text.endswith("Е") or text.endswith("У") or text in config.exception_spisok:
                 for i in range(len(config.ends)):
                     if i == 0 or i == 2 or i == 5:
-                        text = text[:w_len-1]
+                        text = text[:t_len-1]
                     else:
                         text = str(message.text[7:])
                     text = text + config.end[i]
                     text = text.upper()
-                    A.append(text)
-                for i in A:
-                    bot.send_message(message.chat.id, i)
+                    ideal_spisok += str(text) + '\n'
+                bot.send_message(message.chat.id, ideal_spisok)
 
             elif text.endswith("Ь"):
                 for i in range(len(config.ends)):
                     if i == 2 or i == 4 or i == 5:
-                        text = text[:w_len-1]
+                        text = text[:t_len-1]
                     else:
                         text = str(message.text[7:])
                     text = text + config.end[i]
                     text = text.upper()
-                    A.append(text)
-                for i in A:
-                    bot.send_message(message.chat.id, i)
+                    ideal_spisok += str(text) + '\n'
+                bot.send_message(message.chat.id, ideal_spisok)
             else:
-                 for i in range(len(config.ends)):
-                     text = text + config.end[i]
-                     text = text.upper()
-                     A.append(text)
-                     text = str(message.text[7:])
-                 for i in A:
-                     bot.send_message(message.chat.id, i)
+                for i in range(len(config.ends)):
+                    text = text + config.end[i]
+                    text = text.upper()
+                    ideal_spisok += str(text) + '\n'
+                    text = str(message.text[7:])
+                bot.send_message(message.chat.id, ideal_spisok)
 
 @bot.message_handler(commands=["new_year"])
 def new_year_reg(message):
