@@ -65,18 +65,16 @@ def findplayer(user):
 
 
 root_log = ""
-
-
 def logging(message):
     global root_log
     cur_time = time.localtime(time.time())
     root_log += str(cur_time.tm_hour) + ':' + str(cur_time.tm_min) + ' '
     root_log += message.from_user.username + ' сделал '
     if message.text:
-        root_log += message.text + ' на '
+        root_log += message.text
     elif message.sticker:
-        root_log += message.sticker.file_id + ' на '
-    if message.reply_to_message:
+        root_log += message.sticker.file_id
+    if message.reply_to_message and message.reply_to_message.from_user.username:
         root_log += message.reply_to_message.from_user.username
     root_log += '\n'
 
@@ -261,7 +259,7 @@ def femka(message):
     else:
         ideal_spisok = ""
         t_len = len(text)
-        bot.send_message(message.chat.id, "ДЕРЖИ ИДЕАЛЬНЫЕ СЛОВА:")
+        ideal_spisok += "ДЕРЖИ ИДЕАЛЬНЫЕ СЛОВА:" + '\n' + '\n'
         if (text.endswith("И") or text.endswith("Ы")) and text not in config.exception_spisok:
             for i in range(len(config.ends)):
                if i == 0 or i == 2 or i == 5:
@@ -593,6 +591,16 @@ def task_complete(reaction, message):
             if player.task_completed == 60:
                 bot.send_message(message.chat.id, "ТЕБЯ ВЕДЬ УЖЕ ОБНУЛИЛИ... ЗАЧЕМ ТЫ ПРОДОЛЖАЕШЬ ИХ ДЕЛАТЬ?")
 
+def message_above(reaction, message):
+    i = 1
+    while i > 0:
+        try:
+            if message.reply_to_message:
+                k = random.randint(0, len(config.mssg_bv) - 1)
+                bot.send_message(message.chat.id, config.mssg_bv[k], reply_to_message_id=message.reply_to_message.message_id - i)
+                break
+        except telebot.apihelper.ApiException:
+            i += 1
 
 secret_santa = [336595041]
 sherif = [347438021]
@@ -786,7 +794,7 @@ reaction_funcs = {"task_rework": task_rework, "task_fail": task_fail, "task_comp
                   "task_extra": task_extra, "natalka": natalka, "kick_bots": kick_bots, "kick_lyuds": kick_lyuds,
                   "mem_react": mem_react, "anti_task": anti_task, "set_admin": set_admin, "whois": whois,
                   "stop_natalka": stop_natalka, "kick_citrus": kick_citrus, "kick_rels": kick_rels,
-                  "kick_misha": kick_misha}
+                  "kick_misha": kick_misha, "message_above": message_above}
 
 
 def notify(message):
