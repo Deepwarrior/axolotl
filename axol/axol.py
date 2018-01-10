@@ -7,6 +7,7 @@ import players
 import tasks
 import time
 import json
+import copy
 from requests.exceptions import ReadTimeout
 from threading import Timer
 
@@ -261,45 +262,48 @@ def femka(message):
     else:
         ideal_spisok = ""
         ideal_spisok += "ДЕРЖИ ИДЕАЛЬНЫЕ СЛОВА:" + '\n'*2
-        if (text.endswith("И") or text.endswith("Ы")) and text not in config.exception_spisok:
-            for i in range(len(config.ends)):
-               if i == 0 or i == 2 or i == 5:
-                   text = text[:-1]
-               else:
-                   text = str(message.text[7:])
-               text = text + config.ends[i]
-               text = text.upper()
-               ideal_spisok += str(text) + '\n'
+        for i in range(len(config.ends)):
+            if (text.endswith("И") or text.endswith("Ы")) and text not in config.exception_spisok:
+                the_end = config.ends
+                if i == 0 or i == 2 or i == 5:
+                    text = text[:-1]
 
-            bot.send_message(message.chat.id, ideal_spisok)
-        else:
-            for i in range(len(config.end)):
-               text = str(message.text[7:])
-               text = text.upper()
-               if text.endswith("К") or text.endswith("Г"):
-                   print(text[-1:])
-                   if i == 1:
-                       text = text[:-1]
-                       config.end[i] = "ЧКА"
-                   else:
-                       text = str(message.text[7:])
-               elif text.endswith("О") or text.endswith("Е") or text.endswith("У") or text in config.exception_spisok:
+            else:
+                text = text.upper()
+                the_end = config.end
+                print(" ")
+                print("0")
+                if text.endswith("К") or text.endswith("Г"):
+                    print("1")
+                    if i == 1:
+                        text = text[:-1]
+                        the_end2 = copy.copy(the_end)
+                        the_end2[i] = "ЧКА"
+                        #WHAT NEXT?
+                        print("chka")
+                    else:
+                        print("everything_else")
+                        text = str(message.text[7:])
+
+                elif text.endswith("О") or text.endswith("Е") or text.endswith("У") or text in config.exception_spisok:
                     if i == 0 or i == 2 or i == 5:
                         text = text[:-1]
                     else:
                         text = str(message.text[7:])
-               elif text.endswith("Ь"):
+
+                elif text.endswith("Ь"):
                     if i == 2 or i == 4 or i == 5:
                         text = text[:-1]
                     else:
                         text = str(message.text[7:])
-               else:
+                else:
                     text = str(message.text[7:])
-
-               text = text + config.end[i]
-               text = text.upper()
-               ideal_spisok += str(text) + '\n'
-            bot.send_message(message.chat.id, ideal_spisok)
+            text = text + the_end[i]
+            print("2")
+            text = text.upper()
+            ideal_spisok += str(text) + '\n'
+            text = str(message.text[7:])
+        bot.send_message(message.chat.id, ideal_spisok)
 
 @bot.message_handler(commands=["new_year"])
 def new_year_reg(message):
