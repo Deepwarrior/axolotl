@@ -7,7 +7,6 @@ import players
 import tasks
 import time
 import json
-import copy
 from requests.exceptions import ReadTimeout
 from threading import Timer
 
@@ -242,11 +241,11 @@ def messages_off(message):
         player.mess_from_bot = False
         bot.send_message(message.chat.id, "ВЕРНИ КАК БЫЛО")
 
+
 @bot.message_handler(commands=["femka", "FEMKA"])
 def femka(message):
     text = str(message.text[7:])
     text = text.upper()
-
     if not text or text == "rakon_bot":
         bot.send_message(message.chat.id, "ЭАЛЛО, СЛОВО-ТО НАПИШИ")
         return
@@ -257,53 +256,44 @@ def femka(message):
         bot.send_message(message.chat.id, "ПРИВЕТ, ЦИФЕРКА! 0/")
         return
 
-    if text.endswith("А") or text.endswith("Я"):
+    last_char = text[-1]  # You can do switch by value of this variable.
+    if last_char in "ИЫ" and text not in config.exception_spisok:
+        the_end = config.ends[:]
+    else:
+        the_end = config.end[:]
+
+    if last_char in "АЯ":
         bot.send_message(message.chat.id, "СЛОВО «" + text + "» ИДЕАЛЬНО!")
     else:
-        ideal_spisok = ""
-        ideal_spisok += "ДЕРЖИ ИДЕАЛЬНЫЕ СЛОВА:" + '\n'*2
+        text = text[:-1]
         for i in range(len(config.ends)):
-            if (text.endswith("И") or text.endswith("Ы")) and text not in config.exception_spisok:
-                the_end = config.ends
-                if i == 0 or i == 2 or i == 5:
-                    text = text[:-1]
-
+            if last_char in "ИЫ" and text + last_char not in config.exception_spisok:
+                # for i in range(len(config.ends)) and not in [0, 2, 5]:
+                #    the_end[i] = last_char + the_end[i]
+                if not(i == 0 or i == 2 or i == 5):
+                    the_end[i] = last_char + the_end[i]
             else:
-                text = text.upper()
-                the_end = config.end
-                print(" ")
-                print("0")
-                if text.endswith("К") or text.endswith("Г"):
-                    print("1")
+                if last_char in "КГ":
                     if i == 1:
-                        text = text[:-1]
-                        the_end2 = copy.copy(the_end)
-                        the_end2[i] = "ЧКА"
-                        #WHAT NEXT?
-                        print("chka")
+                        the_end[i] = "ЧКА"
                     else:
-                        print("everything_else")
-                        text = str(message.text[7:])
+                        the_end[i] = last_char + the_end[i]
 
-                elif text.endswith("О") or text.endswith("Е") or text.endswith("У") or text in config.exception_spisok:
-                    if i == 0 or i == 2 or i == 5:
-                        text = text[:-1]
-                    else:
-                        text = str(message.text[7:])
+                elif last_char in "ОЕУ" or text + last_char in config.exception_spisok:
+                    if not (i == 0 or i == 2 or i == 5):
+                        the_end[i] = last_char + the_end[i]
 
-                elif text.endswith("Ь"):
-                    if i == 2 or i == 4 or i == 5:
-                        text = text[:-1]
-                    else:
-                        text = str(message.text[7:])
+                elif last_char == "Ь":
+                    if not (i == 2 or i == 4 or i == 5):
+                        the_end[i] = last_char + the_end[i]
                 else:
-                    text = str(message.text[7:])
-            text = text + the_end[i]
-            print("2")
-            text = text.upper()
-            ideal_spisok += str(text) + '\n'
-            text = str(message.text[7:])
+                    the_end[i] = last_char + the_end[i]
+
+        ideal_spisok = "ДЕРЖИ ИДЕАЛЬНЫЕ СЛОВА:" + '\n' * 2
+        for i in the_end:
+            ideal_spisok += text + i.upper() + '\n'
         bot.send_message(message.chat.id, ideal_spisok)
+
 
 @bot.message_handler(commands=["new_year"])
 def new_year_reg(message):
@@ -364,7 +354,7 @@ def pozor(message):
                 user = bot.get_chat_member(message.chat.id, player.user.id)
             except telebot.apihelper.ApiException:
                 continue
-            if user and user.status in ["member", "creator", "administrator"] and not user.user.username == "rakon_bot" \
+            if user and user.status in ["member", "creator", "administrator"] and not user.user.username == "rakon_bot"\
                     and not user.user.username == "uhi_official":
                 text += str(i) + '. '
                 if user.user.first_name:
