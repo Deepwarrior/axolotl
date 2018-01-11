@@ -15,7 +15,7 @@ seconds_in_day = 85000
 
 hi_stickers = ['CAADAgADWwQAAm4y2AABD38IAooC_j4C', 'CAADAgADhAEAAjZ2IA7YnALZRRvJMwI']
 hi_citrus = ['/DELITAPELSIN', 'ГРЕЙПФРУКТ!', 'ОПРИВЕТ', 'ЦИТРУС!', 'Я ЗНАЮ ЭТУ ДЕВЧОНКУ!', 'ЧТО НОВЕНЬКОГО',
-             'СПОЙ ПЕСЕНКУ!', 'НУ МАААААМ!', "КАПИТАН ЛУЧШЕЙ КОМАНДЫ - ДЕВУШКА?"]
+             'СПОЙ ПЕСЕНКУ!', 'НУ МАААААМ!', "КАПИТАН ЛУЧШЕЙ КОМАНДЫ - ДЕВУШКА?", "МОЯ КУРОЧКА :*"]
 hi_cifr = ['1', "НАДЕЮСЬ, ЗАВТРА ТЫ ПРО ДЛИННОКОТА НЕ ЗАБУДЕШЬ.", "ПРИВЕТ, ЦИФЕРКА",
            "1 такую цифру знаешь?💁\nНадеюсь да\nВедь ты не кот🐱", "ЧТО-ТО ДЛИННОЕ ЕЩЁ - ЭТО ПРО ДЛИННОКОТА.",
            "ЗНАЕШЬ, СКОЛЬКО БУДЕТ 0 ФАКТОРИАЛ?", "ОПЯТЬ ТЫ С ЭТИМ СВОИМ СТИКЕРОМ"]
@@ -271,7 +271,8 @@ black_tasks = [
     ['CAADAgADMwADsjRGHu3JoUpaRHB9Ag', 'ТЫ ЧОРНАЯ УНХАЙЛИГ. ЗАКИДАЙ ЯРЕНЩИКА МОЛНИЯМИ ВО ВРЕМЯ ЯРЕНЫ.', 23, 0],
     ['CAADAgADPAADE3yuAgyZWgXL5Kj9Ag', 'ТЫ ЧОРНЫЙ ПИДОР ДНЯ. НАЧИНАЙ ВСЕ СВОИ СООБЩЕНИЯ СО СЛОВ "Я НЕ ГЕЙ".', 23, 0],
     ['CAADAgADNAADsjRGHt8-okdL3EqoAg', 'ТЫ ЧОРНАЯ ВАЛИНОР. СДЕЛАЙ ПОДДЕЛКУ СВОИМИ РУКАМИ.', 23, 0],
-    ['CAADAgADfQEAAli9YEoxkfmxSf7aBAI', 'ТЫ ЧОРНЫЙ РИТЕР. ОТВЕЧАЙ НА ВСЁ, ЧТО ТЕБЯ КАСАЕТСЯ, НО НЕ РАНЬШЕ ЧЕМ ЧЕРЕЗ ЧАС.', 23, 0]
+    ['CAADAgADfQEAAli9YEoxkfmxSf7aBAI', 'ТЫ ЧОРНЫЙ РИТЕР. ОТВЕЧАЙ НА ВСЁ, ЧТО ТЕБЯ КАСАЕТСЯ, НО НЕ РАНЬШЕ ЧЕМ ЧЕРЕЗ ЧАС.', 23, 0],
+    ['CAADAgADOQADsjRGHrDrs5Pilb50Ag', "ТЫ ЧОРНЫЙ НМЛСС. НАЖАЛУЙСЯ НА ПРОВЕРЯТОРОВ ЦИТРУСУ ИЛИ ДИПУ.", 23, 0]
 ]
 
 ng_tasks = [
@@ -286,3 +287,7 @@ ng_tasks = [
     'ОБМОТАЙСЯ МИШУРОЙ И ГИРЛЯНДОЙ И СДЕЛАЙ СЕЛФИ!',
     'ПРИШЛИ ФОТО СВОЕЙ ЁЛОЧКИ!',
     'ОТНЫНЕ ТВОЯ ОБЯЗАННОСТЬ -- СООБЩАТЬ, СКОЛЬКО ДНЕЙ ОСТАЛОСЬ ДО НОВОГО ГОДА!']
+
+end = ["есса", "ка", "иня", "ша", "ница", "уха"]
+ends = ["ессы", "ки", "ини", "ши", "ницы", "ухи"]
+exception_spisok = ["САРАСТИ", "БЛЕДИ"]

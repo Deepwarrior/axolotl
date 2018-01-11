@@ -242,6 +242,59 @@ def messages_off(message):
         bot.send_message(message.chat.id, "ВЕРНИ КАК БЫЛО")
 
 
+@bot.message_handler(commands=["femka", "FEMKA"])
+def femka(message):
+    text = str(message.text[7:])
+    text = text.upper()
+    if not text or text == "rakon_bot":
+        bot.send_message(message.chat.id, "ЭАЛЛО, СЛОВО-ТО НАПИШИ")
+        return
+    if " " in text:
+        bot.send_message(message.chat.id, "Я ЧО, ПОХОЖ НА ПАТРИСИЮ? НАПИШИ ОДНО СЛОВО!")
+        return
+    if not text.isalpha():
+        bot.send_message(message.chat.id, "ПРИВЕТ, ЦИФЕРКА! 0/")
+        return
+
+    last_char = text[-1]  # You can do switch by value of this variable.
+    if last_char in "ИЫ" and text not in config.exception_spisok:
+        the_end = config.ends[:]
+    else:
+        the_end = config.end[:]
+
+    if last_char in "АЯ":
+        bot.send_message(message.chat.id, "СЛОВО «" + text + "» ИДЕАЛЬНО!")
+    else:
+        text = text[:-1]
+        for i in range(len(config.ends)):
+            if last_char in "ИЫ" and text + last_char not in config.exception_spisok:
+                # for i in range(len(config.ends)) and not in [0, 2, 5]:
+                #    the_end[i] = last_char + the_end[i]
+                if not(i == 0 or i == 2 or i == 5):
+                    the_end[i] = last_char + the_end[i]
+            else:
+                if last_char in "КГ":
+                    if i == 1:
+                        the_end[i] = "ЧКА"
+                    else:
+                        the_end[i] = last_char + the_end[i]
+
+                elif last_char in "ОЕУ" or text + last_char in config.exception_spisok:
+                    if not (i == 0 or i == 2 or i == 5):
+                        the_end[i] = last_char + the_end[i]
+
+                elif last_char == "Ь":
+                    if not (i == 2 or i == 4 or i == 5):
+                        the_end[i] = last_char + the_end[i]
+                else:
+                    the_end[i] = last_char + the_end[i]
+
+        ideal_spisok = "ДЕРЖИ ИДЕАЛЬНЫЕ СЛОВА:" + '\n' * 2
+        for i in the_end:
+            ideal_spisok += text + i.upper() + '\n'
+        bot.send_message(message.chat.id, ideal_spisok)
+
+
 @bot.message_handler(commands=["new_year"])
 def new_year_reg(message):
     if message.from_user.id == message.chat.id:
@@ -348,19 +401,20 @@ def task_status(message):
                 if (task[2] * 60 - ((time.time() - player.last_task_time) // 60)) > tm:
                     tm = task[2] * 60 - ((time.time() - player.last_task_time) // 60)
         elif player.task and player.task.time:
-            tm = player.task.time * 60 - ((time.time() - player.last_task_time) // 60)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+            tm = player.task.time * 60 - ((time.time() - player.last_task_time) // 60)
         if tm > 0:
             answer += "Осталось времени: " + str('{:.0f}'.format(tm // 60)) + " часов и " + \
-                        str('{:.0f}'.format(tm % 60)) + " минут\n"
+                      str('{:.0f}'.format(tm % 60)) + " минут\n"
         else:
             answer += "ВЫПОЛНЯЙ, ПОКА НЕ ЗАСЧИТАЮТ!\n"
     answer += "Всего сделано: " + str(player.task_completed % 50) + ".\n"
     tm = config.seconds_in_day // 60 - ((time.time() - player.last_task_time) // 60)
     if tm > 0:
-        tm += 1                                                                                # 1 min more
+        tm += 1  # 1 min more
         answer += "До следующего задания: " + str('{:.0f}'.format(tm // 60)) + " часов и " + \
                   str('{:.0f}'.format(tm % 60)) + " минут\n"
     bot.send_message(message.chat.id, answer)
+
 
 # collect players and give them tasks
 @bot.message_handler(commands=["get_task"])
@@ -520,9 +574,21 @@ def task_complete(reaction, message):
             if player.task_completed == 60:
                 bot.send_message(message.chat.id, "ТЕБЯ ВЕДЬ УЖЕ ОБНУЛИЛИ... ЗАЧЕМ ТЫ ПРОДОЛЖАЕШЬ ИХ ДЕЛАТЬ?")
 
+def message_above(reaction, message):
+    i = 1
+    while i > 0:
+        try:
+            if message.reply_to_message:
+                k = random.randint(0, len(config.mssg_bv) - 1)
+                bot.send_message(message.chat.id, config.mssg_bv[k], reply_to_message_id=message.reply_to_message.message_id - i)
+                break
+        except telebot.apihelper.ApiException:
+            i += 1
 
 secret_santa = [336595041]
 sherif = [347438021]
+
+
 @bot.message_handler(commands=["send_ng_tasks"])
 def send_ng_tasks(message):
     if message.from_user.id == message.chat.id and message.from_user.username in config.root:
@@ -548,9 +614,10 @@ def send_ng_tasks(message):
                 try:
                     player.ng_task_id = -2
                     bot.send_sticker(player.user.id, 'CAADAgADJQADsjRGHuRrNOA7RLqJAg')
-                    bot.send_message(player.user.id, "ТЫ ОЛЕНЬ. КТО-ТО ИЗ ВЗЯВШИХ НОВОГОДНЕЕ ЗАДАНИЕ - ТАЙНЫЙ САНТА. ТВОЯ "
-                                                     "ЗАДАЧА - ЕГО ОТЫСКАТЬ. У ТЕБЯ ОДНА ПОПЫТКА. ОТВЕТ ПРИСЫЛАТЬ ЧЕРЕЗ В "
-                                                     "ЛИЧКУ @Deepwarrior ИЛИ @Uhi_Official.")
+                    bot.send_message(player.user.id,
+                                     "ТЫ ОЛЕНЬ. КТО-ТО ИЗ ВЗЯВШИХ НОВОГОДНЕЕ ЗАДАНИЕ - ТАЙНЫЙ САНТА. ТВОЯ "
+                                     "ЗАДАЧА - ЕГО ОТЫСКАТЬ. У ТЕБЯ ОДНА ПОПЫТКА. ОТВЕТ ПРИСЫЛАТЬ ЧЕРЕЗ В "
+                                     "ЛИЧКУ @Deepwarrior ИЛИ @Uhi_Official.")
                 except telebot.apihelper.ApiException:
                     continue
 
@@ -560,7 +627,7 @@ def all_ng_tasks(message):
     if message.from_user.id == message.chat.id and message.from_user.username in config.root:
         spisok = ""
         for player in active_players:
-            if player.new_year :
+            if player.new_year:
                 if player.user.first_name:
                     spisok += str(player.user.first_name) + '\t'
                 if player.user.last_name:
@@ -598,19 +665,6 @@ def anti_task(reaction, message):
         player.task_completed -= 1
         bot.send_message(message.chat.id, "ОТМЕНА, ОТМЕНА!", reply_to_message_id=message.reply_to_message.message_id)
 
-def message_above(reaction, message):
-    i = 1
-    while i > 0:
-        try:
-            if message.reply_to_message:
-                k = random.randint(0, len(config.mssg_bv)-1)
-                bot.send_message(message.chat.id, config.mssg_bv[k], reply_to_message_id=message.reply_to_message.message_id-i)
-                break
-        except telebot.apihelper.ApiException:
-            i += 1
-
-
-
 
 def drig(arg):
     bot.send_message(arg, "ДРЫГАЙТЕ, ЧЕРТИ!")
@@ -629,14 +683,17 @@ def natalka(reaction, message):
     seconds = cur_time.tm_sec
     rand = random.randint(0, 4)
     if rand:
-        bot.send_sticker(message.chat.id, config.numbers[((minutes + rand + 1) % 60) // 10], reply_to_message_id=message.message_id)
-        bot.send_sticker(message.chat.id, config.numbers[((minutes + rand + 1) % 60) % 10], reply_to_message_id=message.message_id)
+        bot.send_sticker(message.chat.id, config.numbers[((minutes + rand + 1) % 60) // 10],
+                         reply_to_message_id=message.message_id)
+        bot.send_sticker(message.chat.id, config.numbers[((minutes + rand + 1) % 60) % 10],
+                         reply_to_message_id=message.message_id)
 
         timer = Timer(60 * rand - seconds, vbuena, [message.chat.id])
         timer.start()
         all_timers.append(timer)
     else:
         react(reaction, message)
+
 
 def kick_bots(reaction, message):
     targets = [208343353, 88135026, 280982408, 200164142, 226543640, 121913006, 199378994, 110193686, 346903988,
@@ -698,12 +755,14 @@ def kick_citrus(reaction, message):
     except telebot.apihelper.ApiException:
         bot.send_message(message.chat.id, "ТЫ НА КОГО ПАСТЬ ОТКРЫВАЕШЬ, СОБАКА ТРУСЛИВАЯ?!")
 
+
 def kick_rels(reaction, message):
     try:
         bot.kick_chat_member(message.chat.id, config.rels_chat)
         bot.unban_chat_member(message.chat.id, config.rels_chat)
     except telebot.apihelper.ApiException:
         time.sleep(1)
+
 
 def kick_misha(reaction, message):
     try:
@@ -713,12 +772,13 @@ def kick_misha(reaction, message):
     except telebot.apihelper.ApiException:
         bot.send_message(message.chat.id, "ДА КАК ТЫ СМЕЕШЬ ТАК С МАТЕРЬЮ РАЗГОВАРИВАТЬ?!")
 
+
 reaction_funcs = {"task_rework": task_rework, "task_fail": task_fail, "task_complete": task_complete,
                   "task_extra": task_extra, "natalka": natalka, "kick_bots": kick_bots, "kick_lyuds": kick_lyuds,
                   "mem_react": mem_react, "anti_task": anti_task, "set_admin": set_admin, "whois": whois,
-                  "stop_natalka": stop_natalka, "kick_citrus":kick_citrus, "kick_rels":kick_rels, "kick_misha": kick_misha,
-                  "message_above": message_above}
-    
+                  "stop_natalka": stop_natalka, "kick_citrus": kick_citrus, "kick_rels": kick_rels,
+                  "kick_misha": kick_misha, "message_above": message_above}
+
 
 def notify(message):
     for player in active_players:
@@ -742,7 +802,7 @@ def notify(message):
                 player.mess_sended = True
 
 
-#def task_check(message):
+# def task_check(message):
 
 
 @bot.message_handler(content_types=["sticker"])
@@ -757,7 +817,7 @@ def sticker_parsing(message):
                     react(reaction, message)
     if message.chat.id == debug_chat_id or message.chat.id == config.cifr_chat:
         bot.send_message(message.chat.id, '\'' + message.sticker.file_id + '\'', reply_to_message_id=message.message_id)
-    #task_check(message)
+    # task_check(message)
 
 
 @bot.message_handler(content_types=["text"])
@@ -770,14 +830,13 @@ def message_parsing(message):
                     reaction_funcs[reaction[5]](reaction, message)
                 else:
                     react(reaction, message)
-    #task_check(message)
+    # task_check(message)
 
 
 @bot.message_handler(content_types=["voice"])
 def voice_parsing(message):
     if message.chat.id == debug_chat_id:
         bot.send_message(message.chat.id, '\'' + message.voice.file_id + '\'', reply_to_message_id=message.message_id)
-
 
 
 if __name__ == '__main__':
@@ -792,7 +851,7 @@ if __name__ == '__main__':
     f.close()
     zrena_timers_init()
     random.seed()
-    #bot.send_sticker(debug_chat_id, 'CAADAgADMgADsjRGHiKRfQaAeEsnAg')
+    # bot.send_sticker(debug_chat_id, 'CAADAgADMgADsjRGHiKRfQaAeEsnAg')
     for chat in allow_chats:
         try:
             # bot.send_sticker(chat, 'CAADAgADhQADP_vRD-Do6Qz0fkeMAg')
