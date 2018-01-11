@@ -75,7 +75,7 @@ def logging(message):
     elif message.sticker:
         root_log += message.sticker.file_id
     if message.reply_to_message and message.reply_to_message.from_user.username:
-        root_log += message.reply_to_message.from_user.username
+        root_log += ' на ' + message.reply_to_message.from_user.username
     root_log += '\n'
 
 
