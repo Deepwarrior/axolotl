@@ -21,6 +21,7 @@ igroklub_chat = -1001108031278
 alukr_chat = -1001031232765
 allow_chats = [vip_chat_id, debug_chat_id, -1001149068208, igroklub_chat, alukr_chat]
 all_timers = []
+current_task_funcs = []
 
 
 def zrena():
@@ -62,6 +63,22 @@ def findplayer(user):
     player = players.Player(user)
     active_players.append(player)
     return player
+
+
+task_funcs = {}
+
+
+def infinity_check(message, player, data):
+    return False
+
+
+def check_func_costruct(player, func):
+    data = []
+
+    def check_func(message):
+        result = func(message, player, data)
+        return player, result
+    return check_func
 
 
 root_log = ""
@@ -416,6 +433,13 @@ def task_status(message):
     bot.send_message(message.chat.id, answer)
 
 
+def remove_task_check(user, message):
+    for func in current_task_funcs:
+        player, result = func(message)
+        if player == user:
+            current_task_funcs.remove(func)
+
+
 # collect players and give them tasks
 @bot.message_handler(commands=["get_task"])
 def get_task(message):
@@ -428,6 +452,7 @@ def get_task(message):
             player.task_status = 0
             player.task_id = []
             player.task = None
+            remove_task_check(player, message)
         if player.task_status == 1:
             bot.send_message(message.chat.id, "ТЫ УЖЕ ЧТО-ТО ДЕЛАЕШЬ!", reply_to_message_id=message.message_id)
         elif player.task_status == 2:
@@ -436,6 +461,7 @@ def get_task(message):
             if time.time() - player.last_task_time < config.seconds_in_day:
                 bot.send_message(message.chat.id, "НОВОЕ ЗАДАНИЕ БУДЕТ НЕСКОРО!",
                                  reply_to_message_id=message.message_id)
+
             else:
                 if player.task_completed < 100:
                     tasks = config.tasks
@@ -444,6 +470,7 @@ def get_task(message):
                 player.task_status = 1
                 player.last_task_time = time.time()
                 player.last_task_mssg = message.message_id
+
                 rand = random.randint(1, 500)
                 if rand == 237 and player.task_completed < 100:
                     task = ['CAADAgADaQADP_vRD78igQttLbufAg', 'КОЛДУЮ, КОЛДУЮ... ВЖУХ! И ТЫ ПИДОР ДНЯ.', 0, 0]
@@ -476,6 +503,12 @@ def get_task(message):
                         bot.send_sticker(message.chat.id, tasks[rand][0])
                         player.task_id.append(rand)
                         bot.send_message(message.chat.id, "АЗАЗА, УДАЧИ")
+
+                    for task_id in player.task_id:
+                        if len(tasks[task_id]) > 4:
+                            current_task_funcs.append(check_func_costruct(player, task_funcs[tasks[task_id][4]]))
+                        else:
+                            current_task_funcs.append(check_func_costruct(player, infinity_check))
 
 
 # root command. See all players with tasks.
@@ -524,6 +557,16 @@ def task_rework(reaction, message):
                 player.task_status = 1
                 player.task_completed -= 1
                 bot.send_message(message.chat.id, "НЕ, АДМИНАМ НЕ НРАВИТСЯ")
+
+                if player.task_completed < 100:
+                    tasks = config.tasks
+                else:
+                    tasks = config.black_tasks
+                for task_id in player.task_id:
+                    if len(tasks[task_id]) > 4:
+                        current_task_funcs.append(check_func_costruct(player, task_funcs[tasks[task_id][4]]))
+                    else:
+                        current_task_funcs.append(check_func_costruct(player, infinity_check))
         logging(message)
 
 
@@ -532,6 +575,7 @@ def task_fail(reaction, message):
         player = findplayer(message.reply_to_message.from_user)
         if player.task_status == 1:
             player.task_status = 2
+            remove_task_check(player, message)
             bot.send_message(message.chat.id, "ЗАДАНИЕ ПРОВАЛЕНО!",
                              reply_to_message_id=message.reply_to_message.message_id)
             if player.mess_from_bot:
@@ -545,6 +589,7 @@ def task_complete(reaction, message):
         player = findplayer(message.reply_to_message.from_user)
         if player.task_status == 1:
             player.task_status = 0
+            remove_task_check(player, message)
             player.task_completed += 1
             if player.task_completed == 50:
                 bot.send_message(player.user.id, "АЗАЗА, ТЫ УМИР")
@@ -573,6 +618,7 @@ def task_complete(reaction, message):
                 bot.send_sticker(player.user.id, stick)
             if player.task_completed == 60:
                 bot.send_message(message.chat.id, "ТЕБЯ ВЕДЬ УЖЕ ОБНУЛИЛИ... ЗАЧЕМ ТЫ ПРОДОЛЖАЕШЬ ИХ ДЕЛАТЬ?")
+
 
 def message_above(reaction, message):
     i = 1
@@ -782,15 +828,6 @@ reaction_funcs = {"task_rework": task_rework, "task_fail": task_fail, "task_comp
 
 def notify(message):
     for player in active_players:
-        # if player.task and not player.informed:
-        #    if player.task.time:
-        #        if time.time() - player.last_task_time > player.task.time * 3600:
-        #            player.informed = True
-        #           bot.send_message(debug_chat_id, players.to_string(player) + '\nВремя задания истекло! Оцените!')
-        #   if player.task.messages:
-        #       if message.message_id - player.last_task_mssg > player.task.messages:
-        #           player.informed = True
-        #            bot.send_message(debug_chat_id, players.to_string(player) + '\nВсе сообщения написаны! Оцените!')
         if player.mess_from_bot and not player.mess_sended \
                 and time.time() - player.last_task_time > config.seconds_in_day:
             try:
@@ -802,7 +839,13 @@ def notify(message):
                 player.mess_sended = True
 
 
-# def task_check(message):
+def task_check(message):
+    for func in current_task_funcs:
+        player, result = func(message)
+        if result == "+":
+            bot.send_message(message.chat.id, "АВТОЗАЧЁТ!")
+        elif result == "-":
+            bot.send_message(message.chat.id, "АВТОБАЯЗИД!")
 
 
 @bot.message_handler(content_types=["sticker"])
@@ -817,7 +860,7 @@ def sticker_parsing(message):
                     react(reaction, message)
     if message.chat.id == debug_chat_id or message.chat.id == config.cifr_chat:
         bot.send_message(message.chat.id, '\'' + message.sticker.file_id + '\'', reply_to_message_id=message.message_id)
-    # task_check(message)
+    task_check(message)
 
 
 @bot.message_handler(content_types=["text"])
@@ -830,7 +873,7 @@ def message_parsing(message):
                     reaction_funcs[reaction[5]](reaction, message)
                 else:
                     react(reaction, message)
-    # task_check(message)
+    task_check(message)
 
 
 @bot.message_handler(content_types=["voice"])
@@ -844,10 +887,6 @@ if __name__ == '__main__':
     templist = json.load(f)
     for x in templist:
         active_players.append(players.Player(**x))
-        # try:
-        #    print(x)
-        # except UnicodeEncodeError:
-        #    print("nohing!")
     f.close()
     zrena_timers_init()
     random.seed()
