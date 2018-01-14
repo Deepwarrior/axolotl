@@ -4,7 +4,6 @@ import os
 import telebot
 import random
 import players
-import tasks
 import time
 import json
 from requests.exceptions import ReadTimeout
@@ -65,7 +64,220 @@ def findplayer(user):
     return player
 
 
-task_funcs = {}
+# check_functions
+def deep_check(message, player, data):
+    # init
+    if not data:
+        data = [[], []]
+
+    if message.from_user.id != player.user.id and message.text and message.text[0] == '/' and \
+       message.text not in data[0]:
+        data[0].append(message.text)
+
+    if message.from_user.id == player.user.id and message.text and message.text[0] == '/' and \
+       message.text in data[0] and message.text not in data[1]:
+        data[1].append(message.text)
+
+    if len(data[0]) == len(data[1]) and message.message_id - player.last_task_mssg > 300:
+        return "+"
+
+
+def gdvll_check(message, player, data):
+    if message.from_user.id != player.user.id or not message.text:
+        return
+    glsn = "AEOIUУЫАЕОИЮЭЁ"
+    text = message.text.upper()
+    for char in glsn:
+        if char in text:
+            return "-"
+    if time.time() - player.last_task_time > 3600 * 3:
+        return "+"
+
+
+def iioo_check(message, player, data):
+    if message.from_user.id != player.user.id or not message.text:
+        return
+    counter = 0
+    sglsn = "QWRTPSDFGHJKLZXCVBNMЙЦКНГШЩЗХФВПРЛДЖЧСМТБ"
+    text = message.text.upper()
+    words = text.split()
+    for word in words:
+        for char in word:
+            if char in sglsn:
+                counter += 1
+        if counter > 2:
+            return "-"
+        else:
+            counter = 0
+
+    if time.time() - player.last_task_time > 3600 * 3:
+        return "+"
+
+
+def tribbl_check(message, player, data):
+    if message.from_user.id != player.user.id or not message.text:
+        return
+    counter = 0
+    text = message.text
+    if text[:-1].isalpha():
+        return "-"
+    words = text.split()
+    for word in words:
+        for char in word:
+            if char.isupper():
+                counter += 1
+        if counter > 1:
+            return "-"
+        else:
+            counter = 0
+
+
+def liira_check(message, player, data):
+    if message.from_user.id != 265419583 or not message.text or not message.reply_to_message\
+            or not message.reply_to_message.from_user.id != player.user.id:
+        return
+    if "КРАСИВО" in message.text.upper():
+        return "+"
+
+
+def super_check(message, player, data):
+    if message.from_user.id != player.user.id or not message.text:
+        return
+    counter = True
+    for char in message.text:
+        if not char.isalpha() and ord(char) > 100:
+            counter = False
+    if counter:
+        return "-"
+    if time.time() - player.last_task_time > 3600 * 3:
+        return "+"
+
+
+def bumaga_check(message, player, data):
+    if message.from_user.id != player.user.id or not message.text or not message.reply_to_message:
+        return
+    player = findplayer(message.reply_to_message.from_user)
+    if "ПОБЕЖДАЮ" in message.text.upper() and 20 in player.task_id:
+        return "+"
+
+
+def kamen_check(message, player, data):
+    if message.from_user.id != player.user.id or not message.text or not message.reply_to_message:
+        return
+    player = findplayer(message.reply_to_message.from_user)
+    if "ПОБЕЖДАЮ" in message.text.upper() and 21 in player.task_id:
+        return "+"
+
+
+def nozhn_check(message, player, data):
+    if message.from_user.id != player.user.id or not message.text or not message.reply_to_message:
+        return
+    player = findplayer(message.reply_to_message.from_user)
+    if "ПОБЕЖДАЮ" in message.text.upper() and 19 in player.task_id:
+        return "+"
+
+
+def fylhtq_check(message, player, data):
+    if message.from_user.id != player.user.id or not message.text:
+        return
+    kirill = ('абвгдеёжзийклмнопрстуфхцчшщъыьэюя')
+    text = message.text.lower()
+    for char in kirill:
+        if char in text:
+            return "-"
+    if time.time() - player.last_task_time > 3600 * 3:
+        return "+"
+
+
+def fober_check(message, player, data):
+    if message.from_user.id != player.user.id and message.text and player.user.username and \
+            ("@" + player.user.username) in message.text and not data[0]:
+        data[0] = [time.time()]
+        return
+    elif message.from_user.id != player.user.id:
+        return
+    if not data[0]:
+        return
+    if message.from_user.id == player.user.id and time.time() - data[0] > 10 * 60:
+        return "-"
+    else:
+        data[0] = 0.0
+
+    if time.time() - player.last_task_time > 3600 * 6:
+        return "+"
+
+
+def mozg_check(message, player, data):
+    if message.from_user.id != player.user.id or not message.text:
+        return
+    for i in message.text:
+        if message.text[i].isalpha() and message.text[i+1] and message.text[i+1] != ' ':
+            return "-"
+    if time.time() - player.last_task_time > 3600 * 3:
+        return "+"
+
+
+def malefika_check(message, player, data):
+    if message.from_user.id != player.user.id:
+        return
+
+    if message.from_user.id == player.user.id and message.text and message.reply_to_message \
+       and "ПРЕДСКАЗЫВАЮ" in message.text.upper() and not data:
+        enemy = findplayer(message.reply_to_message.from_user)
+        data.append(enemy.last_task_mssg)
+        data.append(enemy.user)
+        data.append(enemy.task_completed)
+
+    if message.from_user.id == player.user.id and data:
+        enemy = findplayer(data[1])
+        if enemy.last_task_mssg == data[0]:
+            return
+        elif enemy.task_completed == data[2]:
+            return "+"
+        elif enemy.task_completed > data[2]:
+            return "-"
+
+
+def katissa_check(message, player, data):
+    if message.from_user.id == player.user.id:
+        return "-"
+    if time.time() - player.last_task_time > 3600 * 6:
+        return "+"
+
+
+def patricia_check(message, player, data):
+    if message.from_user.id != player.user.id or not message.text:
+        return
+    words = message.text.split()
+    if len(words) < 20:
+        return "-"
+    if time.time() - player.last_task_time > 3600 * 3:
+        return "+"
+
+
+def all4u_check(message, player, data):
+    if data[0] and time.time() - data[0] > 30 * 60:
+        return "+"
+    if message.from_user.id == player.user.id:
+        data[0] = time.time()
+    else:
+        data[0] = 0.0
+
+
+def zoloto_check(message, player, data):
+    if message.from_user.id != player.user.id:
+        return
+    if not message.sticker:
+        return "-"
+    if time.time() - player.last_task_time > 3600 * 6:
+        return "+"
+
+task_funcs = {"deep_check": deep_check, "gdvll_check": gdvll_check, "iioo_check": iioo_check,
+              "tribbl_check": tribbl_check, "liira_check": liira_check, "super_check": super_check,
+              "bumaga_check": bumaga_check, "kamen_check": kamen_check, "nozhn_check": nozhn_check,
+              "fylhtq_check": fylhtq_check, "fober_check": fober_check, "mozg_check": mozg_check,
+              "malefika_check": malefika_check, "katissa_check": katissa_check, "patricia_check": patricia_check,
+              "all4u_check": all4u_check, "zoloto_check": zoloto_check}
 
 
 def infinity_check(message, player, data):
@@ -79,7 +291,7 @@ def check_func_costruct(player, func):
         result = func(message, player, data)
         return player, result
     return check_func
-
+# check functions
 
 root_log = ""
 def logging(message):
@@ -840,12 +1052,16 @@ def notify(message):
 
 
 def task_check(message):
+    if message.chat.id not in [vip_chat_id, -1001246951967]:
+        return
     for func in current_task_funcs:
         player, result = func(message)
         if result == "+":
             bot.send_message(message.chat.id, "АВТОЗАЧЁТ!")
+            current_task_funcs.remove(func)
         elif result == "-":
             bot.send_message(message.chat.id, "АВТОБАЯЗИД!")
+            current_task_funcs.remove(func)
 
 
 @bot.message_handler(content_types=["sticker"])
