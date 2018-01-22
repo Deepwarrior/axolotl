@@ -18,7 +18,7 @@ vip_chat_id = -1001145739506
 debug_chat_id = -1001107497089
 igroklub_chat = -1001108031278
 alukr_chat = -1001031232765
-allow_chats = [vip_chat_id, debug_chat_id, -1001149068208, igroklub_chat, alukr_chat]
+allow_chats = [vip_chat_id, debug_chat_id, -1001149068208, igroklub_chat, alukr_chat, -1001274709885]
 all_timers = []
 current_task_funcs = []
 
@@ -1052,6 +1052,7 @@ def notify(message):
 
 
 def task_check(message):
+    return #remove this
     if message.chat.id not in [vip_chat_id, -1001246951967]:
         return
     for func in current_task_funcs:
