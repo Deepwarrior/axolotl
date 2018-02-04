@@ -18,7 +18,7 @@ vip_chat_id = -1001145739506
 debug_chat_id = -1001107497089
 igroklub_chat = -1001108031278
 alukr_chat = -1001031232765
-allow_chats = [vip_chat_id, debug_chat_id, -1001149068208, igroklub_chat, alukr_chat, -1001274709885]
+allow_chats = [vip_chat_id, debug_chat_id, -1001149068208, igroklub_chat, alukr_chat]
 all_timers = []
 current_task_funcs = []
 
@@ -68,16 +68,25 @@ def findplayer(user):
 def deep_check(message, player, data):
     # init
     if not data:
-        data = [[], []]
+        data.append([])
+        data.append([])
+    if not message.text:
+        return
+    words = message.text.split()
+    for word in words:
+        i = len(word)
+        for i in range(1, len(word)):
+            if not word[i].isalpha() and word[i] != '_' and not word[i].isdigit():
+                i -= 1
+                break
+        if len(word[:i+1]) == 1:
+            continue
 
-    if message.from_user.id != player.user.id and message.text and message.text[0] == '/' and \
-       message.text not in data[0]:
-        data[0].append(message.text)
+        if message.from_user.id != player.user.id and word[0] == '/' and word[:i+1] not in data[0]:
+            data[0].append(word[:i+1])
 
-    if message.from_user.id == player.user.id and message.text and message.text[0] == '/' and \
-       message.text in data[0] and message.text not in data[1]:
-        data[1].append(message.text)
-
+        if message.from_user.id == player.user.id and word[0] == '/' and word[:i+1] in data[0] and word[:i+1] not in data[1]:
+            data[1].append(word[:i+1])
     if len(data[0]) == len(data[1]) and message.message_id - player.last_task_mssg > 300:
         return "+"
 
@@ -117,19 +126,14 @@ def iioo_check(message, player, data):
 def tribbl_check(message, player, data):
     if message.from_user.id != player.user.id or not message.text:
         return
-    counter = 0
     text = message.text
-    if text[:-1].isalpha():
+    if text[-1].isalpha():
         return "-"
     words = text.split()
     for word in words:
-        for char in word:
+        for char in word[1:]:
             if char.isupper():
-                counter += 1
-        if counter > 1:
-            return "-"
-        else:
-            counter = 0
+                return "-"
 
 
 def liira_check(message, player, data):
@@ -190,6 +194,8 @@ def fylhtq_check(message, player, data):
 
 
 def fober_check(message, player, data):
+    if not data:
+        data.append(0.0)
     if message.from_user.id != player.user.id and message.text and player.user.username and \
             ("@" + player.user.username) in message.text and not data[0]:
         data[0] = [time.time()]
@@ -210,7 +216,7 @@ def fober_check(message, player, data):
 def mozg_check(message, player, data):
     if message.from_user.id != player.user.id or not message.text:
         return
-    for i in message.text:
+    for i in range(len(message.text)):
         if message.text[i].isalpha() and message.text[i+1] and message.text[i+1] != ' ':
             return "-"
     if time.time() - player.last_task_time > 3600 * 3:
@@ -230,7 +236,7 @@ def malefika_check(message, player, data):
 
     if message.from_user.id == player.user.id and data:
         enemy = findplayer(data[1])
-        if enemy.last_task_mssg == data[0]:
+        if enemy.last_task_mssg == data[0] and enemy.task_status == 1:
             return
         elif enemy.task_completed == data[2]:
             return "+"
@@ -256,6 +262,8 @@ def patricia_check(message, player, data):
 
 
 def all4u_check(message, player, data):
+    if not data:
+        data.append(0.0)
     if data[0] and time.time() - data[0] > 30 * 60:
         return "+"
     if message.from_user.id == player.user.id:
@@ -287,8 +295,11 @@ def infinity_check(message, player, data):
 def check_func_costruct(player, func):
     data = []
 
-    def check_func(message):
-        result = func(message, player, data)
+    def check_func(message, need_result):
+        if need_result:
+            result = func(message, player, data)
+        else:
+            result = 0
         return player, result
     return check_func
 # check functions
@@ -647,7 +658,7 @@ def task_status(message):
 
 def remove_task_check(user, message):
     for func in current_task_funcs:
-        player, result = func(message)
+        player, result = func(message, False)
         if player == user:
             current_task_funcs.remove(func)
 
@@ -1056,7 +1067,7 @@ def task_check(message):
     if message.chat.id not in [vip_chat_id, -1001246951967]:
         return
     for func in current_task_funcs:
-        player, result = func(message)
+        player, result = func(message, True)
         if result == "+":
             bot.send_message(message.chat.id, "АВТОЗАЧЁТ!")
             current_task_funcs.remove(func)
@@ -1120,5 +1131,7 @@ if __name__ == '__main__':
         except ReadTimeout:
             print("die?")
             time.sleep(60)
+            if root_log:
+                bot.send_message(debug_chat_id, root_log)
         finally:
             backup(None)
