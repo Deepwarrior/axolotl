@@ -334,13 +334,17 @@ def new_member(message):
     else:
         bot.send_message(message.chat.id, "ОНЕТ!", reply_to_message_id=message.message_id)
 
-
 @bot.message_handler(content_types=["left_chat_member"])
 def left_member(message):
-    if message.left_chat_member.id in config.whitelist:
-        bot.send_message(message.chat.id, "ОНЕТ!", reply_to_message_id=message.message_id)
-    else:
-        bot.send_message(message.chat.id, "ОУРА!", reply_to_message_id=message.message_id)
+    try:
+        if message.left_chat_member.id in config.whitelist:
+            bot.send_message(message.chat.id, "ОНЕТ!", reply_to_message_id=message.message_id)
+        elif message.left_chat_member.id == config.slomanny_chat or message.left_chat_member.id == 409875476:
+            bot.send_message(message.chat.id, "ОНЕТ! ВЕРНИТЕ В ЧАТИК МОЕГО МНОГОСТРАДАЛЬНОГО БРАТИШКУ КАК ВЫ СМЕЕТЕ НИНАВИЖУ ВАС ПЛАК-ПЛАК :(", reply_to_message_id=message.message_id)
+        else:
+            bot.send_message(message.chat.id, "ОУРА!", reply_to_message_id=message.message_id)
+    except telebot.apihelper.ApiException:
+        bot.send_message(debug_chat_id, "КОГО-ТО КИКНУЛИ, ЕСЛИ ВАМ ЭТО ИНТЕРЕСНО")
 
 
 @bot.message_handler(commands=["IGRO", "igro"])
@@ -462,7 +466,10 @@ def send(message):
         text = message.from_user.last_name + text
     if message.from_user.first_name:
         text = message.from_user.first_name + ' ' + text
-    bot.send_message(-1001246951967, text)
+    try:
+        bot.send_message(-1001246951967, text)
+    except telebot.apihelper.ApiException:
+        bot.send_message(debug_chat_id, text)
 
 
 @bot.message_handler(commands=["on"])
