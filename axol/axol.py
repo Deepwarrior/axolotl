@@ -542,6 +542,12 @@ def femka(message):
         bot.send_message(message.chat.id, ideal_spisok)
 
 
+@bot.message_handler(commands=["love_reg"])
+def love_reg(message):
+    if message.from_user.id == message.chat.id:
+        player = findplayer(message.from_user)
+        player.islove = True
+        bot.send_message(message.chat.id, "СПАСИБО ЗА РЕГИСТРАЦИЮ, КОТИК \u2764 \u2764 \u2764")
 @bot.message_handler(commands=["new_year"])
 def new_year_reg(message):
     if message.from_user.id == message.chat.id:
