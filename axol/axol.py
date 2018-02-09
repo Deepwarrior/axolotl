@@ -1015,7 +1015,7 @@ def set_admin(reaction, message):
 
 
 def whois(reaction, message):
-    if message.reply_to_message and message.from_user.username in config.root:
+    if message.reply_to_message and message.from_user.username in config.root and message.from_user.username != "alukr":
         player = findplayer(message.reply_to_message.from_user)
         if (player.task or (hasattr(player, "task_id") and len(player.task_id))) and player.task_status == 1:
             bot.send_message(message.chat.id, players.to_string(player))
