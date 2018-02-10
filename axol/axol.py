@@ -339,7 +339,7 @@ def left_member(message):
     try:
         if message.left_chat_member.id in config.whitelist:
             bot.send_message(message.chat.id, "ОНЕТ!", reply_to_message_id=message.message_id)
-        elif message.left_chat_member.id == config.slomanny_chat or message.left_chat_member.id == 409875476:
+        elif message.left_chat_member.id == 409875476:
             bot.send_message(message.chat.id, "ОНЕТ! ВЕРНИТЕ В ЧАТИК МОЕГО МНОГОСТРАДАЛЬНОГО БРАТИШКУ КАК ВЫ СМЕЕТЕ НИНАВИЖУ ВАС ПЛАК-ПЛАК :(", reply_to_message_id=message.message_id)
         else:
             bot.send_message(message.chat.id, "ОУРА!", reply_to_message_id=message.message_id)
