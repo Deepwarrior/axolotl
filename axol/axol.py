@@ -550,6 +550,46 @@ def love_reg(message):
         bot.send_message(message.chat.id, "СПАСИБО ЗА РЕГИСТРАЦИЮ, КОТИК \u2764 \u2764 \u2764")
 @bot.message_handler(commands=["new_year"])
 def new_year_reg(message):
+@bot.message_handler(commands=["love_set"])
+def love_set(message):
+    lovers_list = []
+    players_in_love = []
+    already_paired = []
+    m = 0
+    for player in active_players:
+        if player.islove:
+            pair = ""
+            if player.user.first_name:
+                pair += str(player.user.first_name) + '\t'
+            if player.user.last_name:
+                pair += str(player.user.last_name) + '\t'
+            if player.user.username:
+                pair += '@' + str(player.user.username) + '\t'
+            lovers_list.append(pair)
+            player.love_id = m
+            players_in_love.append(player)
+            m = m + 1
+    for player in players_in_love:
+        if not player.ispaired:
+            n = random.randint(0, len(players_in_love) - 1)
+            if n not in already_paired and not n == player.love_id:
+                player.pair_id = n
+                already_paired.append(n)
+                print(already_paired)
+                player.ispaired = True
+
+    for player in players_in_love:
+        pair = lovers_list[player.pair_id]
+        love_task = random.choice(config.love_tasks)
+        try:
+            bot.send_message(config.citrus_chat, player.pair_id)
+            bot.send_message(config.citrus_chat, 'АКСОЛОТЛЬ-КУПИДОН НАУДАЧУ ЗАПУСТИЛ' 
+                                            ' СВОЮ СТРЕЛУ. ТВОЯ ВТОРАЯ ПОЛОВИНКА '
+                                      + pair + ' УЖЕ ЖДЁТ ОТ ТЕБЯ ЗНАКА ВНИМАНИЯ!')
+            bot.send_sticker(config.citrus_chat, 'CAADAgADUgADsjRGHr5CgRYMzRQNAg')
+            bot.send_message(config.citrus_chat, love_task + ' \u2764 \u2764 \u2764')
+        except telebot.apihelper.ApiException:
+            continue
     if message.from_user.id == message.chat.id:
         player = findplayer(message.from_user)
         player.new_year = True
