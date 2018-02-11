@@ -548,8 +548,7 @@ def love_reg(message):
         player = findplayer(message.from_user)
         player.islove = True
         bot.send_message(message.chat.id, "СПАСИБО ЗА РЕГИСТРАЦИЮ, КОТИК \u2764 \u2764 \u2764")
-@bot.message_handler(commands=["new_year"])
-def new_year_reg(message):
+
 @bot.message_handler(commands=["love_set"])
 def love_set(message):
     lovers_list = []
@@ -590,6 +589,9 @@ def love_set(message):
             bot.send_message(config.citrus_chat, love_task + ' \u2764 \u2764 \u2764')
         except telebot.apihelper.ApiException:
             continue
+
+ @bot.message_handler(commands=["new_year"])
+ def new_year_reg(message):
     if message.from_user.id == message.chat.id:
         player = findplayer(message.from_user)
         player.new_year = True
