@@ -1210,8 +1210,8 @@ if __name__ == '__main__':
     # bot.send_sticker(debug_chat_id, 'CAADAgADMgADsjRGHiKRfQaAeEsnAg')
     for chat in allow_chats:
         try:
-            # bot.send_sticker(chat, 'CAADAgADhQADP_vRD-Do6Qz0fkeMAg')
-            print('1')
+            bot.send_sticker(chat, 'CAADAgADhQADP_vRD-Do6Qz0fkeMAg')
+            # print('1')
         except telebot.apihelper.ApiException:
             continue
     while True:
