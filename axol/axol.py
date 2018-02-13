@@ -569,7 +569,7 @@ def love_set(message):
     for player in active_players:
         if player.islove:
             try:
-                status = bot.get_chat_member(vip.chat.id, player.user.id)
+                status = bot.get_chat_member(vip_chat_id, player.user.id)
             except telebot.apihelper.ApiException:
                 continue
             if status and status.status in ["member", "creator", "administrator"] and not player.user.username == "rakon_bot":
@@ -603,7 +603,7 @@ def love(message):
         for player in active_players:
             if player.islove:
                 try:
-                    status = bot.get_chat_member(vip.chat.id, player.user.id)
+                    status = bot.get_chat_member(vip_chat_id, player.user.id)
                 except telebot.apihelper.ApiException:
                     continue
                 if status and status.status in ["member", "creator",
