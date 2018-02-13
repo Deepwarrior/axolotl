@@ -568,7 +568,12 @@ def love_set(message):
     players_in_love = []
     for player in active_players:
         if player.islove:
-            players_in_love.append(player)
+            try:
+                status = bot.get_chat_member(vip_chat_id, player.user.id)
+            except telebot.apihelper.ApiException:
+                continue
+            if status and status.status in ["member", "creator", "administrator"] and not player.user.username == "rakon_bot":
+                players_in_love.append(player)
     random.shuffle(players_in_love)
     lovers = len(players_in_love)
     for i in range(lovers):
@@ -597,13 +602,19 @@ def love(message):
     if message.from_user.username in config.root:
         for player in active_players:
             if player.islove:
-                if player.user.first_name:
-                    answer += str(player.user.first_name) + '\t'
-                if player.user.last_name:
-                    answer += str(player.user.last_name) + '\t'
-                if player.user.username:
-                    answer += '@' + str(player.user.username) + '.\t'
-                answer += '\n'
+                try:
+                    status = bot.get_chat_member(vip_chat_id, player.user.id)
+                except telebot.apihelper.ApiException:
+                    continue
+                if status and status.status in ["member", "creator",
+                                            "administrator"] and not player.user.username == "rakon_bot":
+                    if player.user.first_name:
+                        answer += str(player.user.first_name) + '\t'
+                    if player.user.last_name:
+                        answer += str(player.user.last_name) + '\t'
+                    if player.user.username:
+                        answer += '@' + str(player.user.username) + '.\t'
+                    answer += '\n'
         bot.send_message(message.chat.id, answer)
 
 @bot.message_handler(commands=["love_all"])
