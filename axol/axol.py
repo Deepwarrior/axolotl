@@ -559,7 +559,7 @@ def love_send(message):
         return
     text = "#валентинка" + "\n" + text
     try:
-        bot.send_message(debug_chat_id, text)
+        bot.send_message(vip_chat_id, text)
     except telebot.apihelper.ApiException:
         bot.send_message(message.chat.id, "НЕ ВЫШЛО ОТПРАВИТЬ СООБЩЕНИЕ :(")
 
