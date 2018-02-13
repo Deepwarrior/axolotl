@@ -549,49 +549,83 @@ def love_reg(message):
         player.islove = True
         bot.send_message(message.chat.id, "СПАСИБО ЗА РЕГИСТРАЦИЮ, КОТИК \u2764 \u2764 \u2764")
 
+@bot.message_handler(commands=["love_send"])
+def love_send(message):
+    text = str(message.text[11:])
+    if not message.from_user.id == message.chat.id:
+        return
+    if not text or text == "rakon_bot":
+        bot.send_message(message.chat.id, "НЕ СТЕСНЯЙСЯ, ВЫРАЗИ СВОИ ЧУВСТВА!")
+        return
+    text = "#валентинка" + "\n" + text
+    try:
+        bot.send_message(debug_chat_id, text)
+    except telebot.apihelper.ApiException:
+        bot.send_message(message.chat.id, "НЕ ВЫШЛО ОТПРАВИТЬ СООБЩЕНИЕ :(")
+
 @bot.message_handler(commands=["love_set"])
 def love_set(message):
-    lovers_list = []
     players_in_love = []
-    already_paired = []
-    m = 0
     for player in active_players:
         if player.islove:
-            pair = ""
-            if player.user.first_name:
-                pair += str(player.user.first_name) + '\t'
-            if player.user.last_name:
-                pair += str(player.user.last_name) + '\t'
-            if player.user.username:
-                pair += '@' + str(player.user.username) + '\t'
-            lovers_list.append(pair)
-            player.love_id = m
             players_in_love.append(player)
-            m = m + 1
-    for player in players_in_love:
-        if not player.ispaired:
-            n = random.randint(0, len(players_in_love) - 1)
-            if n not in already_paired and not n == player.love_id:
-                player.pair_id = n
-                already_paired.append(n)
-                print(already_paired)
-                player.ispaired = True
-
-    for player in players_in_love:
-        pair = lovers_list[player.pair_id]
-        love_task = random.choice(config.love_tasks)
+    random.shuffle(players_in_love)
+    lovers = len(players_in_love)
+    for i in range(lovers):
+        player = players_in_love[i]
+        pair = players_in_love[(i+1) % lovers]
+        player.pair = ""
+        if player.user.first_name:
+            player.pair += str(pair.user.first_name) + '\t'
+        if player.user.last_name:
+            player.pair += str(pair.user.last_name) + '\t'
+        if player.user.username:
+            player.pair += '@' + str(pair.user.username) + '\t'
+        player.love_task = random.choice(config.love_tasks)
         try:
-            bot.send_message(config.citrus_chat, player.pair_id)
-            bot.send_message(config.citrus_chat, 'АКСОЛОТЛЬ-КУПИДОН НАУДАЧУ ЗАПУСТИЛ' 
+            bot.send_message(player.user.id, 'АКСОЛОТЛЬ-КУПИДОН НАУДАЧУ ЗАПУСТИЛ'
                                             ' СВОЮ СТРЕЛУ. ТВОЯ ВТОРАЯ ПОЛОВИНКА '
-                                      + pair + ' УЖЕ ЖДЁТ ОТ ТЕБЯ ЗНАКА ВНИМАНИЯ!')
-            bot.send_sticker(config.citrus_chat, 'CAADAgADUgADsjRGHr5CgRYMzRQNAg')
-            bot.send_message(config.citrus_chat, love_task + ' \u2764 \u2764 \u2764')
+                                      + player.pair + ' УЖЕ ЖДЁТ ОТ ТЕБЯ ЗНАКА ВНИМАНИЯ!')
+            bot.send_sticker(player.user.id, 'CAADAgADUgADsjRGHr5CgRYMzRQNAg')
+            bot.send_message(player.user.id, player.love_task + ' \u2764 \u2764 \u2764')
         except telebot.apihelper.ApiException:
             continue
 
- @bot.message_handler(commands=["new_year"])
- def new_year_reg(message):
+@bot.message_handler(commands=["love"])
+def love(message):
+    answer = "LOVE IS EVERYWHERE: \n"
+    if message.from_user.username in config.root:
+        for player in active_players:
+            if player.islove:
+                if player.user.first_name:
+                    answer += str(player.user.first_name) + '\t'
+                if player.user.last_name:
+                    answer += str(player.user.last_name) + '\t'
+                if player.user.username:
+                    answer += '@' + str(player.user.username) + '.\t'
+                answer += '\n'
+        bot.send_message(message.chat.id, answer)
+
+@bot.message_handler(commands=["love_all"])
+def love_all(message):
+    if message.from_user.id == message.chat.id and message.from_user.username in config.root:
+        list = ""
+        for player in active_players:
+            if player.islove:
+                if player.user.first_name:
+                    list += str(player.user.first_name) + '\t'
+                if player.user.last_name:
+                    list += str(player.user.last_name) + '\t'
+                if player.user.username:
+                    list += '@' + str(player.user.username) + '\t'
+                list += "И ПОЛОВИНКА " + player.pair + '\t'
+                list += "С ЗАДАНИЕМ "
+                list += player.love_task + '.\t'
+                list += '\n'*2
+        bot.send_message(message.chat.id, list)
+
+@bot.message_handler(commands=["new_year"])
+def new_year_reg(message):
     if message.from_user.id == message.chat.id:
         player = findplayer(message.from_user)
         player.new_year = True
