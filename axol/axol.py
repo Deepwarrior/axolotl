@@ -339,7 +339,7 @@ def left_member(message):
     try:
         if message.left_chat_member.id in config.whitelist:
             bot.send_message(message.chat.id, "ОНЕТ!", reply_to_message_id=message.message_id)
-        elif message.left_chat_member.id == config.slomanny_chat or message.left_chat_member.id == 409875476:
+        elif message.left_chat_member.id == 409875476:
             bot.send_message(message.chat.id, "ОНЕТ! ВЕРНИТЕ В ЧАТИК МОЕГО МНОГОСТРАДАЛЬНОГО БРАТИШКУ КАК ВЫ СМЕЕТЕ НИНАВИЖУ ВАС ПЛАК-ПЛАК :(", reply_to_message_id=message.message_id)
         else:
             bot.send_message(message.chat.id, "ОУРА!", reply_to_message_id=message.message_id)
@@ -595,6 +595,7 @@ def love_set(message):
                 bot.send_message(player.user.id, player.love_task + ' \u2764 \u2764 \u2764')
             except telebot.apihelper.ApiException:
                 continue
+                
 
 @bot.message_handler(commands=["love"])
 def love(message):
@@ -1102,7 +1103,7 @@ def set_admin(reaction, message):
 
 
 def whois(reaction, message):
-    if message.reply_to_message and message.from_user.username in config.root:
+    if message.reply_to_message and message.from_user.username in config.root and message.from_user.username != "alukr":
         player = findplayer(message.reply_to_message.from_user)
         if (player.task or (hasattr(player, "task_id") and len(player.task_id))) and player.task_status == 1:
             bot.send_message(message.chat.id, players.to_string(player))
