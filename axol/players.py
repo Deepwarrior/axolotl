@@ -7,7 +7,7 @@ class Player:
     def __init__(self, user=None, task_status=0, last_task_time=0, last_task_mssg=0, task_completed=0, task=None,
                  task_id=[], informed=False, mess_from_bot=False, mess_sended=False,
                  new_year=False, ng_task_id=-1, ng_task_status=0, ng_task = None,
-                 islove = False, love_id = 0, love_task = None, pair = None):
+                 islove = False, love_task = None, pair = None):
         self.user = Namespace(**user) if isinstance(user, dict) else user
         self.task_status = task_status           # 0 - without task; 1 - in progress; 2 - failed.
         self.last_task_time = last_task_time     # time when last task had taken.
@@ -21,7 +21,6 @@ class Player:
         self.new_year = new_year
         self.ng_task_id = ng_task_id
         self.islove = islove                     # Does player participate
-        self.love_id = love_id
         self.love_task = love_task
         self.pair = pair
 
