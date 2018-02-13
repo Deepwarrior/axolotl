@@ -574,28 +574,27 @@ def love_set(message):
                 continue
             if status and status.status in ["member", "creator", "administrator"] and not player.user.username == "rakon_bot":
                 players_in_love.append(player)
-        random.shuffle(players_in_love)
-        lovers = len(players_in_love)
-        for i in range(lovers):
-            player = players_in_love[i]
-            pair = players_in_love[(i+1) % lovers]
-            player.pair = ""
-            if player.user.first_name:
-                player.pair += str(pair.user.first_name) + '\t'
-            if player.user.last_name:
-                player.pair += str(pair.user.last_name) + '\t'
-            if player.user.username:
-                player.pair += '@' + str(pair.user.username) + '\t'
-            player.love_task = random.choice(config.love_tasks)
-            try:
-                bot.send_message(player.user.id, 'АКСОЛОТЛЬ-КУПИДОН НАУДАЧУ ЗАПУСТИЛ'
-                                                ' СВОЮ СТРЕЛУ. ТВОЯ ВТОРАЯ ПОЛОВИНКА '
-                                          + player.pair + ' УЖЕ ЖДЁТ ОТ ТЕБЯ ЗНАКА ВНИМАНИЯ!')
-                bot.send_sticker(player.user.id, 'CAADAgADUgADsjRGHr5CgRYMzRQNAg')
-                bot.send_message(player.user.id, player.love_task + ' \u2764 \u2764 \u2764')
-            except telebot.apihelper.ApiException:
-                continue
-                
+    random.shuffle(players_in_love)
+    lovers = len(players_in_love)
+    for i in range(lovers):
+        player = players_in_love[i]
+        pair = players_in_love[(i+1) % lovers]
+        player.pair = ""
+        if player.user.first_name:
+            player.pair += str(pair.user.first_name) + '\t'
+        if player.user.last_name:
+            player.pair += str(pair.user.last_name) + '\t'
+        if player.user.username:
+            player.pair += '@' + str(pair.user.username) + '\t'
+        player.love_task = random.choice(config.love_tasks)
+        try:
+            bot.send_message(player.user.id, 'АКСОЛОТЛЬ-КУПИДОН НАУДАЧУ ЗАПУСТИЛ'
+                                            ' СВОЮ СТРЕЛУ. ТВОЯ ВТОРАЯ ПОЛОВИНКА '
+                                      + player.pair + ' УЖЕ ЖДЁТ ОТ ТЕБЯ ЗНАКА ВНИМАНИЯ!')
+            bot.send_sticker(player.user.id, 'CAADAgADUgADsjRGHr5CgRYMzRQNAg')
+            bot.send_message(player.user.id, player.love_task + ' \u2764 \u2764 \u2764')
+        except telebot.apihelper.ApiException:
+            continue
 
 @bot.message_handler(commands=["love"])
 def love(message):
