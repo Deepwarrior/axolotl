@@ -548,6 +548,82 @@ def love_reg(message):
         player = findplayer(message.from_user)
         player.islove = True
         bot.send_message(message.chat.id, "СПАСИБО ЗА РЕГИСТРАЦИЮ, КОТИК \u2764 \u2764 \u2764")
+
+@bot.message_handler(commands=["love_send"])
+def love_send(message):
+    text = str(message.text[11:])
+    if not message.from_user.id == message.chat.id:
+        return
+    if not text or text == "rakon_bot":
+        bot.send_message(message.chat.id, "НЕ СТЕСНЯЙСЯ, ВЫРАЗИ СВОИ ЧУВСТВА!")
+        return
+    text = "#валентинка" + "\n" + text
+    try:
+        bot.send_message(vip_chat_id, text)
+    except telebot.apihelper.ApiException:
+        bot.send_message(message.chat.id, "НЕ ВЫШЛО ОТПРАВИТЬ СООБЩЕНИЕ :(")
+
+@bot.message_handler(commands=["love_set"])
+def love_set(message):
+    players_in_love = []
+    for player in active_players:
+        if player.islove:
+            players_in_love.append(player)
+    random.shuffle(players_in_love)
+    lovers = len(players_in_love)
+    for i in range(lovers):
+        player = players_in_love[i]
+        pair = players_in_love[(i+1) % lovers]
+        player.pair = ""
+        if player.user.first_name:
+            player.pair += str(pair.user.first_name) + '\t'
+        if player.user.last_name:
+            player.pair += str(pair.user.last_name) + '\t'
+        if player.user.username:
+            player.pair += '@' + str(pair.user.username) + '\t'
+        player.love_task = random.choice(config.love_tasks)
+        try:
+            bot.send_message(player.user.id, 'АКСОЛОТЛЬ-КУПИДОН НАУДАЧУ ЗАПУСТИЛ'
+                                            ' СВОЮ СТРЕЛУ. ТВОЯ ВТОРАЯ ПОЛОВИНКА '
+                                      + player.pair + ' УЖЕ ЖДЁТ ОТ ТЕБЯ ЗНАКА ВНИМАНИЯ!')
+            bot.send_sticker(player.user.id, 'CAADAgADUgADsjRGHr5CgRYMzRQNAg')
+            bot.send_message(player.user.id, player.love_task + ' \u2764 \u2764 \u2764')
+        except telebot.apihelper.ApiException:
+            continue
+
+@bot.message_handler(commands=["love"])
+def love(message):
+    answer = "LOVE IS EVERYWHERE: \n"
+    if message.from_user.username in config.root:
+        for player in active_players:
+            if player.islove:
+                if player.user.first_name:
+                    answer += str(player.user.first_name) + '\t'
+                if player.user.last_name:
+                    answer += str(player.user.last_name) + '\t'
+                if player.user.username:
+                    answer += '@' + str(player.user.username) + '.\t'
+                answer += '\n'
+        bot.send_message(message.chat.id, answer)
+
+@bot.message_handler(commands=["love_all"])
+def love_all(message):
+    if message.from_user.id == message.chat.id and message.from_user.username in config.root:
+        list = ""
+        for player in active_players:
+            if player.islove:
+                if player.user.first_name:
+                    list += str(player.user.first_name) + '\t'
+                if player.user.last_name:
+                    list += str(player.user.last_name) + '\t'
+                if player.user.username:
+                    list += '@' + str(player.user.username) + '\t'
+                list += "И ПОЛОВИНКА " + player.pair + '\t'
+                list += "С ЗАДАНИЕМ "
+                list += player.love_task + '.\t'
+                list += '\n'*2
+        bot.send_message(message.chat.id, list)
+
 @bot.message_handler(commands=["new_year"])
 def new_year_reg(message):
     if message.from_user.id == message.chat.id:
