@@ -623,16 +623,22 @@ def love_all(message):
         list = ""
         for player in active_players:
             if player.islove:
-                if player.user.first_name:
-                    list += str(player.user.first_name) + '\t'
-                if player.user.last_name:
-                    list += str(player.user.last_name) + '\t'
-                if player.user.username:
-                    list += '@' + str(player.user.username) + '\t'
-                list += "И ПОЛОВИНКА " + player.pair + '\t'
-                list += "С ЗАДАНИЕМ "
-                list += player.love_task + '.\t'
-                list += '\n'*2
+                try:
+                    status = bot.get_chat_member(vip_chat_id, player.user.id)
+                except telebot.apihelper.ApiException:
+                    continue
+                if status and status.status in ["member", "creator",
+                                            "administrator"] and not player.user.username == "rakon_bot":
+                    if player.user.first_name:
+                        list += str(player.user.first_name) + '\t'
+                    if player.user.last_name:
+                        list += str(player.user.last_name) + '\t'
+                    if player.user.username:
+                        list += '@' + str(player.user.username) + '\t'
+                    list += "И ПОЛОВИНКА " + player.pair + '\t'
+                    list += "С ЗАДАНИЕМ "
+                    list += player.love_task + '.\t'
+                    list += '\n'*2
         bot.send_message(message.chat.id, list)
 
 @bot.message_handler(commands=["new_year"])
