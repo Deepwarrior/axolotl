@@ -388,6 +388,78 @@ def clean(message):
                 player.task = None
 
 
+@bot.message_handler(commands=["gnom"])
+def gnom(message):
+    if message.chat.id == -1001269697180:
+        player = findplayer(message.from_user)
+        text = str(message.text[6:])
+        if '9' in text:
+            player.gnome_status = 1
+        elif '11' in text:
+            player.gnome_status = 2
+        elif "ВСЕГДА" in text.upper():
+            player.gnome_status = 3
+        elif "НЕ" in text.upper():
+            player.gnome_status = 0
+
+
+@bot.message_handler(commands=["gnoms"])
+def gnoms(message):
+    list9 =[]
+    list11 = []
+    list911 = []
+    list0 = []
+    for player in active_players:
+        if player.gnome_status == 1:
+            list9.append(player)
+        elif player.gnome_status == 2:
+            list11.append(player)
+        elif player.gnome_status == 3:
+            list911.append(player)
+        elif player.gnome_status == 0:
+            list0.append(player)
+    answer = "СТОЛ 9\n"
+    for player in list9:
+        if player.user.first_name:
+            answer += str(player.user.first_name) + '\t'
+        if player.user.last_name:
+            answer += str(player.user.last_name) + '\t'
+        if player.user.username:
+            answer += '@' + str(player.user.username) + '.\t'
+    answer += '\nСТОЛ 11\n'
+    for player in list11:
+        if player.user.first_name:
+            answer += str(player.user.first_name) + '\t'
+        if player.user.last_name:
+            answer += str(player.user.last_name) + '\t'
+        if player.user.username:
+            answer += '@' + str(player.user.username) + '.\t'
+    answer += '\nДВАСТОЛА\n'
+    for player in list911:
+        if player.user.first_name:
+            answer += str(player.user.first_name) + '\t'
+        if player.user.last_name:
+            answer += str(player.user.last_name) + '\t'
+        if player.user.username:
+            answer += '@' + str(player.user.username) + '.\t'
+    answer += '\nАНТИРЕГ\n'
+    for player in list0:
+        if player.user.first_name:
+            answer += str(player.user.first_name) + '\t'
+        if player.user.last_name:
+            answer += str(player.user.last_name) + '\t'
+        if player.user.username:
+            answer += '@' + str(player.user.username) + '.\t'
+    bot.send_message(message.chat.id, answer)
+
+
+@bot.message_handler(commands=["new_gnoms"])
+def new_gnoms(message):
+    if message.from_user.username == "Deepwarrior":
+        for player in active_players:
+            player.gnome_status = -1
+
+
 @bot.message_handler(commands=["long"])
 def long_cat(message):
     text = str(message.text[6:])
