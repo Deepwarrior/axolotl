@@ -426,7 +426,8 @@ def gnoms(message):
             answer += str(player.user.last_name) + '\t'
         if player.user.username:
             answer += '@' + str(player.user.username) + '.\t'
-    answer += '\nСТОЛ 11\n'
+        answer += '\n'
+    answer += 'СТОЛ 11\n'
     for player in list11:
         if player.user.first_name:
             answer += str(player.user.first_name) + '\t'
@@ -434,7 +435,8 @@ def gnoms(message):
             answer += str(player.user.last_name) + '\t'
         if player.user.username:
             answer += '@' + str(player.user.username) + '.\t'
-    answer += '\nДВАСТОЛА\n'
+        answer += '\n'
+    answer += 'ДВАСТОЛА\n'
     for player in list911:
         if player.user.first_name:
             answer += str(player.user.first_name) + '\t'
@@ -442,7 +444,8 @@ def gnoms(message):
             answer += str(player.user.last_name) + '\t'
         if player.user.username:
             answer += '@' + str(player.user.username) + '.\t'
-    answer += '\nАНТИРЕГ\n'
+        answer += '\n'
+    answer += 'АНТИРЕГ\n'
     for player in list0:
         if player.user.first_name:
             answer += str(player.user.first_name) + '\t'
@@ -450,6 +453,7 @@ def gnoms(message):
             answer += str(player.user.last_name) + '\t'
         if player.user.username:
             answer += '@' + str(player.user.username) + '.\t'
+        answer += '\n'
     bot.send_message(message.chat.id, answer)
 
 
