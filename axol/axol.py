@@ -390,6 +390,82 @@ def clean(message):
                 player.task = None
 
 
+@bot.message_handler(commands=["gnom"])
+def gnom(message):
+    if message.chat.id == -1001269697180:
+        player = findplayer(message.from_user)
+        text = str(message.text[6:])
+        if '9' in text:
+            player.gnome_status = 1
+        elif '11' in text:
+            player.gnome_status = 2
+        elif "ВСЕГДА" in text.upper():
+            player.gnome_status = 3
+        elif "НЕ" in text.upper():
+            player.gnome_status = 0
+
+
+@bot.message_handler(commands=["gnoms"])
+def gnoms(message):
+    list9 =[]
+    list11 = []
+    list911 = []
+    list0 = []
+    for player in active_players:
+        if player.gnome_status == 1:
+            list9.append(player)
+        elif player.gnome_status == 2:
+            list11.append(player)
+        elif player.gnome_status == 3:
+            list911.append(player)
+        elif player.gnome_status == 0:
+            list0.append(player)
+    answer = "СТОЛ 9\n"
+    for player in list9:
+        if player.user.first_name:
+            answer += str(player.user.first_name) + '\t'
+        if player.user.last_name:
+            answer += str(player.user.last_name) + '\t'
+        if player.user.username:
+            answer += '@' + str(player.user.username) + '.\t'
+        answer += '\n'
+    answer += 'СТОЛ 11\n'
+    for player in list11:
+        if player.user.first_name:
+            answer += str(player.user.first_name) + '\t'
+        if player.user.last_name:
+            answer += str(player.user.last_name) + '\t'
+        if player.user.username:
+            answer += '@' + str(player.user.username) + '.\t'
+        answer += '\n'
+    answer += 'ДВАСТОЛА\n'
+    for player in list911:
+        if player.user.first_name:
+            answer += str(player.user.first_name) + '\t'
+        if player.user.last_name:
+            answer += str(player.user.last_name) + '\t'
+        if player.user.username:
+            answer += '@' + str(player.user.username) + '.\t'
+        answer += '\n'
+    answer += 'АНТИРЕГ\n'
+    for player in list0:
+        if player.user.first_name:
+            answer += str(player.user.first_name) + '\t'
+        if player.user.last_name:
+            answer += str(player.user.last_name) + '\t'
+        if player.user.username:
+            answer += '@' + str(player.user.username) + '.\t'
+        answer += '\n'
+    bot.send_message(message.chat.id, answer)
+
+
+@bot.message_handler(commands=["new_gnoms"])
+def new_gnoms(message):
+    if message.from_user.username == "Deepwarrior":
+        for player in active_players:
+            player.gnome_status = -1
+
+
 @bot.message_handler(commands=["long"])
 def long_cat(message):
     text = str(message.text[6:])
@@ -550,6 +626,99 @@ def love_reg(message):
         player = findplayer(message.from_user)
         player.islove = True
         bot.send_message(message.chat.id, "СПАСИБО ЗА РЕГИСТРАЦИЮ, КОТИК \u2764 \u2764 \u2764")
+
+@bot.message_handler(commands=["love_send"])
+def love_send(message):
+    text = str(message.text[11:])
+    if not message.from_user.id == message.chat.id:
+        return
+    if not text or text == "rakon_bot":
+        bot.send_message(message.chat.id, "НЕ СТЕСНЯЙСЯ, ВЫРАЗИ СВОИ ЧУВСТВА!")
+        return
+    text = "#валентинка" + "\n" + text
+    try:
+        bot.send_message(vip_chat_id, text)
+    except telebot.apihelper.ApiException:
+        bot.send_message(message.chat.id, "НЕ ВЫШЛО ОТПРАВИТЬ СООБЩЕНИЕ :(")
+
+@bot.message_handler(commands=["love_set"])
+def love_set(message):
+    players_in_love = []
+    for player in active_players:
+        if player.islove:
+            try:
+                status = bot.get_chat_member(vip_chat_id, player.user.id)
+            except telebot.apihelper.ApiException:
+                continue
+            if status and status.status in ["member", "creator", "administrator"] and not player.user.username == "rakon_bot":
+                players_in_love.append(player)
+    random.shuffle(players_in_love)
+    lovers = len(players_in_love)
+    for i in range(lovers):
+        player = players_in_love[i]
+        pair = players_in_love[(i+1) % lovers]
+        player.pair = ""
+        if player.user.first_name:
+            player.pair += str(pair.user.first_name) + '\t'
+        if player.user.last_name:
+            player.pair += str(pair.user.last_name) + '\t'
+        if player.user.username:
+            player.pair += '@' + str(pair.user.username) + '\t'
+        player.love_task = random.choice(config.love_tasks)
+        try:
+            bot.send_message(player.user.id, 'АКСОЛОТЛЬ-КУПИДОН НАУДАЧУ ЗАПУСТИЛ'
+                                            ' СВОЮ СТРЕЛУ. ТВОЯ ВТОРАЯ ПОЛОВИНКА '
+                                      + player.pair + ' УЖЕ ЖДЁТ ОТ ТЕБЯ ЗНАКА ВНИМАНИЯ!')
+            bot.send_sticker(player.user.id, 'CAADAgADUgADsjRGHr5CgRYMzRQNAg')
+            bot.send_message(player.user.id, player.love_task + ' \u2764 \u2764 \u2764')
+        except telebot.apihelper.ApiException:
+            continue
+
+@bot.message_handler(commands=["love"])
+def love(message):
+    answer = "LOVE IS EVERYWHERE: \n"
+    if message.from_user.username in config.root:
+        for player in active_players:
+            if player.islove:
+                try:
+                    status = bot.get_chat_member(vip_chat_id, player.user.id)
+                except telebot.apihelper.ApiException:
+                    continue
+                if status and status.status in ["member", "creator",
+                                            "administrator"] and not player.user.username == "rakon_bot":
+                    if player.user.first_name:
+                        answer += str(player.user.first_name) + '\t'
+                    if player.user.last_name:
+                        answer += str(player.user.last_name) + '\t'
+                    if player.user.username:
+                        answer += '@' + str(player.user.username) + '.\t'
+                    answer += '\n'
+        bot.send_message(message.chat.id, answer)
+
+@bot.message_handler(commands=["love_all"])
+def love_all(message):
+    if message.from_user.id == message.chat.id and message.from_user.username in config.root:
+        list = ""
+        for player in active_players:
+            if player.islove:
+                try:
+                    status = bot.get_chat_member(vip_chat_id, player.user.id)
+                except telebot.apihelper.ApiException:
+                    continue
+                if status and status.status in ["member", "creator",
+                                            "administrator"] and not player.user.username == "rakon_bot":
+                    if player.user.first_name:
+                        list += str(player.user.first_name) + '\t'
+                    if player.user.last_name:
+                        list += str(player.user.last_name) + '\t'
+                    if player.user.username:
+                        list += '@' + str(player.user.username) + '\t'
+                    list += "И ПОЛОВИНКА " + player.pair + '\t'
+                    list += "С ЗАДАНИЕМ "
+                    list += player.love_task + '.\t'
+                    list += '\n'*2
+        bot.send_message(message.chat.id, list)
+
 @bot.message_handler(commands=["new_year"])
 def new_year_reg(message):
     if message.from_user.id == message.chat.id:
