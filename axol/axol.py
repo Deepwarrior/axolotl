@@ -127,7 +127,7 @@ def tribbl_check(message, player, data):
     if message.from_user.id != player.user.id or not message.text:
         return
     text = message.text
-    if text[-1].isalpha():
+    if text[-1].isalpha() or text[-1].isdigit():
         return "-"
     words = text.split()
     for word in words:
@@ -334,13 +334,15 @@ def new_member(message):
     else:
         bot.send_message(message.chat.id, "ОНЕТ!", reply_to_message_id=message.message_id)
 
+
 @bot.message_handler(content_types=["left_chat_member"])
 def left_member(message):
     try:
         if message.left_chat_member.id in config.whitelist:
             bot.send_message(message.chat.id, "ОНЕТ!", reply_to_message_id=message.message_id)
         elif message.left_chat_member.id == 409875476:
-            bot.send_message(message.chat.id, "ОНЕТ! ВЕРНИТЕ В ЧАТИК МОЕГО МНОГОСТРАДАЛЬНОГО БРАТИШКУ КАК ВЫ СМЕЕТЕ НИНАВИЖУ ВАС ПЛАК-ПЛАК :(", reply_to_message_id=message.message_id)
+            bot.send_message(message.chat.id, "ОНЕТ! ВЕРНИТЕ В ЧАТИК МОЕГО МНОГОСТРАДАЛЬНОГО БРАТИШКУ КАК ВЫ СМЕЕТЕ "
+                                              "НИНАВИЖУ ВАС ПЛАК-ПЛАК :(", reply_to_message_id=message.message_id)
         else:
             bot.send_message(message.chat.id, "ОУРА!", reply_to_message_id=message.message_id)
     except telebot.apihelper.ApiException:
@@ -1184,7 +1186,7 @@ def set_admin(reaction, message):
 
 
 def whois(reaction, message):
-    if message.reply_to_message and message.from_user.username in config.root and message.from_user.username != "alukr":
+    if message.reply_to_message and message.from_user.username in config.root:
         player = findplayer(message.reply_to_message.from_user)
         if (player.task or (hasattr(player, "task_id") and len(player.task_id))) and player.task_status == 1:
             bot.send_message(message.chat.id, players.to_string(player))
@@ -1245,17 +1247,30 @@ def notify(message):
 
 
 def task_check(message):
-    return #remove this
-    if message.chat.id not in [vip_chat_id, -1001246951967]:
+    # return #remove this
+    if message.chat.id not in [vip_chat_id]:
         return
     for func in current_task_funcs:
         player, result = func(message, True)
         if result == "+":
-            bot.send_message(message.chat.id, "АВТОЗАЧЁТ!")
             current_task_funcs.remove(func)
+            other_tasks = False
+            for func in current_task_funcs:
+                task_owner, result = func(message, False)
+                if task_owner == player:
+                    other_tasks = True
+            if not other_tasks:
+                try:
+                    bot.send_message(message.chat.id, "ТЕСТОВЫЙ АВТОЗАЧЁТ!", reply_to_message_id=player.last_task_mssg)
+                except telebot.apihelper.ApiException:
+                    bot.send_message(message.chat.id, "ТЕСТОВЫЙ АВТОЗАЧЁТ!")
         elif result == "-":
-            bot.send_message(message.chat.id, "АВТОБАЯЗИД!")
+            try:
+                bot.send_message(message.chat.id, "ТЕСТОВЫЙ АВТОБАЯЗИД!", reply_to_message_id=player.last_task_mssg)
+            except telebot.apihelper.ApiException:
+                bot.send_message(message.chat.id, "ТЕСТОВЫЙ АВТОБАЯЗИД!")
             current_task_funcs.remove(func)
+            remove_task_check(player, message)
 
 
 @bot.message_handler(content_types=["sticker"])
