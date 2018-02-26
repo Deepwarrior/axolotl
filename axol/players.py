@@ -25,6 +25,7 @@ class Player:
         self.pair = pair
         self.gnome_status = gnome_status
 
+
 def to_string(self):
     res = str(self.user.first_name) + ' ' + str(self.user.last_name) + ' @' + str(self.user.username) + '\n'
     secs = time.time() - self.last_task_time
@@ -35,9 +36,11 @@ def to_string(self):
     else:
         tasks = config.black_tasks
 
-    if hasattr(self, "task_id") and len(self.task_id):
+    if self.task_completed >= 150 and len(self.task_id):
+        res += config.black_tasks[self.task_id[0]][1] + '\n'
+        res += config.tasks[self.task_id[1]][1] + '\n'
+    elif len(self.task_id):
         for idx in self.task_id:
             res += tasks[idx][1] + '\n'
-    elif self.task:
-        res += self.task.text + '\n'
+
     return res
