@@ -837,7 +837,13 @@ def task_status(message):
         tm += 1  # 1 min more
         answer += "До следующего задания: " + str('{:.0f}'.format(tm // 60)) + " часов и " + \
                   str('{:.0f}'.format(tm % 60)) + " минут\n"
-    bot.send_message(message.chat.id, answer)
+    try:
+        bot.send_message(message.chat.id, answer, reply_to_message_id=player.last_task_mssg)
+    except telebot.apihelper.ApiException:
+        try:
+            bot.send_message(message.chat.id, answer)
+        except telebot.apihelper.ApiException:
+            print("my_task failed")
 
 
 def remove_task_check(user, message):
@@ -896,9 +902,11 @@ def get_task(message):
                         bot.send_message(message.chat.id, text)
                     player.informed = False
                     player.mess_sended = False
-                    backup(None)
-                    if player.task_completed % 100 >= 70:
+
+                    if 99 >= player.task_completed >= 70 or player.task_completed >= 150:
                         bot.send_message(message.chat.id, "А ВОТ ЕЩЁ ТЕБЕ...")
+                        if player.task_completed >= 150:
+                            tasks = config.tasks
                         rand = random.randint(0, len(tasks) - 1)
                         bot.send_sticker(message.chat.id, tasks[rand][0])
                         player.task_id.append(rand)
@@ -910,6 +918,8 @@ def get_task(message):
                         bot.send_sticker(message.chat.id, tasks[rand][0])
                         player.task_id.append(rand)
                         bot.send_message(message.chat.id, "АЗАЗА, УДАЧИ")
+
+                    backup(None)
 
                     for task_id in player.task_id:
                         if len(tasks[task_id]) > 4:
@@ -1000,8 +1010,10 @@ def task_complete(reaction, message):
             player.task_completed += 1
             if player.task_completed == 50:
                 bot.send_message(player.user.id, "АЗАЗА, ТЫ УМИР")
-            if player.task_completed == 100:
+            elif player.task_completed == 100:
                 bot.send_message(player.user.id, "СГОРИ ДОТЛА! КАК И ВСЕ ТВОИ ОЧКИ")
+            elif player.task_completed == 150:
+                bot.send_message(player.user.id, "УРА УРА СУИЦИД")
             if player.task_completed % 50 == 0:
                 bot.send_message(message.chat.id, "ЗАДАНИЕ ВЫПОЛНЕНО!\nВСЕГО СДЕЛАНО 50 ЗАДАНИЙ!",
                                  reply_to_message_id=message.reply_to_message.message_id)
