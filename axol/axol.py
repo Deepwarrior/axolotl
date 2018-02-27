@@ -756,15 +756,15 @@ def panteon(message):
             if player not in top and player.task_completed % 50 == max_tasks:
                 answer += str(i) + '.\t'
                 if player.user.first_name:
-                    answer += str(player.user.first_name) + '\t'
+                    answer += '<b>' + str(player.user.first_name) + '</b>' + '\t'
                 if player.user.last_name:
-                    answer += str(player.user.last_name) + '\t'
+                    answer += '<b>' + str(player.user.last_name) + '</b>' + '\t'
                 if player.user.username:
                     answer += '@' + str(player.user.username) + '.\t'
                 answer += 'Сделано:' + str(max_tasks) + '\n'
                 top.append(player)
                 break
-    bot.send_message(message.chat.id, answer)
+    bot.send_message(message.chat.id, answer, parse_mode="HTML")
 
 
 @bot.message_handler(commands=["top_pozora"])
@@ -782,14 +782,14 @@ def pozor(message):
                     and not user.user.username == "uhi_official":
                 text += str(i) + '. '
                 if user.user.first_name:
-                    text += str(user.user.first_name) + ' '
+                    text += '<b>' + str(user.user.first_name) + '</b>' + ' '
                 if user.user.last_name:
-                    text += str(user.user.last_name) + ' '
+                    text += '<b>' + str(user.user.last_name) + '</b>' + ' '
                 if user.user.username:
                     text += '@' + str(user.user.username) + '.\t'
                 text += '\n'
                 i += 1
-    bot.send_message(message.chat.id, text)
+    bot.send_message(message.chat.id, text, parse_mode="HTML")
 
 
 @bot.message_handler(commands=["top_sarastie"])
@@ -883,6 +883,7 @@ def get_task(message):
                 player.task_status = 1
                 player.last_task_time = time.time()
                 player.last_task_mssg = message.message_id
+                player.message = message
 
                 rand = random.randint(1, 500)
                 if rand == 237 and player.task_completed < 100:
@@ -1327,7 +1328,8 @@ if __name__ == '__main__':
     f.close()
     zrena_timers_init()
     random.seed()
-    # bot.send_sticker(debug_chat_id, 'CAADAgADMgADsjRGHiKRfQaAeEsnAg')
+
+    # bot.send_message(debug_chat_id, '*CAADAgADMgADsj* _RGHiKRfQaAeEsnAg_', parse_mode="Markdown")
     for chat in allow_chats:
         try:
             # bot.send_sticker(chat, 'CAADAgADhQADP_vRD-Do6Qz0fkeMAg')
