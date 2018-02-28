@@ -82,6 +82,7 @@ reactions = [
     [['РИННЕКО', 'РИН-НЕ-КО', 'РИННЕКО!', 'РИН-НЕ-КО!'], [], rinneko_chat, [], ['CAADAgADxAADP_vRD-wohLnM0GMRAg']],
     [[], ['CAADAgADKwQAAuce7AWo_pyLoNBvLgI'], 196345058, ['О, НАТАЛИЯ НАЧАЛАСЬ'], []],
     [["ВОУ ВОУ", "ВОУ-ВОУ", "ВОУ ВОУ!", "ВОУ-ВОУ!"], [], 0, [], ['CAADAgAD9wADP_vRD4s-yYzXKDzSAg']],
+    [["ЭАЛО"], [], 0, ["2Л"], []], [["ДЛИННОМОЗГ"], [], 0, ["1Н"], []],
 
     [[], ['CAADAgADpgEAAmDrzgNSIT8rlE3K0AI', 'CAADAgADVQADsjRGHmcXPWcGP2BfAg'], 0, [], [], "task_rework"],
     [fail_phrase, ['CAADAgADFAADjW7LE9E1TbwjuTk7Ag'], 0, [], [], "task_fail"],
