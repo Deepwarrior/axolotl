@@ -1266,9 +1266,9 @@ def kick_misha(reaction, message):
 def alpha_change(reaction, message):
     if message.from_user.id in config.alpha_moder and message.reply_to_message:
         player = findplayer(message.reply_to_message.from_user)
-        if message.text == "АЛЬФА":
+        if message.text.to_upper() == "АЛЬФА":
             player.alpha += 0.1
-        elif message.text == "ОМЕГА":
+        elif message.text.to_upper() == "ОМЕГА":
             player.alpha -= 0.1
         backup(None)
 
