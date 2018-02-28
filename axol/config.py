@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-root = ['random_answer', 'Deepwarrior', 'kstera', 'uhi_official', 'alukr', 'Kotokotokotova', 'areatangent']
+root = ['random_answer', 'Deepwarrior', 'kstera', 'uhi_official', 'alukr', 'Kotokotokotova', 'areatangent', 'evgsol']
+alpha_moder = [265419583, 206787289]
 
 deep_chat = 150029429
 citrus_chat = 507917490
@@ -81,6 +82,7 @@ reactions = [
     [['РИННЕКО', 'РИН-НЕ-КО', 'РИННЕКО!', 'РИН-НЕ-КО!'], [], rinneko_chat, [], ['CAADAgADxAADP_vRD-wohLnM0GMRAg']],
     [[], ['CAADAgADKwQAAuce7AWo_pyLoNBvLgI'], 196345058, ['О, НАТАЛИЯ НАЧАЛАСЬ'], []],
     [["ВОУ ВОУ", "ВОУ-ВОУ", "ВОУ ВОУ!", "ВОУ-ВОУ!"], [], 0, [], ['CAADAgAD9wADP_vRD4s-yYzXKDzSAg']],
+    [["ЭАЛО"], [], 0, ["2Л"], []], [["ДЛИННОМОЗГ"], [], 0, ["1Н"], []],
 
     [[], ['CAADAgADpgEAAmDrzgNSIT8rlE3K0AI', 'CAADAgADVQADsjRGHmcXPWcGP2BfAg'], 0, [], [], "task_rework"],
     [fail_phrase, ['CAADAgADFAADjW7LE9E1TbwjuTk7Ag'], 0, [], [], "task_fail"],
@@ -98,7 +100,9 @@ reactions = [
     [[], ['CAADAgADLgADsjRGHsGbRuS2PA26Ag'], 0, [], [], "kick_citrus"],
     [[], ['CAADAgADKAADO9HBD1SvkhGZJT_BAg', 'CAADAgADVwADO9HBD35E69ryx07IAg'], 0, [], [], "kick_rels"],
     [[], ['CAADAgADLwADsjRGHvSXP4ESf3tIAg'], 0, [], [], "kick_misha"],
-    [["ОТВЕТЬ НА СООБЩЕНИЕ НАД ЭТИМ", "ЧАТ ЗАЖЕВАЛО"], [], 0, [], [], "message_above"]]
+    [["ОТВЕТЬ НА СООБЩЕНИЕ НАД ЭТИМ", "ЧАТ ЗАЖЕВАЛО"], [], 0, [], [], "message_above"],
+    [["АЛЬФА", "ОМЕГА"], [], 0, [], [], "alpha_change"]
+]
 
 mssg_bv = ["ДА ННА!", "ДЕРЖЫ", "НИЧЕГО БЕЗ МЕНЯ НЕ МОЖЕШЬ", 'А ЧТО ОТВЕТИТЬ-ТО?']
 
@@ -298,7 +302,8 @@ black_tasks = [
                                        ' И НОСИ ЕЁ ЦЕЛЫЕ СУТКИ.', 23, 0],
     ['CAADAgADSQADsjRGHk3DvMY4826-Ag', 'ТЫ ЧОРНЫЙ ЭЛЕКСОРИЕН. ОБРАЩАЙСЯ КО ВСЕМ ТАК, КАК БУДТО КАЖДЫЙ ПОМЕНЯЛ ПОЛ, '
                                        'ВКЛЮЧАЯ ТЕБЯ', 6, 0],
-    ['CAADAgADQAADE3yuAqIdHAT-b_Z1Ag', 'ТЫ ЧОРНЫЙ АНДАРХ. ОБМАНЫВАЙ В КАЖДОМ СООБЩЕНИИ', 6, 0]
+    ['CAADAgADQAADE3yuAqIdHAT-b_Z1Ag', 'ТЫ ЧОРНЫЙ АНДАРХ. ОБМАНЫВАЙ В КАЖДОМ СООБЩЕНИИ', 6, 0],
+    ['CAADAgAD_wADP_vRD5KLT6TsHgqzAg', 'ТЫ ЧОРНАЯ ТРИШШШ. НЕ СПИ ВСЮ НОЧЬ', 23, 0]
 ]
 
 ng_tasks = [

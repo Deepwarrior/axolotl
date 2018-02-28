@@ -5,13 +5,14 @@ from argparse import Namespace
 
 class Player:
     def __init__(self, user=None, task_status=0, last_task_time=0, last_task_mssg=0, task_completed=0, task=None,
-                 task_id=[], informed=False, mess_from_bot=False, mess_sended=False,
-                 new_year=False, ng_task_id=-1, ng_task_status=0, ng_task = None,
-                 islove=False, love_task=None, pair=None, gnome_status=-1):
+                 task_id=[], informed=False, mess_from_bot=False, mess_sended=False, alpha=0.0,
+                 new_year=False, ng_task_id=-1,
+                 islove=False, love_task=None, pair=None, gnome_status=-1, message=None):
         self.user = Namespace(**user) if isinstance(user, dict) else user
         self.task_status = task_status           # 0 - without task; 1 - in progress; 2 - failed.
         self.last_task_time = last_task_time     # time when last task had taken.
         self.last_task_mssg = last_task_mssg     # message when task had taken.
+        self.message = message
         self.task_completed = task_completed
         self.task = Namespace(**task) if task else None
         self.task_id = task_id
@@ -24,6 +25,7 @@ class Player:
         self.love_task = love_task
         self.pair = pair
         self.gnome_status = gnome_status
+        self.alpha = alpha
 
 
 def to_string(self):
