@@ -627,6 +627,7 @@ def love_reg(message):
         player.islove = True
         bot.send_message(message.chat.id, "СПАСИБО ЗА РЕГИСТРАЦИЮ, КОТИК \u2764 \u2764 \u2764")
 
+
 @bot.message_handler(commands=["love_send"])
 def love_send(message):
     text = str(message.text[11:])
@@ -640,6 +641,7 @@ def love_send(message):
         bot.send_message(vip_chat_id, text)
     except telebot.apihelper.ApiException:
         bot.send_message(message.chat.id, "НЕ ВЫШЛО ОТПРАВИТЬ СООБЩЕНИЕ :(")
+
 
 @bot.message_handler(commands=["love_set"])
 def love_set(message):
@@ -674,6 +676,7 @@ def love_set(message):
         except telebot.apihelper.ApiException:
             continue
 
+
 @bot.message_handler(commands=["love"])
 def love(message):
     answer = "LOVE IS EVERYWHERE: \n"
@@ -694,6 +697,7 @@ def love(message):
                         answer += '@' + str(player.user.username) + '.\t'
                     answer += '\n'
         bot.send_message(message.chat.id, answer)
+
 
 @bot.message_handler(commands=["love_all"])
 def love_all(message):
@@ -718,6 +722,7 @@ def love_all(message):
                     list += player.love_task + '.\t'
                     list += '\n'*2
         bot.send_message(message.chat.id, list)
+
 
 @bot.message_handler(commands=["new_year"])
 def new_year_reg(message):
@@ -764,6 +769,25 @@ def panteon(message):
                 answer += 'Сделано:' + str(max_tasks) + '\n'
                 top.append(player)
                 break
+    bot.send_message(message.chat.id, answer, parse_mode="HTML")
+
+
+@bot.message_handler(commands=["alpha_samka"])
+def alpha_samka(message):
+    answer = "ИЕРАРХИЯ РАКОНОВ:\n"
+    i = 1
+    newlist = sorted(active_players, key=lambda xxx: xxx.alpha, reverse=True)
+    for player in newlist:
+        if player.alpha:
+            answer += str(i) + '.\t'
+            if player.user.first_name:
+                answer += '<b>' + str(player.user.first_name) + '</b>' + '\t'
+            if player.user.last_name:
+                answer += '<b>' + str(player.user.last_name) + '</b>' + '\t'
+            if player.user.username:
+                answer += '@' + str(player.user.username) + '.\t'
+            answer += '\nАЛЬФАЧЕСТВО:             <b>' + str(player.alpha) + '</b>\n'
+            i += 1
     bot.send_message(message.chat.id, answer, parse_mode="HTML")
 
 
@@ -1239,11 +1263,20 @@ def kick_misha(reaction, message):
         bot.send_message(message.chat.id, "ДА КАК ТЫ СМЕЕШЬ ТАК С МАТЕРЬЮ РАЗГОВАРИВАТЬ?!")
 
 
+def alpha_change(reaction, message):
+    if message.from_user.id in config.alpha_moder and message.reply_to_message:
+        player = findplayer(message.reply_to_message.from_user)
+        if message.text == "АЛЬФА":
+            player.alpha += 0.1
+        elif message.text == "ОМЕГА":
+            player.alpha -= 0.1
+        backup(None)
+
 reaction_funcs = {"task_rework": task_rework, "task_fail": task_fail, "task_complete": task_complete,
                   "task_extra": task_extra, "natalka": natalka, "kick_bots": kick_bots, "kick_lyuds": kick_lyuds,
                   "mem_react": mem_react, "anti_task": anti_task, "set_admin": set_admin, "whois": whois,
                   "stop_natalka": stop_natalka, "kick_citrus": kick_citrus, "kick_rels": kick_rels,
-                  "kick_misha": kick_misha, "message_above": message_above}
+                  "kick_misha": kick_misha, "message_above": message_above, "alpha_change": alpha_change}
 
 
 def notify(message):
