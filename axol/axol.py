@@ -217,7 +217,7 @@ def mozg_check(message, player, data):
     if message.from_user.id != player.user.id or not message.text:
         return
     for i in range(len(message.text)):
-        if message.text[i].isalpha() and message.text[i+1] and message.text[i+1] != ' ':
+        if message.text[i].isalpha() and len(message.text) > i + 1 and message.text[i+1] != ' ':
             return "-"
     if time.time() - player.last_task_time > 3600 * 3:
         return "+"
@@ -786,7 +786,10 @@ def alpha_samka(message):
                 answer += '<b>' + str(player.user.last_name) + '</b>' + '\t'
             if player.user.username:
                 answer += '@' + str(player.user.username) + '.\t'
-            answer += '\nАЛЬФАЧЕСТВО:             <b>' + str(player.alpha) + '</b>\n'
+            if player.alpha > 0:
+                answer += '\nАЛЬФАЧЕСТВО:           <b>' + str(player.alpha) + '</b>\n'
+            else:
+                answer += '\nОМЕЖЕСТВО:             <b>' + str(player.alpha) + '</b>\n'
             i += 1
     bot.send_message(message.chat.id, answer, parse_mode="HTML")
 
@@ -1223,7 +1226,7 @@ def set_admin(reaction, message):
 
 
 def whois(reaction, message):
-    if message.reply_to_message and message.from_user.username in config.root:
+    if message.reply_to_message and message.from_user.username in config.root and message.from_user.id != config.misha_chat:
         player = findplayer(message.reply_to_message.from_user)
         if (player.task or (hasattr(player, "task_id") and len(player.task_id))) and player.task_status == 1:
             bot.send_message(message.chat.id, players.to_string(player))
