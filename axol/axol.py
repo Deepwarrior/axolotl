@@ -390,82 +390,6 @@ def clean(message):
                 player.task = None
 
 
-@bot.message_handler(commands=["gnom"])
-def gnom(message):
-    if message.chat.id == -1001269697180:
-        player = findplayer(message.from_user)
-        text = str(message.text[6:])
-        if '9' in text:
-            player.gnome_status = 1
-        elif '11' in text:
-            player.gnome_status = 2
-        elif "ВСЕГДА" in text.upper():
-            player.gnome_status = 3
-        elif "НЕ" in text.upper():
-            player.gnome_status = 0
-
-
-@bot.message_handler(commands=["gnoms"])
-def gnoms(message):
-    list9 =[]
-    list11 = []
-    list911 = []
-    list0 = []
-    for player in active_players:
-        if player.gnome_status == 1:
-            list9.append(player)
-        elif player.gnome_status == 2:
-            list11.append(player)
-        elif player.gnome_status == 3:
-            list911.append(player)
-        elif player.gnome_status == 0:
-            list0.append(player)
-    answer = "СТОЛ 9\n"
-    for player in list9:
-        if player.user.first_name:
-            answer += str(player.user.first_name) + '\t'
-        if player.user.last_name:
-            answer += str(player.user.last_name) + '\t'
-        if player.user.username:
-            answer += '@' + str(player.user.username) + '.\t'
-        answer += '\n'
-    answer += 'СТОЛ 11\n'
-    for player in list11:
-        if player.user.first_name:
-            answer += str(player.user.first_name) + '\t'
-        if player.user.last_name:
-            answer += str(player.user.last_name) + '\t'
-        if player.user.username:
-            answer += '@' + str(player.user.username) + '.\t'
-        answer += '\n'
-    answer += 'ДВАСТОЛА\n'
-    for player in list911:
-        if player.user.first_name:
-            answer += str(player.user.first_name) + '\t'
-        if player.user.last_name:
-            answer += str(player.user.last_name) + '\t'
-        if player.user.username:
-            answer += '@' + str(player.user.username) + '.\t'
-        answer += '\n'
-    answer += 'АНТИРЕГ\n'
-    for player in list0:
-        if player.user.first_name:
-            answer += str(player.user.first_name) + '\t'
-        if player.user.last_name:
-            answer += str(player.user.last_name) + '\t'
-        if player.user.username:
-            answer += '@' + str(player.user.username) + '.\t'
-        answer += '\n'
-    bot.send_message(message.chat.id, answer)
-
-
-@bot.message_handler(commands=["new_gnoms"])
-def new_gnoms(message):
-    if message.from_user.username == "Deepwarrior":
-        for player in active_players:
-            player.gnome_status = -1
-
-
 @bot.message_handler(commands=["long"])
 def long_cat(message):
     text = str(message.text[6:])
@@ -619,7 +543,7 @@ def femka(message):
             ideal_spisok += text + i.upper() + '\n'
         bot.send_message(message.chat.id, ideal_spisok)
 
-
+'''
 @bot.message_handler(commands=["love_reg"])
 def love_reg(message):
     if message.from_user.id == message.chat.id:
@@ -746,7 +670,7 @@ def new_year_reg_get(message):
                     answer += '@' + str(player.user.username) + '.\t'
                 answer += '\n'
         bot.send_message(message.chat.id, answer)
-
+'''
 
 @bot.message_handler(commands=["panteon"])
 def panteon(message):
@@ -865,7 +789,10 @@ def task_status(message):
         answer += "До следующего задания: " + str('{:.0f}'.format(tm // 60)) + " часов и " + \
                   str('{:.0f}'.format(tm % 60)) + " минут\n"
     try:
-        bot.send_message(message.chat.id, answer, reply_to_message_id=player.last_task_mssg)
+        if player.message and player.message.chat.id == message.chat.id:
+            bot.send_message(message.chat.id, answer, reply_to_message_id=player.last_task_mssg)
+        else:
+            raise telebot.apihelper.ApiException("Wrong chat", "my_task", "Exception")
     except telebot.apihelper.ApiException:
         try:
             bot.send_message(message.chat.id, answer)

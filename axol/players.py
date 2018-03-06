@@ -12,7 +12,7 @@ class Player:
         self.task_status = task_status           # 0 - without task; 1 - in progress; 2 - failed.
         self.last_task_time = last_task_time     # time when last task had taken.
         self.last_task_mssg = last_task_mssg     # message when task had taken.
-        self.message = message
+        self.message = Namespace(**message) if task else None
         self.task_completed = task_completed
         self.task = Namespace(**task) if task else None
         self.task_id = task_id
