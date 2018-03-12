@@ -771,10 +771,11 @@ def task_status(message):
         else:
             answer += ")))\n"
         if hasattr(player, "task_id") and len(player.task_id):
-            for idx in player.task_id:
-                task = tasks[idx]
-                if (task[2] * 60 - ((time.time() - player.last_task_time) // 60)) > tm:
-                    tm = task[2] * 60 - ((time.time() - player.last_task_time) // 60)
+            if player.task_completed < 150:
+                for idx in player.task_id:
+                    task = tasks[idx]
+                    if (task[2] * 60 - ((time.time() - player.last_task_time) // 60)) > tm:
+                        tm = task[2] * 60 - ((time.time() - player.last_task_time) // 60)
         elif player.task and player.task.time:
             tm = player.task.time * 60 - ((time.time() - player.last_task_time) // 60)
         if tm > 0:
@@ -876,11 +877,18 @@ def get_task(message):
 
                     backup(None)
 
-                    for task_id in player.task_id:
-                        if len(tasks[task_id]) > 4:
-                            current_task_funcs.append(check_func_costruct(player, task_funcs[tasks[task_id][4]]))
-                        else:
-                            current_task_funcs.append(check_func_costruct(player, infinity_check))
+                    if player.task_completed < 150:
+                        for task_id in player.task_id:
+                            if len(tasks[task_id]) > 4:
+                                current_task_funcs.append(check_func_costruct(player, task_funcs[tasks[task_id][4]]))
+                            else:
+                                current_task_funcs.append(check_func_costruct(player, infinity_check))
+                    else:
+                        for task_id in player.task_id[1:]:
+                            if len(tasks[task_id]) > 4:
+                                current_task_funcs.append(check_func_costruct(player, task_funcs[tasks[task_id][4]]))
+                            else:
+                                current_task_funcs.append(check_func_costruct(player, infinity_check))
 
 
 # root command. See all players with tasks.
@@ -1237,14 +1245,26 @@ def task_check(message):
                     other_tasks = True
             if not other_tasks:
                 try:
-                    bot.send_message(message.chat.id, "ТЕСТОВЫЙ АВТОЗАЧЁТ!", reply_to_message_id=player.last_task_mssg)
+                    if player.message and player.message.chat.id == message.chat.id:
+                        bot.send_message(message.chat.id, "ТЕСТОВЫЙ АВТОЗАЧЁТ!", reply_to_message_id=player.last_task_mssg)
+                    else:
+                        raise telebot.apihelper.ApiException("Wrong chat", "my_task", "Exception")
                 except telebot.apihelper.ApiException:
-                    bot.send_message(message.chat.id, "ТЕСТОВЫЙ АВТОЗАЧЁТ!")
+                    try:
+                        bot.send_message(message.chat.id, "ТЕСТОВЫЙ АВТОЗАЧЁТ!")
+                    except telebot.apihelper.ApiException:
+                        print("+ failed")
         elif result == "-":
             try:
-                bot.send_message(message.chat.id, "ТЕСТОВЫЙ АВТОБАЯЗИД!", reply_to_message_id=player.last_task_mssg)
+                if player.message and player.message.chat.id == message.chat.id:
+                    bot.send_message(message.chat.id, "ТЕСТОВЫЙ АВТОБАЯЗИД!", reply_to_message_id=player.last_task_mssg)
+                else:
+                    raise telebot.apihelper.ApiException("Wrong chat", "my_task", "Exception")
             except telebot.apihelper.ApiException:
-                bot.send_message(message.chat.id, "ТЕСТОВЫЙ АВТОБАЯЗИД!")
+                try:
+                    bot.send_message(message.chat.id, "ТЕСТОВЫЙ АВТОБАЯЗИД!")
+                except telebot.apihelper.ApiException:
+                    print("+ failed")
             current_task_funcs.remove(func)
             remove_task_check(player, message)
 
