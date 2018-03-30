@@ -671,6 +671,15 @@ def new_year_reg_get(message):
                 answer += '\n'
         bot.send_message(message.chat.id, answer)
 '''
+@bot.message_handler(commands=["dura", "DURA"])
+def dura_reg(message):
+    if message.from_user.id == message.chat.id:
+        player = findplayer(message.from_user)
+        if not player.isdura:
+            if player.dura_status == 3:
+                return
+            player.isdura = True
+            bot.send_message(message.chat.id, "ДОРОГИ НАЗАД НЕ БУДЕТ, ТЫ В КУРСЕ?")
 
 @bot.message_handler(commands=["panteon"])
 def panteon(message):
