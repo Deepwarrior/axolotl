@@ -18,9 +18,11 @@ vip_chat_id = -1001145739506
 debug_chat_id = -1001107497089
 igroklub_chat = -1001108031278
 alukr_chat = -1001031232765
+tipa_tri_skobki_chat = -1001246951967
 allow_chats = [vip_chat_id, debug_chat_id, -1001149068208, igroklub_chat, alukr_chat]
 all_timers = []
 current_task_funcs = []
+dura_chat = [vip_chat_id, igroklub_chat, alukr_chat]
 
 
 def zrena():
@@ -671,6 +673,137 @@ def new_year_reg_get(message):
                 answer += '\n'
         bot.send_message(message.chat.id, answer)
 '''
+@bot.message_handler(commands=["kill", "KILL"])
+def kill(message):
+    player = findplayer(message.from_user)
+    if player.isdura:
+        has_murder_been_done = False
+        has_arrow_been_thrown = False
+        how_many_victims = 0
+        winner_check = False
+        if player.dura_status == 2:
+            player.dura_status = 0
+            killer = ''
+            if player.user.username:
+                killer += '@' + str(player.user.username)
+            else:
+                if player.user.first_name:
+                    killer += str(player.user.first_name) + '\t'
+                if player.user.last_name:
+                    killer += str(player.user.last_name)
+            text = str(message.text[6:])
+            if not text:
+                chance = random.randint(0, 2)
+                if chance == 0:
+                    for chat in dura_chat:
+                        bot.send_message(chat, killer + " УРОНИЛ ВЕРХОВНУЮ СТРЕЛУ МАГИИ, "
+                                                               "ОНА ОТСКОЧИЛА ОТ ПОЛА И УДАРИЛА В ЛЮСТРУ. "
+                                                               "ЛЮСТРА УПАЛА НА ИГРОКА И УБИЛА ЕГО. НЯПОКА.")
+                    player.dura_status = 3
+                    player.isdura = False
+                    player.has_a_shield = False
+                    winner_check = True
+                else:
+                    for chat in dura_chat:
+                        bot.send_message(chat, killer +
+                                         " УРОНИЛ ВЕРХОВНУЮ СТРЕЛУ МАГИИ И ПОТЕРЯЛ ЕЁ, АЗАЗА.")
+                    player.dura_status = 0
+                    player.can_get_a_shield = True
+                    return
+            try:
+                num = int(text)
+            except ValueError:
+                if text:
+                    bot.send_message(message.chat.id, "ТЫ ДУРА?")
+                    player.dura_status = 2
+                    return
+                else:
+                    num = player.dura_num
+            try:
+                bot.send_message(player.user.id, "ВЫБОР СДЕЛАН, ПУЩЕНА СТРЕЛА.")
+            except telebot.apihelper.ApiException:
+                bot.send_message(message.chat.id, "ВЫБОР СДЕЛАН, ПУЩЕНА СТРЕЛА.", reply_to_message_id=message.message_id)
+            for victim in active_players:
+                if victim.isdura:
+                    how_many_victims += 1
+                    if victim.dura_num == num:
+                        name = ""
+                        if victim.user.username:
+                            name += '@' + str(victim.user.username)
+                        else:
+                            if victim.user.first_name:
+                                name += str(victim.user.first_name) + '\t'
+                            if victim.user.last_name:
+                                name += str(victim.user.last_name)
+                        if not victim.has_a_shield:
+                            has_murder_been_done = True
+                            victim.isdura = False
+                            victim.dura_status = 3
+                            for chat in dura_chat:
+                                bot.send_message(chat, killer + " СТРЕЛЯЕТ ВЕРХОВНОЙ СТРЕЛОЙ "
+                                                                        "МАГИИ. ТЕБЯ УБИЛИ, " + name + " :(")
+                        else:
+                            victim.has_a_shield = False
+                            for chat in dura_chat:
+                                bot.send_message(chat, killer + " СТРЕЛЯЕТ. CТРЕЛА УДАРЯЕТСЯ О ЩИТ И ЛОМАЕТСЯ, "
+                                                   "А ЩИТ ПАДАЕТ НА ПОЛ И РАЗБИВАЕТСЯ НА МЕЛКИЕ КУСОЧКИ. " + name + " ВЫЖИЛ.")
+                            has_arrow_been_thrown = True
+            if has_murder_been_done and has_arrow_been_thrown:
+                player.can_get_a_shield = True
+            if how_many_victims == 2 and has_murder_been_done or how_many_victims == 1 and winner_check:
+                winner_name = ''
+                for winner in active_players:
+                    if winner.isdura:
+                        if winner.user.first_name:
+                            winner_name += str(winner.user.first_name) + " "
+                        if winner.user.last_name:
+                                winner_name += str(winner.user.last_name) + " "
+                        if winner.user.username:
+                            winner_name += '@' + str(winner.user.username) + " "
+                for chat in dura_chat:
+                    bot.send_message(chat, winner_name + "ПОДЕБИЛ В ЭТОЙ ЖЕСТОКОЙ ИГРЕ! ОУРА, ТОВАРИЩИ!")
+                try:
+                    bot.send_message(tipa_tri_skobki_chat, "ТОВАРИЩИ ПРОВЕРЯТОРЫ, ТУТ ЧЕЛОВЕЧКА НАГРАДИТЬ НУЖНО, ЭТО " +
+                                 winner_name)
+                except telebot.apihelper.ApiException:
+                    bot.send_message(debug_chat_id, "ТОВАРИЩИ ПРОВЕРЯТОРЫ, ТУТ ЧЕЛОВЕЧКА НАГРАДИТЬ НУЖНО, ЭТО " +
+                                     winner_name)
+            if not has_murder_been_done and not winner_check and not has_arrow_been_thrown:
+                player.dura_status = 2
+                bot.send_message(message.chat.id, 'МАТЕМАТИКА — ЦАРИЦА НАУК.', reply_to_message_id=message.message_id)
+                return
+        else:
+            bot.send_message(message.chat.id, 'ТЫ НЕ МОЖЕШЬ НИКОГО УБИТЬ!', reply_to_message_id=message.message_id)
+
+@bot.message_handler(commands=["net_ty", "NET_TY"])
+def shield(message):
+    player = findplayer(message.from_user)
+    if player.isdura:
+        if not player.has_a_shield and player.dura_status == 2:
+            if player.can_get_a_shield:
+                player.has_a_shield = True
+                player.dura_status = 0
+                player.can_get_a_shield = False
+                bot.send_message(message.chat.id, 'ТЕПЕРЬ ТЫ ЗАЩИЩЁН ОТ ОДНОЙ АТАКИ.',
+                                                                                reply_to_message_id=message.message_id)
+                name = ""
+                if player.user.username:
+                    name += '@' + str(player.user.username)
+                else:
+                    if player.user.first_name:
+                        name += str(player.user.first_name) + '\t'
+                    if player.user.last_name:
+                        name += str(player.user.last_name)
+                for chat in dura_chat:
+                    bot.send_message(chat, name + " ВЗЯЛ ЩИТ.")
+                return
+            else:
+                bot.send_message(message.chat.id, 'ТЫ НЕ МОЖЕШЬ ЗАЩИЩАТЬСЯ 2 РАЗА ПОДРЯД. ВРЕМЯ АТАКОВАТЬ!',
+                                                                                reply_to_message_id=message.message_id)
+        else:
+            bot.send_message(message.chat.id, 'ОБОЙДЁШЬСЯ.', reply_to_message_id=message.message_id)
+
+
 @bot.message_handler(commands=["dura", "DURA"])
 def dura_reg(message):
     if message.from_user.id == message.chat.id:
@@ -678,8 +811,40 @@ def dura_reg(message):
         if not player.isdura:
             if player.dura_status == 3:
                 return
+            if player.dura_started:
+                bot.send_message(message.chat.id, 'ТЫ НЕ ДУРА, ТЫ ТОРМОЗ.', reply_to_message_id=message.message_id)
+                return
             player.isdura = True
             bot.send_message(message.chat.id, "ДОРОГИ НАЗАД НЕ БУДЕТ, ТЫ В КУРСЕ?")
+
+def dura_approve(reaction, message):
+    if message.reply_to_message and message.from_user.username in config.root:
+        player = findplayer(message.reply_to_message.from_user)
+        if player.dura_status == 1:
+            answer = ""
+            player.dura_status = 2
+            list = ""
+            for victim in active_players:
+                if victim.isdura:
+                    if victim.user.first_name:
+                        list += str(victim.user.first_name) + '\t'
+                    if victim.user.last_name:
+                        list += str(victim.user.last_name) + '\t'
+                    if victim.user.username:
+                        list += '@' + str(victim.user.username) + '\t'
+                    if victim.has_a_shield:
+                        list += "(ЩИТ)" + '\t'
+                    list += "(" + str(victim.dura_num) + ")"
+                    list += '\n'
+            answer += "У ТЕБЯ ПОЯВИЛАСЬ ВОЗМОЖНОСТЬ ИЗБАВИТЬСЯ ОТ ЛЮБОГО ИЗ ТВОИХ СОПЕРНИКОВ!\n" + list
+            answer += "\nОТПРАВЬ КОМАНДУ /kill n (ГДЕ n = НОМЕР ЖЕРТВЫ ИЗ СПИСКА)."
+            if not player.has_a_shield:
+                answer += "\nА ЕЩЁ ТЫ МОЖЕШЬ ВЗЯТЬ ЩИТ КОМАНДОЙ /net_ty, НО НЕЛЬЗЯ ДЕРЖАТЬ ПРИ СЕБЕ БОЛЕЕ ОДНОГО " \
+                          "ЩИТА. ЩИТ ЛОМАЕТСЯ, КОГДА ТЕБЯ ПЫТАЮТСЯ УБИТЬ."
+            try:
+                bot.send_message(player.user.id, answer)
+            except telebot.apihelper.ApiException:
+                bot.send_message(message.chat.id, answer, reply_to_message_id=message.message_id)
 
 @bot.message_handler(commands=["get_nums"])
 def get_dura_nums(message):
@@ -699,6 +864,71 @@ def get_dura_nums(message):
                     answer += '@' + str(player.user.username) + '.\t'
                 answer += "("+str(player.dura_num)+")"+'\n'
         bot.send_message(message.chat.id, answer)
+
+def dura_fail(reaction, message):
+    if message.reply_to_message and message.from_user.username in config.root:
+        player = findplayer(message.reply_to_message.from_user)
+        if player.dura_status == 1:
+            player.dura_status = 0
+            bot.send_message(message.chat.id, "ЛАДНО, НИЧТОЖЕСТВО, БЕРИ ДРУГОЕ ЗАДАНИЕ.",
+                                                                                reply_to_message_id=message.message_id)
+@bot.message_handler(commands=["start_dura"])
+def start_dura(message):
+    for chat in dura_chat:
+        bot.send_message(chat, "ИГРА НАЧАЛАСЬ! НАЖИМАЙТЕ /dura_task И СПАСАЙТЕСЬ, ГЛУПЦЫ!")
+    for player in active_players:
+        player.dura_started = True
+
+
+
+@bot.message_handler(commands=["clean_dura"])
+def clean_dura_list(message):
+    for player in active_players:
+        player.dura_started = False
+        player.dura_task = None
+        player.dura_status = 0
+        player.isdura = False
+        player.can_get_a_shield = True
+        player.has_a_shield = False
+
+@bot.message_handler(commands=["dura_task"])
+def get_dura_task(message):
+    player = findplayer(message.from_user)
+    if player.isdura:
+        if player.dura_status == 1:
+            bot.send_message(message.chat.id, 'ТЫ ДУРА? У ТЕБЯ УЖЕ ЕСТЬ ЗАДАНИЕ.', reply_to_message_id=message.message_id)
+        if player.dura_status == 0:
+            if message.from_user.id == message.chat.id:
+                bot.send_message(message.chat.id, 'ТЫ ДУРА? БЕРИ ЗАДАНИЕ У ВСЕХ НА ВИДУ!',
+                                                                                reply_to_message_id=message.message_id)
+                return
+            player.dura_status = 1
+            bot.send_sticker(message.chat.id, random.choice(config.dura_stickers))
+            task = ''
+            task += "ТЫ " + random.choice(config.dura_who) + ". "
+            task += random.choice(config.dura_do) + " "
+            task += random.choice(config.dura_what) + " "
+            task += random.choice(config.dura_how) + "."
+            bot.send_message(message.chat.id, task)
+            player.dura_task = task
+        if player.dura_status == 2:
+            bot.send_message(message.chat.id, "ПРЕЖДЕ ЧЕМ ВЗЯТЬ НОВОЕ ЗАДАНИЕ, НУЖНО КОГО-ТО УБИТЬ!",
+                                                                                reply_to_message_id=message.message_id)
+    if player.dura_status == 3:
+        bot.send_message(message.chat.id, "УСПОКОЙСЯ, ТЫ УЖЕ НИЧЕГО НЕ РЕШАЕШЬ.", reply_to_message_id=message.message_id)
+
+@bot.message_handler(commands=["my_dura"])
+def check_my_dura_task(message):
+    player = findplayer(message.from_user)
+    if player.isdura and player.dura_status == 0:
+        bot.send_message(message.chat.id, "НАЖМИ /dura_task!", reply_to_message_id=message.message_id)
+    if player.dura_status == 1:
+        bot.send_message(message.chat.id, player.dura_task,  reply_to_message_id=message.message_id)
+    if player.dura_status == 2:
+        bot.send_message(message.chat.id, "ПОКА ЧТО У ТЕБЯ НЕТ ЗАДАНИЯ.", reply_to_message_id=message.message_id)
+    if player.dura_status == 3:
+        bot.send_message(message.chat.id, "УСПОКОЙСЯ, ТЫ УЖЕ НИЧЕГО НЕ РЕШАЕШЬ.", reply_to_message_id=message.message_id)
+
 @bot.message_handler(commands=["panteon"])
 def panteon(message):
     answer = ""
@@ -1241,7 +1471,9 @@ reaction_funcs = {"task_rework": task_rework, "task_fail": task_fail, "task_comp
                   "task_extra": task_extra, "natalka": natalka, "kick_bots": kick_bots, "kick_lyuds": kick_lyuds,
                   "mem_react": mem_react, "anti_task": anti_task, "set_admin": set_admin, "whois": whois,
                   "stop_natalka": stop_natalka, "kick_citrus": kick_citrus, "kick_rels": kick_rels,
-                  "kick_misha": kick_misha, "message_above": message_above, "alpha_change": alpha_change}
+                  "kick_misha": kick_misha, "message_above": message_above, "alpha_change": alpha_change,
+                  "dura_approve": dura_approve, "dura_fail": dura_fail
+}
 
 
 def notify(message):
