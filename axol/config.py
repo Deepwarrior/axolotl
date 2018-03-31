@@ -41,6 +41,11 @@ numbers = [
      'CAADAgADIgADsjRGHrzBiD52otYrAg', 'CAADAgADIAADsjRGHiEXZ5N3guXYAg', 'CAADAgADDAADsjRGHsDfKDJ9i8kaAg',
      'CAADAgADCAADsjRGHmLQ31WmM2KfAg', 'CAADAgADKgADsjRGHq-fx19cPlV5Ag', 'CAADAgADLQADsjRGHqK-Yozf6v5mAg',
      'CAADAgADDwADsjRGHv62n3n405i_Ag']
+hermite_gaussian_modes = ['CAADAgADEQADkostA3DN6NzApx5JAg', 'CAADAgADEgADkostA9sHz8S4a413Ag',
+                        'CAADAgADEwADkostA2vK1OpNOcPtAg', 'CAADAgADFAADkostA9vY_JeFNyXDAg',
+                        'CAADAgADFQADkostAzDcVqz6x2uLAg', 'CAADAgADFgADkostAwePB0bp3pSeAg',
+                        'CAADAgADFwADkostA-f4qlzLnrlgAg', 'CAADAgADGAADkostA2DEeFePrPEjAg',
+                        'CAADAgADGQADkostA-es84ySG9OSAg', 'CAADAgADGgADkostA7wf1LT8G0OKAg']
 # format: message_list, sticker_list, user, reaction_messages_list, reaction_stickers_list, func for executing
 # "[[], [], 0, [], [], None],"
 reactions = [

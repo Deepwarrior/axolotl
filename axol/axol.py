@@ -1367,10 +1367,15 @@ def natalka(reaction, message):
     minutes = cur_time.tm_min
     seconds = cur_time.tm_sec
     rand = random.randint(0, 4)
+    rand2 = random.randint(0, 1)
+    if not rand2:
+        sticker_set = config.numbers
+    else:
+        sticker_set = config.hermite_gaussian_modes
     if rand:
-        bot.send_sticker(message.chat.id, config.numbers[((minutes + rand + 1) % 60) // 10],
+        bot.send_sticker(message.chat.id, sticker_set[((minutes + rand + 1) % 60) // 10],
                          reply_to_message_id=message.message_id)
-        bot.send_sticker(message.chat.id, config.numbers[((minutes + rand + 1) % 60) % 10],
+        bot.send_sticker(message.chat.id, sticker_set[((minutes + rand + 1) % 60) % 10],
                          reply_to_message_id=message.message_id)
 
         timer = Timer(60 * rand - seconds, vbuena, [message.chat.id])
