@@ -8,7 +8,8 @@ class Player:
                  task_id=[], informed=False, mess_from_bot=False, mess_sended=False, alpha=0.0,
                  new_year=False, ng_task_id=-1,
                  islove=False, love_task=None, pair=None, gnome_status=-1, message=None,
-                 dura_status=0, dura_num=0, isdura=False, has_a_shield=False, can_get_a_shield=True, dura_task=None):
+                 dura_status=0, dura_num=0, isdura=False, has_a_shield=False, can_get_a_shield=True, dura_task=None,
+                 dura_started=False):
         self.user = Namespace(**user) if isinstance(user, dict) else user
         self.task_status = task_status           # 0 - without task; 1 - in progress; 2 - failed.
         self.last_task_time = last_task_time     # time when last task had taken.
@@ -33,6 +34,7 @@ class Player:
         self.has_a_shield = has_a_shield
         self.can_get_a_shield = can_get_a_shield
         self.dura_task = dura_task
+        self.dura_started = dura_started
 def to_string(self):
     res = str(self.user.first_name) + ' ' + str(self.user.last_name) + ' @' + str(self.user.username) + '\n'
     secs = time.time() - self.last_task_time
