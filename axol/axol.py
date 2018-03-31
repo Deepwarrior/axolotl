@@ -686,14 +686,7 @@ def get_dura_nums(message):
     if message.from_user.username in config.root:
         answer = ""
         num = 1
-        text = str(message.text[10:])
         for player in active_players:
-             if text == "clear":
-                player.isdura = False
-                player.dura_status = 0
-                player.can_get_a_shield = True
-                player.has_a_shield = False
-                player.dura_task = None
              if player.isdura:
                 player.dura_status = 0
                 player.dura_num = num
