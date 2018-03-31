@@ -681,6 +681,24 @@ def dura_reg(message):
             player.isdura = True
             bot.send_message(message.chat.id, "ДОРОГИ НАЗАД НЕ БУДЕТ, ТЫ В КУРСЕ?")
 
+@bot.message_handler(commands=["get_nums"])
+def get_dura_nums(message):
+    if message.from_user.username in config.root:
+        answer = ""
+        num = 1
+        for player in active_players:
+             if player.isdura:
+                player.dura_status = 0
+                player.dura_num = num
+                num += 1
+                if player.user.first_name:
+                    answer += str(player.user.first_name) + '\t'
+                if player.user.last_name:
+                    answer += str(player.user.last_name) + '\t'
+                if player.user.username:
+                    answer += '@' + str(player.user.username) + '.\t'
+                answer += "("+str(player.dura_num)+")"+'\n'
+        bot.send_message(message.chat.id, answer)
 @bot.message_handler(commands=["panteon"])
 def panteon(message):
     answer = ""
