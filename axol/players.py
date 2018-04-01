@@ -3,10 +3,11 @@ import time
 import config
 from argparse import Namespace
 
+
 class Player:
     def __init__(self, user=None, task_status=0, last_task_time=0, last_task_mssg=0, task_completed=0, task=None,
                  task_id=[], informed=False, mess_from_bot=False, mess_sended=False, alpha=0.0,
-                 new_year=False, ng_task_id=-1,
+                 new_year=False, ng_task_id=-1, last_mess=0,
                  islove=False, love_task=None, pair=None, gnome_status=-1, message=None,
                  dura_status=0, dura_num=0, isdura=False, has_a_shield=False, can_get_a_shield=True, dura_task=None,
                  dura_started=False):
@@ -18,6 +19,7 @@ class Player:
         self.task_completed = task_completed
         self.task = Namespace(**task) if task else None
         self.task_id = task_id
+        self.last_mess = last_mess
         self.informed = informed                 # Message about task expiration was sent in debug chat.
         self.mess_from_bot = mess_from_bot       # Subscribe for messages from bot
         self.mess_sended = mess_sended           # Message about taking new task was sent to player.
@@ -35,6 +37,8 @@ class Player:
         self.can_get_a_shield = can_get_a_shield
         self.dura_task = dura_task
         self.dura_started = dura_started
+
+
 def to_string(self):
     res = str(self.user.first_name) + ' ' + str(self.user.last_name) + ' @' + str(self.user.username) + '\n'
     secs = time.time() - self.last_task_time
