@@ -433,7 +433,7 @@ def ping(arg):
                                         "administrator"] and not target.user.username == "rakon_bot":
             found = True
             break
-    if found and target.last_mess and target.user.username:
+    if found and target.user.username:
         diff = time.time() - target.last_mess
         if diff < 60:
             how_davno = "СОВСЕМ ЧУТОК"
