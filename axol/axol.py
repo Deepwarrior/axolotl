@@ -197,7 +197,7 @@ def fylhtq_check(message, player, data):
 
 def fober_check(message, player, data):
     if not data:
-        data.append(0.0)
+        data.append(0)
     if message.from_user.id != player.user.id and message.text and player.user.username and \
             ("@" + player.user.username) in message.text and not data[0]:
         data[0] = [time.time()]
@@ -419,6 +419,40 @@ def long_cat(message):
     bot.send_sticker(message.chat.id, tail)
     if tail == 'CAADAgADeAAD2VJTDNSJtyPtKqeKAg':
         bot.send_sticker(message.chat.id, 'CAADAgADlgIAAmMr4glN9I0DbTqtTgI')
+
+
+def ping(arg):
+    target = random.choice(active_players[:20])
+    found = False
+    for chat_id in allow_chats:
+        try:
+            status = bot.get_chat_member(chat_id, target.user.id)
+        except telebot.apihelper.ApiException:
+            continue
+        if status and status.status in ["member", "creator",
+                                        "administrator"] and not target.user.username == "rakon_bot":
+            found = True
+            break
+    if found and target.last_mess and target.user.username:
+        diff = time.time() - target.last_mess
+        if diff < 60:
+            how_davno = "СОВСЕМ ЧУТОК"
+        elif diff > 3600:
+            how_davno = "ОЧЕНЬ ДАВНО"
+        else:
+            how_davno = str(int(diff // 60)) + " МИНУТ"
+
+        target_name = "@" + target.user.username
+        reaction = random.choice(config.pings)
+        bot.send_message(chat_id, reaction[0] + target_name + reaction[1] + how_davno + reaction[2])
+    timer = Timer(300, ping, [0])
+    timer.start()
+
+
+@bot.message_handler(commands=["ping_start"])
+def ping_start(message):
+    timer = Timer(300, ping, [0])
+    timer.start()
 
 
 @bot.message_handler(commands=["send_deep"])
@@ -775,6 +809,7 @@ def kill(message):
         else:
             bot.send_message(message.chat.id, 'ТЫ НЕ МОЖЕШЬ НИКОГО УБИТЬ!', reply_to_message_id=message.message_id)
 
+
 @bot.message_handler(commands=["net_ty", "NET_TY"])
 def shield(message):
     player = findplayer(message.from_user)
@@ -817,6 +852,7 @@ def dura_reg(message):
             player.isdura = True
             bot.send_message(message.chat.id, "ДОРОГИ НАЗАД НЕ БУДЕТ, ТЫ В КУРСЕ?")
 
+
 def dura_approve(reaction, message):
     if message.reply_to_message and message.from_user.username in config.root:
         player = findplayer(message.reply_to_message.from_user)
@@ -846,6 +882,7 @@ def dura_approve(reaction, message):
             except telebot.apihelper.ApiException:
                 bot.send_message(message.chat.id, answer, reply_to_message_id=message.message_id)
 
+
 @bot.message_handler(commands=["get_nums"])
 def get_dura_nums(message):
     if message.from_user.username in config.root:
@@ -865,6 +902,7 @@ def get_dura_nums(message):
                 answer += "("+str(player.dura_num)+")"+'\n'
         bot.send_message(message.chat.id, answer)
 
+
 def dura_fail(reaction, message):
     if message.reply_to_message and message.from_user.username in config.root:
         player = findplayer(message.reply_to_message.from_user)
@@ -872,13 +910,14 @@ def dura_fail(reaction, message):
             player.dura_status = 0
             bot.send_message(message.chat.id, "ЛАДНО, НИЧТОЖЕСТВО, БЕРИ ДРУГОЕ ЗАДАНИЕ.",
                                                                                 reply_to_message_id=message.message_id)
+
+
 @bot.message_handler(commands=["start_dura"])
 def start_dura(message):
     for chat in dura_chat:
         bot.send_message(chat, "ИГРА НАЧАЛАСЬ! НАЖИМАЙТЕ /dura_task И СПАСАЙТЕСЬ, ГЛУПЦЫ!")
     for player in active_players:
         player.dura_started = True
-
 
 
 @bot.message_handler(commands=["clean_dura"])
@@ -890,6 +929,7 @@ def clean_dura_list(message):
         player.isdura = False
         player.can_get_a_shield = True
         player.has_a_shield = False
+
 
 @bot.message_handler(commands=["dura_task"])
 def get_dura_task(message):
@@ -917,6 +957,7 @@ def get_dura_task(message):
     if player.dura_status == 3:
         bot.send_message(message.chat.id, "УСПОКОЙСЯ, ТЫ УЖЕ НИЧЕГО НЕ РЕШАЕШЬ.", reply_to_message_id=message.message_id)
 
+
 @bot.message_handler(commands=["my_dura"])
 def check_my_dura_task(message):
     player = findplayer(message.from_user)
@@ -928,6 +969,7 @@ def check_my_dura_task(message):
         bot.send_message(message.chat.id, "ПОКА ЧТО У ТЕБЯ НЕТ ЗАДАНИЯ.", reply_to_message_id=message.message_id)
     if player.dura_status == 3:
         bot.send_message(message.chat.id, "УСПОКОЙСЯ, ТЫ УЖЕ НИЧЕГО НЕ РЕШАЕШЬ.", reply_to_message_id=message.message_id)
+
 
 @bot.message_handler(commands=["panteon"])
 def panteon(message):
@@ -1541,6 +1583,8 @@ def sticker_parsing(message):
     if message.chat.id == debug_chat_id or message.chat.id == config.cifr_chat:
         bot.send_message(message.chat.id, '\'' + message.sticker.file_id + '\'', reply_to_message_id=message.message_id)
     task_check(message)
+    player = findplayer(message.from_user)
+    player.last_mess = time.time()
 
 
 @bot.message_handler(content_types=["text"])
@@ -1554,6 +1598,8 @@ def message_parsing(message):
                 else:
                     react(reaction, message)
     task_check(message)
+    player = findplayer(message.from_user)
+    player.last_mess = time.time()
 
 
 @bot.message_handler(content_types=["voice"])
