@@ -422,7 +422,7 @@ def long_cat(message):
 
 
 def ping(arg):
-    target = random.choice(active_players[:20])
+    target = random.choice(active_players[])
     found = False
     for chat_id in allow_chats:
         try:
