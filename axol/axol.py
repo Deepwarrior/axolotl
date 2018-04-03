@@ -1456,7 +1456,7 @@ def mem_react(reaction, message):
 
 
 def set_admin(reaction, message):
-    if message.from_user.username in config.root:
+    if message.from_user.username in config.root and message.from_user.username in config.alpha_moder:
         try:
             bot.promote_chat_member(message.chat.id, message.from_user.id,
                                     True, False, False, True, True, True, True, True)
