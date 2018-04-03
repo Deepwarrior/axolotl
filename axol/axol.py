@@ -936,7 +936,7 @@ def clean_dura_list(message):
 @bot.message_handler(commands=["dura_task"])
 def get_dura_task(message):
     player = findplayer(message.from_user)
-    if player.isdura:
+    if player.isdura and player.dura_started:
         if player.dura_status == 1:
             bot.send_message(message.chat.id, 'ТЫ ДУРА? У ТЕБЯ УЖЕ ЕСТЬ ЗАДАНИЕ.', reply_to_message_id=message.message_id)
         if player.dura_status == 0:
@@ -945,7 +945,11 @@ def get_dura_task(message):
                                                                                 reply_to_message_id=message.message_id)
                 return
             player.dura_status = 1
-            bot.send_sticker(message.chat.id, random.choice(config.dura_stickers))
+            sticker = random.choice(config.dura_stickers)
+            try:
+                bot.send_sticker(message.chat.id, sticker)
+            except telebot.apihelper.ApiException:
+                print("STICKER WAS NOT SEND" + sticker)
             task = ''
             task += "ТЫ " + random.choice(config.dura_who) + ". "
             task += random.choice(config.dura_do) + " "
