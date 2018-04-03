@@ -19,10 +19,11 @@ debug_chat_id = -1001107497089
 igroklub_chat = -1001108031278
 alukr_chat = -1001031232765
 tipa_tri_skobki_chat = -1001246951967
+bitva_magov_chat = -1001272922314
 allow_chats = [vip_chat_id, debug_chat_id, -1001149068208, igroklub_chat, alukr_chat]
 all_timers = []
 current_task_funcs = []
-dura_chat = [vip_chat_id, igroklub_chat, alukr_chat]
+dura_chat = [bitva_magov_chat]
 
 
 def zrena():
@@ -782,7 +783,7 @@ def kill(message):
                                 bot.send_message(chat, killer + " СТРЕЛЯЕТ. CТРЕЛА УДАРЯЕТСЯ О ЩИТ И ЛОМАЕТСЯ, "
                                                    "А ЩИТ ПАДАЕТ НА ПОЛ И РАЗБИВАЕТСЯ НА МЕЛКИЕ КУСОЧКИ. " + name + " ВЫЖИЛ.")
                             has_arrow_been_thrown = True
-            if has_murder_been_done and has_arrow_been_thrown:
+            if has_murder_been_done or has_arrow_been_thrown:
                 player.can_get_a_shield = True
             if how_many_victims == 2 and has_murder_been_done or how_many_victims == 1 and winner_check:
                 winner_name = ''
@@ -804,7 +805,8 @@ def kill(message):
                                      winner_name)
             if not has_murder_been_done and not winner_check and not has_arrow_been_thrown:
                 player.dura_status = 2
-                bot.send_message(message.chat.id, 'МАТЕМАТИКА — ЦАРИЦА НАУК.', reply_to_message_id=message.message_id)
+                bot.send_message(message.chat.id, 'ЧТО-ТО ПОШЛО НЕ ТАК, УМНАЯ СТРЕЛА ВЕРНУЛАСЬ ОБРАТНО. '
+                                                  'ПЕПЕБРОСЬ.', reply_to_message_id=message.message_id)
                 return
         else:
             bot.send_message(message.chat.id, 'ТЫ НЕ МОЖЕШЬ НИКОГО УБИТЬ!', reply_to_message_id=message.message_id)
@@ -908,9 +910,9 @@ def dura_fail(reaction, message):
         player = findplayer(message.reply_to_message.from_user)
         if player.dura_status == 1:
             player.dura_status = 0
+            player.dura_task = None
             bot.send_message(message.chat.id, "ЛАДНО, НИЧТОЖЕСТВО, БЕРИ ДРУГОЕ ЗАДАНИЕ.",
-                                                                                reply_to_message_id=message.message_id)
-
+                                                                reply_to_message_id=message.reply_to_message.message_id)
 
 @bot.message_handler(commands=["start_dura"])
 def start_dura(message):
