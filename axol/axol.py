@@ -949,7 +949,7 @@ def get_dura_task(message):
             try:
                 bot.send_sticker(message.chat.id, sticker)
             except telebot.apihelper.ApiException:
-                print("STICKER WAS NOT SEND" + sticker)
+                print("STICKER WAS NOT SEND", sticker)
             task = ''
             task += "ТЫ " + random.choice(config.dura_who) + ". "
             task += random.choice(config.dura_do) + " "
