@@ -1469,6 +1469,15 @@ def set_admin(reaction, message):
         except telebot.apihelper.ApiException:
             time.sleep(1)
 
+@bot.message_handler(commands=["stop_stickers"])
+def stop_stickers(message):
+    if message.from_user.username in config.root:
+        for player in active_players:
+            if player.task_completed < 100 and not player.task_id == 42 or player.task_completed >= 100 and not player.task_id == 10:
+                try:
+                    bot.restrict_chat_member(message.chat.id, player.user.id, True, True, False, False, False)
+                except telebot.apihelper.ApiException:
+                    continue
 
 def whois(reaction, message):
     if message.reply_to_message and message.from_user.username in config.root and message.from_user.id != config.misha_chat:
