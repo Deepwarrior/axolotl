@@ -24,10 +24,14 @@ all_timers = []
 current_task_funcs = []
 dura_chat = [vip_chat_id, igroklub_chat, alukr_chat]
 
-
+zrenki = [vip_chat_id, 1345532965]
 def zrena():
-    bot.send_sticker(vip_chat_id, 'CAADAgADtAADP_vRD1iCbwT85WNIAg')
-    bot.send_message(vip_chat_id, 'ХАЛЯВНЫЙ ЗАРЯД! ГО ПИЛИТЬ РАНДОМЩИКОВ!')
+    for chat in zrenki:
+        try:
+            bot.send_sticker(chat, 'CAADAgADtAADP_vRD1iCbwT85WNIAg')
+            bot.send_message(chat, 'ХАЛЯВНЫЙ ЗАРЯД! ГО ПИЛИТЬ РАНДОМЩИКОВ!')
+        except telebot.apihelper.ApiException:
+            print("zreno to " + str(chat) + " failed")
     timer = Timer(day, zrena)
     timer.start()
 
@@ -1100,6 +1104,11 @@ def get_task(message):
                 rand = random.randint(1, 500)
                 if rand == 237 and player.task_completed < 100:
                     task = ['CAADAgADaQADP_vRD78igQttLbufAg', 'КОЛДУЮ, КОЛДУЮ... ВЖУХ! И ТЫ ПИДОР ДНЯ.', 0, 0]
+                    bot.send_sticker(message.chat.id, task[0])
+                    bot.send_message(message.chat.id, task[1])
+                elif rand == 237:
+                    task = ['CAADAgADPAADE3yuAgyZWgXL5Kj9Ag', 'ТЫ ЧОРНЫЙ ПИДОР ДНЯ. ЗАЙМИСЬ СЕКСОМ НА '
+                                                              'ПРОЕЗЖЕЙ ЧАСТИ.', 0, 0]
                     bot.send_sticker(message.chat.id, task[0])
                     bot.send_message(message.chat.id, task[1])
                 else:
