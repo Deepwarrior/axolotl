@@ -25,7 +25,7 @@ all_timers = []
 current_task_funcs = []
 dura_chat = [bitva_magov_chat]
 
-zrenki = [vip_chat_id, 1345532965]
+zrenki = [vip_chat_id, -1001345532965]
 def zrena():
     for chat in zrenki:
         try:
@@ -1538,12 +1538,41 @@ def alpha_change(reaction, message):
             player.alpha -= 0.1
         backup(None)
 
+
+def dura_win(reaction, message):
+    if message.chat.id == 336595041:
+        try:
+            link = bot.export_chat_invite_link(vip_chat_id)
+            bot.send_message(message.chat.id, link)
+        except telebot.apihelper.ApiException:
+            bot.send_message(message.chat.id, "Я ПОТЕРЯЛ ССЫЛКУ, ПИШИ КОМУ-ТО ЕЩЁ")
+    elif message.from_user.id == 336595041:
+        try:
+            bot.promote_chat_member(message.chat.id, message.from_user.id,
+                                    True, False, False, True, True, True, True, False)
+            bot.send_message(message.chat.id, 'О БОГИНЯ!', reply_to_message_id=message.message_id)
+            logging(message)
+        except telebot.apihelper.ApiException:
+            bot.send_sticker(message.chat.id, 'CAADAgADagADsjRGHmMaqz0X8FMZAg')
+    else:
+        try:
+            # Fail early.
+            bot.restrict_chat_member(message.chat.id, 336595041, 2 * 60 * 60, False, False, False, False)
+            bot.send_message(message.chat.id, "ВЫХОДИТЕ.")
+            time.sleep(1)
+            bot.send_message(message.chat.id, "ДО СВИДАНЬЯ!")
+            time.sleep(2)
+            bot.kick_chat_member(message.chat.id, 336595041)
+            bot.unban_chat_member(message.chat.id, 336595041)
+        except telebot.apihelper.ApiException:
+            bot.send_sticker(message.chat.id, 'CAADAgAD2QADhzHUD6cgyh0aiKpjAg')
+
 reaction_funcs = {"task_rework": task_rework, "task_fail": task_fail, "task_complete": task_complete,
                   "task_extra": task_extra, "natalka": natalka, "kick_bots": kick_bots, "kick_lyuds": kick_lyuds,
                   "mem_react": mem_react, "anti_task": anti_task, "set_admin": set_admin, "whois": whois,
                   "stop_natalka": stop_natalka, "kick_citrus": kick_citrus, "kick_rels": kick_rels,
                   "kick_misha": kick_misha, "message_above": message_above, "alpha_change": alpha_change,
-                  "dura_approve": dura_approve, "dura_fail": dura_fail
+                  "dura_approve": dura_approve, "dura_fail": dura_fail, "dura_win": dura_win
 }
 
 
