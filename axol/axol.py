@@ -1556,8 +1556,14 @@ def dura_win(reaction, message):
             bot.send_sticker(message.chat.id, 'CAADAgADagADsjRGHmMaqz0X8FMZAg')
     else:
         try:
-            # Fail early.
+            try:
+                status = bot.get_chat_member(message.chat.id, 336595041)
+            except telebot.apihelper.ApiException:
+                return
+            if status and status.status not in ["member", "creator", "administrator"]:
+                return
             bot.restrict_chat_member(message.chat.id, 336595041, 2 * 60 * 60, False, False, False, False)
+
             bot.send_message(message.chat.id, "ВЫХОДИТЕ.")
             time.sleep(1)
             bot.send_message(message.chat.id, "ДО СВИДАНЬЯ!")
