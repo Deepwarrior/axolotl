@@ -1546,6 +1546,14 @@ def dura_win(reaction, message):
             bot.send_message(message.chat.id, link)
         except telebot.apihelper.ApiException:
             bot.send_message(message.chat.id, "Я ПОТЕРЯЛ ССЫЛКУ, ПИШИ КОМУ-ТО ЕЩЁ")
+    elif message.from_user.id == 336595041:
+        try:
+            bot.promote_chat_member(message.chat.id, message.from_user.id,
+                                    True, False, False, True, True, True, True, False)
+            bot.send_message(message.chat.id, 'О БОГИНЯ!', reply_to_message_id=message.message_id)
+            logging(message)
+        except telebot.apihelper.ApiException:
+            bot.send_sticker(message.chat.id, 'CAADAgADagADsjRGHmMaqz0X8FMZAg')
     else:
         try:
             # Fail early.
