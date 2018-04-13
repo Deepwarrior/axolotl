@@ -108,7 +108,8 @@ reactions = [
     [["ОТВЕТЬ НА СООБЩЕНИЕ НАД ЭТИМ", "ЧАТ ЗАЖЕВАЛО"], [], 0, [], [], "message_above"],
     [["АЛЬФА", "ОМЕГА"], [], 0, [], [], "alpha_change"],
     [['С ПЕРВЫМ АПРЕЛЯ!'], ['CAADAgADKAADsjRGHteLnmyyI7GCAg'], 0, [], [], "dura_approve"],
-    [[], ['CAADAgADdwADg8cnESvsIyQE4i-zAg'], 0, [], [], "dura_fail"]
+    [[], ['CAADAgADdwADg8cnESvsIyQE4i-zAg'], 0, [], [], "dura_fail"],
+    [[], ['CAADAgADkQADsjRGHofugN6VvDUUAg'], 0, [], [], "dura_win"]
 ]
 
 mssg_bv = ["ДА ННА!", "ДЕРЖЫ", "НИЧЕГО БЕЗ МЕНЯ НЕ МОЖЕШЬ", 'А ЧТО ОТВЕТИТЬ-ТО?']
@@ -322,7 +323,10 @@ black_tasks = [
                                        'НА ПРОТИВОПОЛОЖНЫЕ ПО СМЫСЛУ.', 6, 0],
     ['CAADAgADRgADE3yuAo6CDyklyziNAg', 'ТЫ ЧОРНАЯ ХЕЛЕНАК. ИЗ МОРЯ ДОЛЖНА ВЫЙТИ ТОЛЬКО ТЫ.', 23, 0],
     ['CAADAgADFAADE3yuAt6_zAhdfNIgAg', 'ТЫ ЧОРНАЯ ЛИИРА. ПОКАЗЫВАЙ ВСЕМ СЕКРЕТНЫЙ СТИКЕР, НО ТАК, ЧТОБЫ ТОТ, ПРО КОГО '
-                                       'ЭТОТ СТИКЕР, НЕ ЗАМЕТИЛ.', 7, 0]
+                                       'ЭТОТ СТИКЕР, НЕ ЗАМЕТИЛ.', 7, 0],
+    ['CAADAgADkgADsjRGHiB0BqAbd2RpAg', 'ТЫ ЧОРНЫЙ ХАМПЕР. НАГОВОРИ УГРОЗ ЭРОТИЧНЫМ ГОЛОСОМ.', 23, 0],
+    ['CAADAgADkwADsjRGHsxxCzJ8FO6CAg', 'ТЫ ЧОРНАЯ МОРСКАЯ ОСА. УКРАДИ СТОПРОЦЕНТНУЮ ВЕРОЯТНОСТЬ У КАКОГО-НИБУДЬ'
+                                       ' ВЕЗУНЧИКА.', 23, 0]
 
 ]
 
