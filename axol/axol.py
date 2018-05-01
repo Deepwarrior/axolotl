@@ -893,12 +893,8 @@ def dura_approve(reaction, message):
 def get_dura_nums(message):
     if message.from_user.username in config.root:
         answer = ""
-        num = 1
         for player in active_players:
              if player.isdura:
-                player.dura_status = 0
-                player.dura_num = num
-                num += 1
                 if player.user.first_name:
                     answer += str(player.user.first_name) + '\t'
                 if player.user.last_name:
@@ -920,11 +916,15 @@ def dura_fail(reaction, message):
 
 @bot.message_handler(commands=["start_dura"])
 def start_dura(message):
+    num = 1
+    for player in active_players:
+        if player.isdura:
+            player.dura_status = 0
+            player.dura_num = num
+            num += 1
+        player.dura_started = True
     for chat in dura_chat:
         bot.send_message(chat, "ИГРА НАЧАЛАСЬ! НАЖИМАЙТЕ /dura_task И СПАСАЙТЕСЬ, ГЛУПЦЫ!")
-    for player in active_players:
-        player.dura_started = True
-
 
 @bot.message_handler(commands=["clean_dura"])
 def clean_dura_list(message):
