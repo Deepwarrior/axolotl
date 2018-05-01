@@ -922,6 +922,11 @@ def start_dura(message):
             player.dura_status = 0
             player.dura_num = num
             num += 1
+            try:
+                bot.send_message(player.user.id, "ЕСЛИ ТЕБЕ ПРИШЛО ЭТО СООБЩЕНИЕ, ЗНАЧИТ ТЫ РЕГИСТРИРОВАЛСЯ НА "
+                                 "<b>БИТВУ МАГОВ</b>. ИГРА НАЧАЛАСЬ!")
+            except telebot.apihelper.ApiException:
+                continue
         player.dura_started = True
     for chat in dura_chat:
         bot.send_message(chat, "ИГРА НАЧАЛАСЬ! НАЖИМАЙТЕ /dura_task И СПАСАЙТЕСЬ, ГЛУПЦЫ!")
