@@ -357,10 +357,7 @@ love_tasks = [
 end = ["есса", "ка", "иня", "ша", "ница", "уха"]
 ends = ["ессы", "ки", "ини", "ши", "ницы", "ухи"]
 exception_spisok = ["САРАСТИ", "БЛЕДИ"]
-dura_stickers = ['CAADAgADyAEAAlKAsUmiRD2wg5PILQI', 'CAADAgADyQEAAlKAsUkLN0ZbdL2-LQI',
-                 'CAADAgADywEAAlKAsUmjXJEAARKgSnYC', 'CAADAgADzAEAAlKAsUm4NFlVX0t0MAI', 'CAADAgAD0wEAAlKAsUmHiGZDRH69CQI',
-                 'CAADAgAD3wEAAlKAsUm3DyUBJor4AQI', 'CAADAgADPA0AAmOLRgxiNSbi4FrFIQI', 'CAADBAADEgADxXu1FF098lh1r0WXAg',
-                 'CAADAgAD1QIAAiSGFAU97fcyQVNEGAI', 'CAADAgAD2wIAAiSGFAUZTh8mDflBBQI', 'CAADAgAD4QIAAiSGFAXb-dYynVQFvQI',
+dura_stickers = [
                  'CAADAgAD7QIAAiSGFAUtKTE-L04-1AI', 'CAADAgADCwADdy_1D1mCkXkRI1k7Ag', 'CAADAgADCwADdy_1D1mCkXkRI1k7Ag',
                  'CAADAgADBQADdy_1D9bPrqqGz6gEAg', 'CAADAgADAwADdy_1D-Kg1Bf23dX9Ag', 'CAADAgADSQADdy_1D8XAPVA9EcicAg',
                  'CAADAgADJQADdy_1D5b97De4rtqvAg', 'CAADAgADKwADdy_1D-sUHzyCN7HjAg', 'CAADAgADHwIAAjHTyQEKhvAch1TwpgI',
