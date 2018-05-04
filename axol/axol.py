@@ -1500,7 +1500,7 @@ def stop_stickers(message):
                     continue
 
 def whois(reaction, message):
-    if message.reply_to_message and message.from_user.username in config.root and message.from_user.id != config.misha_chat:
+    if message.reply_to_message and message.from_user.username in config.root:
         player = findplayer(message.reply_to_message.from_user)
         if (player.task or (hasattr(player, "task_id") and len(player.task_id))) and player.task_status == 1:
             bot.send_message(message.chat.id, players.to_string(player))
