@@ -893,8 +893,10 @@ def dura_approve(reaction, message):
 def get_dura_nums(message):
     if message.from_user.username in config.root:
         answer = ""
+        does_someone_participate = False
         for player in active_players:
              if player.isdura:
+                does_someone_participate = True
                 if player.user.first_name:
                     answer += str(player.user.first_name) + '\t'
                 if player.user.last_name:
@@ -902,7 +904,11 @@ def get_dura_nums(message):
                 if player.user.username:
                     answer += '@' + str(player.user.username) + '.\t'
                 answer += "("+str(player.dura_num)+")"+'\n'
-        bot.send_message(message.chat.id, answer)
+        if does_someone_participate:
+            bot.send_message(message.chat.id, answer)
+        else:
+            answer = "ПОКА ЧТО ЗАРЕГИСТРИРОВАВШИХСЯ НЕТ. БУДЬ ПЕРВЫМ, НАЖМИ /dura!"
+            bot.send_message(message.chat.id, answer)
 
 
 def dura_fail(reaction, message):
@@ -924,7 +930,7 @@ def start_dura(message):
             num += 1
             try:
                 bot.send_message(player.user.id, "ЕСЛИ ТЕБЕ ПРИШЛО ЭТО СООБЩЕНИЕ, ЗНАЧИТ ТЫ РЕГИСТРИРОВАЛСЯ НА "
-                                 "<b>БИТВУ МАГОВ</b>. ИГРА НАЧАЛАСЬ!")
+                                 "<b>БИТВУ МАГОВ</b>. ИГРА НАЧАЛАСЬ!", parse_mode="HTML")
             except telebot.apihelper.ApiException:
                 continue
         player.dura_started = True
@@ -1494,7 +1500,7 @@ def stop_stickers(message):
                     continue
 
 def whois(reaction, message):
-    if message.reply_to_message and message.from_user.username in config.root and message.from_user.id != config.misha_chat:
+    if message.reply_to_message and message.from_user.username in config.root:
         player = findplayer(message.reply_to_message.from_user)
         if (player.task or (hasattr(player, "task_id") and len(player.task_id))) and player.task_status == 1:
             bot.send_message(message.chat.id, players.to_string(player))
