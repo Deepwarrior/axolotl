@@ -1683,6 +1683,12 @@ def voice_parsing(message):
         bot.send_message(message.chat.id, '\'' + message.voice.file_id + '\'', reply_to_message_id=message.message_id)
 
 
+@bot.message_handler(content_types=["document"])
+def doc_parsing(message):
+    if message.chat.id == debug_chat_id:
+        bot.send_message(message.chat.id, '\'' + message.document.file_id + '\'', reply_to_message_id=message.message_id)
+
+
 if __name__ == '__main__':
     f = open('players.json', 'r')
     templist = json.load(f)
@@ -1705,7 +1711,6 @@ if __name__ == '__main__':
         except ReadTimeout:
             print("die?")
             time.sleep(60)
-            if root_log:
-                bot.send_message(debug_chat_id, root_log)
+            bot.send_sticker(debug_chat_id, 'CAADAgAD4wADNnYgDrZmXXEJzxGgAg')
         finally:
             backup(None)
