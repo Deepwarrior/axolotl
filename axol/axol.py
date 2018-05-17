@@ -1659,7 +1659,7 @@ def sticker_parsing(message):
                 else:
                     react(reaction, message)
     if message.chat.id == debug_chat_id or message.chat.id == config.cifr_chat:
-        bot.send_message(message.chat.id, '\'' + message.sticker.file_id + '\'\n' + message.sticker.set_name,
+        bot.send_message(message.chat.id, '\'' + message.sticker.file_id + '\'\n',# + message.sticker.set_name,
                          reply_to_message_id=message.message_id)
     task_check(message)
     player = findplayer(message.from_user)
