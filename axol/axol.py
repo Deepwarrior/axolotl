@@ -1302,6 +1302,9 @@ def task_complete(reaction, message):
                 bot.send_message(player.user.id, "СГОРИ ДОТЛА! КАК И ВСЕ ТВОИ ОЧКИ")
             elif player.task_completed == 150:
                 bot.send_message(player.user.id, "УРА УРА СУИЦИД")
+            elif player.task_completed == 200:
+                bot.send_message(player.user.id, "ЧОМУ ТАК ХОЛОДНО МЕНІ\nІ ЩО БОЛИТЬ У ГОЛОВІ\nЯ ДУМАВ ПІСЛЯ СМЕРТІ\n"
+                                                 "Я СТАНУ КУПОЮ ЗЕМЛІ")
             if player.task_completed % 50 == 0:
                 bot.send_message(message.chat.id, "ЗАДАНИЕ ВЫПОЛНЕНО!\nВСЕГО СДЕЛАНО 50 ЗАДАНИЙ!",
                                  reply_to_message_id=message.reply_to_message.message_id)
@@ -1656,7 +1659,8 @@ def sticker_parsing(message):
                 else:
                     react(reaction, message)
     if message.chat.id == debug_chat_id or message.chat.id == config.cifr_chat:
-        bot.send_message(message.chat.id, '\'' + message.sticker.file_id + '\'', reply_to_message_id=message.message_id)
+        bot.send_message(message.chat.id, '\'' + message.sticker.file_id + '\'\n' + message.sticker.set_name,
+                         reply_to_message_id=message.message_id)
     task_check(message)
     player = findplayer(message.from_user)
     player.last_mess = time.time()
@@ -1711,6 +1715,7 @@ if __name__ == '__main__':
         except ReadTimeout:
             print("die?")
             time.sleep(60)
-            bot.send_sticker(debug_chat_id, 'CAADAgAD4wADNnYgDrZmXXEJzxGgAg')
+            set = bot.get_sticker_set('MexicanAxolotl')
+            bot.send_sticker(debug_chat_id, random.choice(set.stickers))
         finally:
             backup(None)
