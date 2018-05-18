@@ -1717,5 +1717,6 @@ if __name__ == '__main__':
             time.sleep(60)
             set = bot.get_sticker_set('MexicanAxolotl')
             bot.send_sticker(debug_chat_id, random.choice(set.stickers).file_id)
+            bot.send_sticker(vip_chat_id, random.choice(set.stickers).file_id)
         finally:
             backup(None)
