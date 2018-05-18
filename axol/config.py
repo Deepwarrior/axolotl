@@ -11,6 +11,7 @@ rinneko_chat = 264360251
 undo_chat = 332099213
 rels_chat = 44989459
 misha_chat = 53316498
+osa_chat = 299778732
 
 seconds_in_day = 85000
 
@@ -88,6 +89,8 @@ reactions = [
     [[], ['CAADAgADKwQAAuce7AWo_pyLoNBvLgI'], 196345058, ['О, НАТАЛИЯ НАЧАЛАСЬ'], []],
     [["ВОУ ВОУ", "ВОУ-ВОУ", "ВОУ ВОУ!", "ВОУ-ВОУ!"], [], 0, [], ['CAADAgAD9wADP_vRD4s-yYzXKDzSAg']],
     [["ЭАЛО"], [], 0, ["2Л"], []], [["ДЛИННОМОЗГ"], [], 0, ["1Н"], []],
+    [["/ТИХО РЖЁТЬ/"], [], osa_chat, ["ГРОМЧЕ!"], []],
+    [["/АРЁТ/"], [], osa_chat, [], ['CAADAgADDQADdUTxCP-onsxKIsJqAg']],
 
     [[], ['CAADAgADpgEAAmDrzgNSIT8rlE3K0AI', 'CAADAgADVQADsjRGHmcXPWcGP2BfAg'], 0, [], [], "task_rework"],
     [fail_phrase, ['CAADAgADFAADjW7LE9E1TbwjuTk7Ag'], 0, [], [], "task_fail"],
