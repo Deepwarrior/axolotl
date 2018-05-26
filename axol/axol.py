@@ -1175,7 +1175,7 @@ def get_task(message):
                     task = tasks[rand]
                     player.task_id.append(rand)
                     bot.send_sticker(message.chat.id, task[0])
-                    if player.task_completed % 100 < 40:
+                    if player.task_completed % 100 < 40 and player.task_completed < 200:
                         bot.send_message(message.chat.id, task[1])
                     else:
                         text = random.choice(["ТЫ УЖЕ БОЛЬШОЙ, САМ РАЗБЕРЕШЬСЯ", "<СПОЙЛЕРЫ>", "Я ПОЗАБЫЛ ВСЕ СЛОВА",
@@ -1191,6 +1191,11 @@ def get_task(message):
                         rand = random.randint(0, len(tasks) - 1)
                         bot.send_sticker(message.chat.id, tasks[rand][0])
                         player.task_id.append(rand)
+                    if player.task_completed > 200:
+                        rand = random.randint(0, len(config.anti_tasks) - 1)
+                        podtask = config.anti_tasks[rand]
+                        player.antitask_id = rand
+                        bot.send_message(message.chat.id, podtask)
                     if player.task_completed % 100 == 99:
                         rand = random.randint(0, len(tasks) - 1)
                         bot.send_sticker(message.chat.id, tasks[rand][0])
@@ -1492,6 +1497,7 @@ def set_admin(reaction, message):
         except telebot.apihelper.ApiException:
             time.sleep(1)
 
+
 @bot.message_handler(commands=["stop_stickers"])
 def stop_stickers(message):
     if message.from_user.username in config.root:
@@ -1502,10 +1508,11 @@ def stop_stickers(message):
                 except telebot.apihelper.ApiException:
                     continue
 
+
 def whois(reaction, message):
     if message.reply_to_message and message.from_user.username in config.root:
         player = findplayer(message.reply_to_message.from_user)
-        if (player.task or (hasattr(player, "task_id") and len(player.task_id))) and player.task_status == 1:
+        if len(player.task_id) and player.task_status == 1:
             bot.send_message(message.chat.id, players.to_string(player))
         else:
             bot.send_message(message.chat.id, "ТЫ НИКТО, АЗАЗА")

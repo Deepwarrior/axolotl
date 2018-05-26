@@ -6,7 +6,7 @@ from argparse import Namespace
 
 class Player:
     def __init__(self, user=None, task_status=0, last_task_time=0, last_task_mssg=0, task_completed=0, task=None,
-                 task_id=[], informed=False, mess_from_bot=False, mess_sended=False, alpha=0.0,
+                 task_id=[], antitask_id=-1, informed=False, mess_from_bot=False, mess_sended=False, alpha=0.0,
                  new_year=False, ng_task_id=-1, last_mess=0,
                  islove=False, love_task=None, pair=None, gnome_status=-1, message=None,
                  dura_status=0, dura_num=0, isdura=False, has_a_shield=False, can_get_a_shield=True, dura_task=None,
@@ -17,8 +17,8 @@ class Player:
         self.last_task_mssg = last_task_mssg     # message when task had taken.
         self.message = Namespace(**message) if task else None
         self.task_completed = task_completed
-        self.task = Namespace(**task) if task else None
         self.task_id = task_id
+        self.antitask_id = antitask_id
         self.last_mess = last_mess
         self.informed = informed                 # Message about task expiration was sent in debug chat.
         self.mess_from_bot = mess_from_bot       # Subscribe for messages from bot
@@ -55,5 +55,8 @@ def to_string(self):
     elif len(self.task_id):
         for idx in self.task_id:
             res += tasks[idx][1] + '\n'
+
+    if self.antitask_id != -1:
+        res += config.anti_tasks[self.antitask_id]
 
     return res
