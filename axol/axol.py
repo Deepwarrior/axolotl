@@ -6,6 +6,8 @@ import random
 import players
 import time
 import json
+import socket
+import urllib3
 from requests.exceptions import ReadTimeout
 from threading import Timer
 
@@ -1712,7 +1714,7 @@ if __name__ == '__main__':
     while True:
         try:
             bot.polling(none_stop=True)
-        except ReadTimeout:
+        except (ReadTimeout, socket.timeout, urllib3.exceptions.ReadTimeoutError):
             print("die?")
             time.sleep(60)
             set = bot.get_sticker_set('MexicanAxolotl')
