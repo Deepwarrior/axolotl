@@ -1228,7 +1228,7 @@ def get_task(message):
 def all_tasks(message):
     if message.from_user.username in config.root:
         for player in active_players:
-            if (player.task or (hasattr(player, "task_id") and len(player.task_id))) and player.task_status == 1:
+            if len(player.task_id) and player.task_status == 1:
                 bot.send_message(message.chat.id, players.to_string(player))
         logging(message)
 
@@ -1264,7 +1264,7 @@ def react(reaction, message):
 def task_rework(reaction, message):
     if message.from_user.username in config.root and message.reply_to_message:
         player = findplayer(message.reply_to_message.from_user)
-        if player.task or hasattr(player, "task_id") and len(player.task_id):
+        if len(player.task_id):
             if player.task_status == 0:
                 player.task_status = 1
                 player.task_completed -= 1
