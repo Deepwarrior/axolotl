@@ -396,7 +396,6 @@ def clean(message):
             if time.time() - player.last_task_time > config.seconds_in_day * 7:
                 player.task_status = 0
                 player.task_id = []
-                player.task = None
 
 
 @bot.message_handler(commands=["long"])
@@ -1086,20 +1085,14 @@ def task_status(message):
         tasks = config.black_tasks
     if player.task_status == 1:
         if player.task_completed % 100 < 40:
-            if hasattr(player, "task_id") and len(player.task_id):
-                answer += tasks[player.task_id[0]][1] + "\n"
-            elif player.task:
-                answer += player.task.text + "\n"
+            answer += tasks[player.task_id[0]][1] + "\n"
         else:
             answer += ")))\n"
-        if hasattr(player, "task_id") and len(player.task_id):
-            if player.task_completed < 150:
-                for idx in player.task_id:
-                    task = tasks[idx]
-                    if (task[2] * 60 - ((time.time() - player.last_task_time) // 60)) > tm:
-                        tm = task[2] * 60 - ((time.time() - player.last_task_time) // 60)
-        elif player.task and player.task.time:
-            tm = player.task.time * 60 - ((time.time() - player.last_task_time) // 60)
+        if player.task_completed < 150:
+            for idx in player.task_id:
+                task = tasks[idx]
+                if (task[2] * 60 - ((time.time() - player.last_task_time) // 60)) > tm:
+                    tm = task[2] * 60 - ((time.time() - player.last_task_time) // 60)
         if tm > 0:
             answer += "Осталось времени: " + str('{:.0f}'.format(tm // 60)) + " часов и " + \
                       str('{:.0f}'.format(tm % 60)) + " минут\n"
@@ -1141,7 +1134,6 @@ def get_task(message):
         if time.time() - player.last_task_time > config.seconds_in_day:
             player.task_status = 0
             player.task_id = []
-            player.task = None
             remove_task_check(player, message)
         if player.task_status == 1:
             bot.send_message(message.chat.id, "ТЫ УЖЕ ЧТО-ТО ДЕЛАЕШЬ!", reply_to_message_id=message.message_id)
