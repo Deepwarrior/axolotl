@@ -47,13 +47,13 @@ def zrena_timers_init():
     tim = (day + 55 * 60 - hours * 3600 - mins * 60 - sec) % day
     timer = Timer(tim, zrena)
     timer.start()
-    tim = (day + 20 * 60 + 9 * 3600 - hours * 3600 - mins * 60 - sec) % day
+    tim = (day + 35 * 60 + 9 * 3600 - hours * 3600 - mins * 60 - sec) % day
     timer = Timer(tim, zrena)
     timer.start()
-    tim = (day + 5 * 60 + 20 * 3600 - hours * 3600 - mins * 60 - sec) % day
+    tim = (day + 15 * 60 + 20 * 3600 - hours * 3600 - mins * 60 - sec) % day
     timer = Timer(tim, zrena)
     timer.start()
-    tim = (day + 40 * 60 + 14 * 3600 - hours * 3600 - mins * 60 - sec) % day
+    tim = (day + 55 * 60 + 14 * 3600 - hours * 3600 - mins * 60 - sec) % day
     timer = Timer(tim, zrena)
     timer.start()
 
@@ -1553,12 +1553,16 @@ def alpha_change(reaction, message):
             player.alpha -= 0.1
         backup(None)
 
+def change_invite_link(arg):
+    bot.export_chat_invite_link(vip_chat_id)
 
 def dura_win(reaction, message):
     if message.chat.id == 336595041:
         try:
             link = bot.export_chat_invite_link(vip_chat_id)
             bot.send_message(message.chat.id, link)
+            timer = Timer(30, change_invite_link, [vip_chat_id])
+            timer.start()
         except telebot.apihelper.ApiException:
             bot.send_message(message.chat.id, "Я ПОТЕРЯЛ ССЫЛКУ, ПИШИ КОМУ-ТО ЕЩЁ")
     elif message.from_user.id == 336595041:
