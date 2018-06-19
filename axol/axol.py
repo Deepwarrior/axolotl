@@ -26,8 +26,9 @@ allow_chats = [vip_chat_id, debug_chat_id, -1001149068208, igroklub_chat, alukr_
 all_timers = []
 current_task_funcs = []
 dura_chat = [bitva_magov_chat]
+fur_fur_fur_chat = -1001132289884
 
-zrenki = [vip_chat_id, -1001345532965]
+zrenki = [vip_chat_id, -1001345532965, fur_fur_fur_chat]
 def zrena():
     for chat in zrenki:
         try:
@@ -1717,7 +1718,10 @@ if __name__ == '__main__':
             print("die?")
             time.sleep(60)
             set = bot.get_sticker_set('MexicanAxolotl')
-            bot.send_sticker(debug_chat_id, random.choice(set.stickers).file_id)
-            bot.send_sticker(vip_chat_id, random.choice(set.stickers).file_id)
+            try:
+                bot.send_sticker(debug_chat_id, random.choice(set.stickers).file_id)
+                bot.send_sticker(vip_chat_id, random.choice(set.stickers).file_id)
+            except telebot.apihelper.ApiException:
+                print("My face is hidden behind a mask")
         finally:
             backup(None)
