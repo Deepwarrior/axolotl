@@ -1687,7 +1687,7 @@ def message_parsing(message):
     player.last_mess = time.time()
 
 
-@bot.message_handler(content_types=["voice"])
+#@bot.message_handler(content_types=["voice"])
 def voice_parsing(message):
     if message.chat.id == debug_chat_id:
         bot.send_message(message.chat.id, '\'' + message.voice.file_id + '\'', reply_to_message_id=message.message_id)
