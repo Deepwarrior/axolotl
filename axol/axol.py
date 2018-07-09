@@ -11,7 +11,7 @@ import json
 bot = telebot.TeleBot(str(os.environ['TOKEN']))
 active_players = []
 
-vip_chat_id = -1001090074308
+vip_chat_id = -1001145739506
 debug_chat_id = -1001107497089
 
 def jsonDefault(object):
@@ -88,7 +88,7 @@ def task_send(message):
             if time.time() -  player.last_task_time < config.seconds_in_day:
                 bot.send_message(message.chat.id, "НОВОЕ ЗАДАНИЕ БУДЕТ НЕСКОРО!", reply_to_message_id = message.message_id)
             else:
-                f = open('players.json', 'w')
+                f = open('players1.json', 'w')
                 json.dump(active_players, f, default=jsonDefault)
                 f.close()
                 player.task_status = 1
@@ -119,7 +119,7 @@ def donate(message):
 
 @bot.message_handler(commands=["backup"])
 def backup(message):
-    f = open('players.json', 'w')
+    f = open('players1.json', 'w')
     json.dump(active_players, f, default=jsonDefault)
     f.close()
 
@@ -189,8 +189,11 @@ def message_parsing(message):
                         bot.send_message(message.chat.id, "ЗАДАНИЕ ПРОВАЛЕНО!", reply_to_message_id = message.reply_to_message.message_id)
 
 if __name__ == '__main__':
-    f = open('players.json', 'r')
-    active_players[:] = json.load(f, object_hook=obj)
-    f.close()
+    if os.path.isfile('players1.json'):
+        f = open('players1.json', 'r')
+        active_players[:] = json.load(f, object_hook=obj)
+        f.close()
+    else:
+        active_players = []
     random.seed()
     bot.polling(none_stop=True)

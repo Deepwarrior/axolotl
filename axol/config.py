@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-root = ['random_answer', 'Deepwarrior', 'kstera']
+root = ['uhi_official', 'Deepwarrior', 'kstera']
 deep_chat = 150029429 #need to check it on release version
 
 seconds_in_day = 86000
