@@ -131,9 +131,9 @@ def level_up():
     print(level)
     if level <= len(config.questions)-1:
         question = "ДЕРЖИ ЕЩЁ ВОПРОС:\n" + config.questions[level]
-        bot.send_message(debug_chat_id, question)
+        bot.send_message(vip_chat_id, question)
     elif level == len(config.questions):
-        bot.send_message(debug_chat_id, "ТЫ ПОДЕБИЛ")
+        bot.send_message(vip_chat_id, "ТЫ ПОДЕБИЛ")
 
 @bot.message_handler(commands=["NEXT", "next"])
 def next_level(message):
@@ -143,15 +143,7 @@ def next_level(message):
 @bot.message_handler(commands=["no", "NO"])
 def send_fuck(message):
     if message.from_user.username in config.root:
-        bot.send_sticker(debug_chat_id, random.choice(config.fuck_list))
-
-@bot.message_handler(content_types=["text"])
-def message_parsing_to_bday_game(message):
-    if message.chat.id == debug_chat_id:
-        text = message.text.upper()
-        if level < len(config.questions)-1:
-            if text == config.answers[level]:
-                level_up()
+        bot.send_sticker(vip_chat_id, random.choice(config.fuck_list))
 
 @bot.message_handler(content_types=["sticker"])
 def sticker_parsing(message):
@@ -217,6 +209,13 @@ def message_parsing(message):
                     if player.task_status == 1:
                         player.task_status = 2
                         bot.send_message(message.chat.id, "ЗАДАНИЕ ПРОВАЛЕНО!", reply_to_message_id = message.reply_to_message.message_id)
+
+    if message.chat.id == vip_chat_id:
+        text = message.text.upper()
+        global level
+        if level < len(config.questions)-1:
+            if text == config.answers[level]:
+                level_up()
 
 if __name__ == '__main__':
     if os.path.isfile('players1.json'):
