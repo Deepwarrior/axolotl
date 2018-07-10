@@ -123,6 +123,28 @@ def backup(message):
     json.dump(active_players, f, default=jsonDefault)
     f.close()
 
+#CHANGE CHAT IN LEVEL_UP(), NO() AND message_parsing_to_bday_game(message)!!1
+level = -1
+def level_up():
+    global level
+    level += 1
+    print(level)
+    if level <= len(config.questions)-1:
+        question = "ДЕРЖИ ЕЩЁ ВОПРОС:\n" + config.questions[level]
+        bot.send_message(vip_chat_id, question)
+    elif level == len(config.questions):
+        bot.send_message(vip_chat_id, "ТЫ ПОДЕБИЛ")
+
+@bot.message_handler(commands=["NEXT", "next"])
+def next_level(message):
+    if message.from_user.username in config.root:
+        level_up()
+
+@bot.message_handler(commands=["no", "NO"])
+def send_fuck(message):
+    if message.from_user.username in config.root:
+        bot.send_sticker(vip_chat_id, random.choice(config.fuck_list))
+
 @bot.message_handler(content_types=["sticker"])
 def sticker_parsing(message):
     for w in active_players[:]:
@@ -187,6 +209,13 @@ def message_parsing(message):
                     if player.task_status == 1:
                         player.task_status = 2
                         bot.send_message(message.chat.id, "ЗАДАНИЕ ПРОВАЛЕНО!", reply_to_message_id = message.reply_to_message.message_id)
+
+    if message.chat.id == vip_chat_id:
+        text = message.text.upper()
+        global level
+        if level < len(config.questions)-1:
+            if text == config.answers[level]:
+                level_up()
 
 if __name__ == '__main__':
     if os.path.isfile('players1.json'):
