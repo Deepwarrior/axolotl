@@ -133,7 +133,7 @@ def level_up():
     level += 1
     print(level)
     if level <= len(config.questions)-1:
-        question = "ДЕРЖИ ЕЩЁ ВОПРОС:\n" + config.questions[level]
+        question = "ДЕРЖИ ВОПРОС:\n" + config.questions[level]
         bot.send_message(vip_chat_id, question)
     elif level == len(config.questions):
         bot.send_message(vip_chat_id, "ТЫ ПОДЕБИЛ")
@@ -236,7 +236,7 @@ def message_parsing(message):
                 level_up()
 
 if __name__ == '__main__':
-    f = open('players.json', 'r')
+    f = open('players1.json', 'r')
     templist = json.load(f)
     for x in templist:
         active_players.append(players.Player(**x))
