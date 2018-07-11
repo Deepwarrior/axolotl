@@ -7,6 +7,9 @@ import players
 import tasks
 import time
 import json
+import socket
+import urllib3
+from requests.exceptions import ReadTimeout
 
 bot = telebot.TeleBot(str(os.environ['TOKEN']))
 active_players = []
@@ -145,6 +148,21 @@ def send_fuck(message):
     if message.from_user.username in config.root:
         bot.send_sticker(vip_chat_id, random.choice(config.fuck_list))
 
+@bot.message_handler(commands=["level", "LEVEL"])
+def to_level(message):
+    text = str(message.text[7:])
+    try:
+        num = int(text)
+        global level
+        level = num-1
+        if num <= len(config.questions)-1:
+            bot.send_message(debug_chat_id, "ЕСЛИ НАЖАТЬ НЕКСТ, ТО В ЧАТ ОТПРАВИТСЯ СЛЕДУЮЩЕЕ ЗАДАНИЕ:\n" +
+                             config.questions[level])
+        else:
+            bot.send_message(debug_chat_id, "ЗАДАНИЙ БОЛЬШЕ НЕТ")
+    except telebot.apihelper.ApiException:
+        bot.send_message(debug_chat_id, "ПЕРЕДЕВЫВАЙ")
+
 @bot.message_handler(content_types=["sticker"])
 def sticker_parsing(message):
     for w in active_players[:]:
@@ -218,11 +236,24 @@ def message_parsing(message):
                 level_up()
 
 if __name__ == '__main__':
-    if os.path.isfile('players1.json'):
-        f = open('players1.json', 'r')
-        active_players[:] = json.load(f, object_hook=obj)
-        f.close()
-    else:
-        active_players = []
+    f = open('players1.json', 'r')
+    templist = json.load(f)
+    for x in templist:
+        active_players.append(players.Player(**x))
+    f.close()
     random.seed()
-    bot.polling(none_stop=True)
+    while True:
+        try:
+            bot.polling(none_stop=True)
+        except (ReadTimeout, socket.timeout, urllib3.exceptions.ReadTimeoutError):
+            print("die?")
+            time.sleep(60)
+            set = bot.get_sticker_set('MexicanAxolotl')
+            try:
+                bot.send_sticker(debug_chat_id, random.choice(set.stickers).file_id)
+            except telebot.apihelper.ApiException:
+                print("My face is hidden behind a mask")
+            except (ReadTimeout, socket.timeout, urllib3.exceptions.ReadTimeoutError):
+                print("My face is hidden behind a mask. Elon Mask.")
+        finally:
+            backup(None)
