@@ -236,11 +236,12 @@ def message_parsing(message):
                 level_up()
 
 if __name__ == '__main__':
-    f = open('players1.json', 'r')
-    templist = json.load(f)
-    for x in templist:
-        active_players.append(players.Player(**x))
-    f.close()
+    if os.path.isfile('players1.json'):
+        f = open('players1.json', 'r')
+        active_players[:] = json.load(f, object_hook=obj)
+        f.close()
+    else:
+        active_players = []
     random.seed()
     while True:
         try:
