@@ -157,7 +157,7 @@ def to_level(message):
         level = num-1
         if num <= len(config.questions)-1:
             bot.send_message(debug_chat_id, "ЕСЛИ НАЖАТЬ НЕКСТ, ТО В ЧАТ ОТПРАВИТСЯ СЛЕДУЮЩЕЕ ЗАДАНИЕ:\n" +
-                             config.questions[level])
+                             config.questions[level+1])
         else:
             bot.send_message(debug_chat_id, "ЗАДАНИЙ БОЛЬШЕ НЕТ")
     except telebot.apihelper.ApiException:
