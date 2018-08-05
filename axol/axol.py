@@ -1693,6 +1693,7 @@ def to_level(message):
     except telebot.apihelper.ApiException:
         bot.send_message(debug_chat_id, "ПЕРЕДЕВЫВАЙ")
 
+
 @bot.message_handler(content_types=["sticker"])
 def sticker_parsing(message):
     notify(message)
@@ -1724,6 +1725,13 @@ def message_parsing(message):
     task_check(message)
     player = findplayer(message.from_user)
     player.last_mess = time.time()
+    
+    if message.chat.id == vip_chat_id:
+        text = message.text.upper()
+        global level
+        if level < len(config.questions) - 1:
+            if text == config.answers[level]:
+                level_up()
 
 
 @bot.message_handler(content_types=["voice"])
@@ -1737,13 +1745,6 @@ def doc_parsing(message):
     if message.chat.id == debug_chat_id:
         bot.send_message(message.chat.id, '\'' + message.document.file_id + '\'', reply_to_message_id=message.message_id)
 
-
-    if message.chat.id == vip_chat_id:
-        text = message.text.upper()
-        global level
-        if level < len(config.questions)-1:
-            if text == config.answers[level]:
-                level_up()
 
 if __name__ == '__main__':
     f = open('players.json', 'r')
