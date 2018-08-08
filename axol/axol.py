@@ -745,9 +745,16 @@ def kill(message):
                     player.has_a_shield = False
                     winner_check = True
                 else:
-                    for chat in dura_chat:
-                        bot.send_message(chat, killer +
-                                         " УРОНИЛ ВЕРХОВНУЮ СТРЕЛУ МАГИИ И ПОТЕРЯЛ ЕЁ, АЗАЗА.")
+                    if chance == 1:
+                        for chat in dura_chat:
+                            bot.send_message(chat, killer +
+                                             " УРОНИЛ ВЕРХОВНУЮ СТРЕЛУ МАГИИ И ПОТЕРЯЛ ЕЁ, АЗАЗА.")
+                    else:
+                        for chat in dura_chat:
+                            bot.send_message(chat, killer +
+                                             " ДЕЛАЕТ ТАК:")
+                            bot.send_document(chat, 'CgADAgADaQEAAtmjWUtJal60t9pcOwI')
+
                     player.dura_status = 0
                     player.can_get_a_shield = True
                     return
@@ -858,7 +865,12 @@ def dura_reg(message):
                 bot.send_message(message.chat.id, 'ТЫ НЕ ДУРА, ТЫ ТОРМОЗ.', reply_to_message_id=message.message_id)
                 return
             player.isdura = True
-            bot.send_message(message.chat.id, "ДОРОГИ НАЗАД НЕ БУДЕТ, ТЫ В КУРСЕ?")
+            bot.send_message(message.chat.id, random.choice(["ДОРОГИ НАЗАД НЕ БУДЕТ, ТЫ В КУРСЕ?",
+                                                             "НАДЕЮСЬ, ТЫ КАК СЛЕДУЕТ ПРОКАЧАЛ МЕТКОСТЬ.",
+                                                             "ОТЛИЧНО! ТЕПЕРЬ ЖДИ НАЧАЛА ИГРЫ."]))
+    else:
+        bot.send_message(message.chat.id, 'ТЫ СОБРАЛСЯ РЕГАТЬСЯ У ВСЕХ НА ВИДУ? ГО КО МНЕ В ЛИЧКУ ;)',
+                         reply_to_message_id=message.message_id)
 
 
 def dura_approve(reaction, message):
@@ -904,8 +916,7 @@ def get_dura_nums(message):
                 if player.user.last_name:
                     answer += str(player.user.last_name) + '\t'
                 if player.user.username:
-                    answer += '@' + str(player.user.username) + '.\t'
-                answer += "("+str(player.dura_num)+")"+'\n'
+                    answer += '@' + str(player.user.username) + '.\n'
         if does_someone_participate:
             bot.send_message(message.chat.id, answer)
         else:
@@ -949,6 +960,15 @@ def clean_dura_list(message):
         player.can_get_a_shield = True
         player.has_a_shield = False
 
+def random_task():
+    task = ''
+    task += "ТЫ " + random.choice(config.dura_who) + ". "
+    task += random.choice(config.dura_do) + " "
+    task += random.choice(config.dura_what) + " "
+    task += random.choice(config.dura_how) + "."
+
+    return task
+
 
 @bot.message_handler(commands=["dura_task"])
 def get_dura_task(message):
@@ -967,11 +987,7 @@ def get_dura_task(message):
                 bot.send_sticker(message.chat.id, sticker)
             except telebot.apihelper.ApiException:
                 print("STICKER WAS NOT SEND", sticker)
-            task = ''
-            task += "ТЫ " + random.choice(config.dura_who) + ". "
-            task += random.choice(config.dura_do) + " "
-            task += random.choice(config.dura_what) + " "
-            task += random.choice(config.dura_how) + "."
+            task = random_task()
             bot.send_message(message.chat.id, task)
             player.dura_task = task
         if player.dura_status == 2:
