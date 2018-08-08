@@ -60,7 +60,7 @@ reactions = [
     [['КОГО?', 'КОГО'], [], 0, ["МИРАКЛЮ"], []],
     [["МИРАКЛЮ", "МИРАКЛЮ."], [], 0, ["КОГО?"], []],
     [['D:', 'ВЖ'], [], 0, ['/UTYUG'], ['CAADAgADAQADjW7LE45SqDkRKtyzAg', 'CAADAgADGwADsjRGHuBFiQgG41R0Ag',
-                                       'CAADAgADjAADsjRGHrkIcAsCdzOMAg', 'CAADAgADmAADsjRGHtmnGfSSrTedAg']],
+                                       'CAADAgADjAADsjRGHrkIcAsCdzOMAg']],
     [[], ['CAADAgADAQADjW7LE45SqDkRKtyzAg'], undo_chat, ["УНДЮЖОЧЕК!"], ["CAADAgADMgADg8cnEWp3ie4jNHg-Ag"]],
     [['D: D: D:', 'ВЖ ВЖ ВЖ'], [], 0, [], ['CAADAgADAgADjW7LE_v50VPsaKSvAg']],
     [[], dlinnohead, cifr_chat, ['СПАСИБО ЗА ДЛИННОКОТА, СЕРЁЖА!', '', ''],
@@ -491,8 +491,7 @@ fuck_list = [
         'CAADAgADSgAD-Aq8Al50paCcuOcVAg', 'CAADAgADVwAD4aRlBQ66H46naPqlAg', 'CAADAgAD0gEAAjwDWRXEF8DRoSG6zgI',
         'CAADAgADfQEAAjwDWRXJ5c_2lN2_SwI', 'CAADAgADpgMAAs7Y6AsBGW7oU-wJAwI', 'CAADAQAD-gADru5-BSTq6hwYOcqjAg',
         'CAADAgADggEAAonq5QfEW2_6yo1h0AI', 'CAADAgADHgUAAmvEygoUWHovvcjG4gI', 'CAADAgADfwMAAulVBRjxY2aaFwTyVwI',
-        'CAADAgADFAEAAu7EoQoCbdLGMXpJkAI', 'CAADAgADnwADsjRGHk3E17jRmhkDAg', 'CAADAgADiAUAApb6EgUmJA3lDX-IQAI',
-        'CAADAgADZAEAAiyLDwAB8t_s5Cm5D_cC', 'CAADAgADVAEAAiyLDwAB9GkS4z-PAVMC'
+        'CAADAgADFAEAAu7EoQoCbdLGMXpJkAI', 'CAADAgADnwADsjRGHk3E17jRmhkDAg', 'CAADAgADiAUAApb6EgUmJA3lDX-IQAI'
             ]
 
 questions = [
