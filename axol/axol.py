@@ -92,12 +92,15 @@ def deep_check(message, player, data):
         if len(word[:i+1]) == 1:
             continue
 
-        if message.from_user.id != player.user.id and word[0] == '/' and word[:i+1] not in data[0]:
+        if message.from_user.id != player.user.id and word[0] == '/' \
+                and word[:i+1] not in data[0]:
             data[0].append(word[:i+1])
 
-        if message.from_user.id == player.user.id and word[0] == '/' and word[:i+1] in data[0] and word[:i+1] not in data[1]:
+        if message.from_user.id == player.user.id and word[0] == '/' \
+                and word[:i+1] in data[0] and word[:i+1] not in data[1]:
             data[1].append(word[:i+1])
-    if len(data[0]) == len(data[1]) and message.message_id - player.last_task_mssg > 300:
+    if len(data[0]) == len(data[1]) and \
+        message.message_id - player.taskset.get_task_mess() > 300:
         return "+"
 
 
@@ -109,7 +112,7 @@ def gdvll_check(message, player, data):
     for char in glsn:
         if char in text:
             return "-"
-    if time.time() - player.last_task_time > 3600 * 3:
+    if player.taskset.get_task_duration() > 3600 * 3:
         return "+"
 
 
@@ -129,7 +132,7 @@ def iioo_check(message, player, data):
         else:
             counter = 0
 
-    if time.time() - player.last_task_time > 3600 * 3:
+    if player.taskset.get_task_duration() > 3600 * 3:
         return "+"
 
 
@@ -144,6 +147,8 @@ def tribbl_check(message, player, data):
         for char in word[1:]:
             if char.isupper():
                 return "-"
+    if player.taskset.get_task_duration() > 3600 * 3:
+        return "+"
 
 
 def liira_check(message, player, data):
@@ -163,7 +168,7 @@ def super_check(message, player, data):
             counter = False
     if counter:
         return "-"
-    if time.time() - player.last_task_time > 3600 * 3:
+    if player.taskset.get_task_duration() > 3600 * 3:
         return "+"
 
 
@@ -171,24 +176,31 @@ def bumaga_check(message, player, data):
     if message.from_user.id != player.user.id or not message.text or not message.reply_to_message:
         return
     player = findplayer(message.reply_to_message.from_user)
-    if "ПОБЕЖДАЮ" in message.text.upper() and 20 in player.task_id:
-        return "+"
+    if "ПОБЕЖДАЮ" in message.text.upper():
+        for task in player.taskset.tasks:
+            if 20 in task.id and task.type == 'normal':
+                return "+"
 
 
 def kamen_check(message, player, data):
     if message.from_user.id != player.user.id or not message.text or not message.reply_to_message:
         return
     player = findplayer(message.reply_to_message.from_user)
-    if "ПОБЕЖДАЮ" in message.text.upper() and 21 in player.task_id:
-        return "+"
+    if "ПОБЕЖДАЮ" in message.text.upper():
+        for task in player.taskset.tasks:
+            if 21 in task.id and task.type == 'normal':
+                return "+"
 
 
 def nozhn_check(message, player, data):
     if message.from_user.id != player.user.id or not message.text or not message.reply_to_message:
         return
     player = findplayer(message.reply_to_message.from_user)
-    if "ПОБЕЖДАЮ" in message.text.upper() and 19 in player.task_id:
-        return "+"
+    if "ПОБЕЖДАЮ" in message.text.upper():
+        for task in player.taskset.tasks:
+            # У МИШИ НЕ 19
+            if 19 in task.id and task.type == 'normal':
+                return "+"
 
 
 def fylhtq_check(message, player, data):
@@ -199,7 +211,7 @@ def fylhtq_check(message, player, data):
     for char in kirill:
         if char in text:
             return "-"
-    if time.time() - player.last_task_time > 3600 * 3:
+    if player.taskset.get_task_duration() > 3600 * 3:
         return "+"
 
 
@@ -219,7 +231,7 @@ def fober_check(message, player, data):
     else:
         data[0] = 0.0
 
-    if time.time() - player.last_task_time > 3600 * 6:
+    if player.taskset.get_task_duration() > 3600 * 6:
         return "+"
 
 
@@ -229,7 +241,7 @@ def mozg_check(message, player, data):
     for i in range(len(message.text)):
         if message.text[i].isalpha() and len(message.text) > i + 1 and message.text[i+1] != ' ':
             return "-"
-    if time.time() - player.last_task_time > 3600 * 3:
+    if player.taskset.get_task_duration() > 3600 * 3:
         return "+"
 
 
@@ -257,7 +269,7 @@ def malefika_check(message, player, data):
 def katissa_check(message, player, data):
     if message.from_user.id == player.user.id:
         return "-"
-    if time.time() - player.last_task_time > 3600 * 6:
+    if player.taskset.get_task_duration() > 3600 * 6:
         return "+"
 
 
@@ -267,7 +279,7 @@ def patricia_check(message, player, data):
     words = message.text.split()
     if len(words) < 20:
         return "-"
-    if time.time() - player.last_task_time > 3600 * 3:
+    if player.taskset.get_task_duration() > 3600 * 3:
         return "+"
 
 
@@ -287,7 +299,7 @@ def zoloto_check(message, player, data):
         return
     if not message.sticker:
         return "-"
-    if time.time() - player.last_task_time > 3600 * 6:
+    if player.taskset.get_task_duration() > 3600 * 6:
         return "+"
 
 task_funcs = {"deep_check": deep_check, "gdvll_check": gdvll_check, "iioo_check": iioo_check,
@@ -371,9 +383,12 @@ def axol_igrovoice(message):
 def axol_voice(message):
     if message.from_user.username in config.root:
         text = str(message.text[6:])
-        if text:
+        mess = text.split(' ', 1)
+        try:
+            chat = int(mess[0])
+            bot.send_message(chat, mess[1])
+        except (ValueError, telebot.apihelper.ApiException):
             bot.send_message(vip_chat_id, text)
-            logging(message)
 
 
 @bot.message_handler(commands=["SAVE", "save"])
@@ -386,17 +401,21 @@ def save(message):
 @bot.message_handler(commands=["fwd", "FWD"])
 def fwd(message):
     if message.from_user.username in config.root and message.reply_to_message:
-        bot.forward_message(vip_chat_id, message.chat.id, message.reply_to_message.message_id)
-        logging(message)
+        text = str(message.text[5:])
+        try:
+            chat = int(text)
+            bot.forward_message(chat, message.chat.id, message.reply_to_message.message_id)
+        except (ValueError, telebot.apihelper.ApiException):
+            bot.forward_message(vip_chat_id, message.chat.id, message.reply_to_message.message_id)
+            logging(message)
 
 
 @bot.message_handler(commands=["clean"])
 def clean(message):
     if message.from_user.username in config.root:
         for player in active_players:
-            if time.time() - player.last_task_time > config.seconds_in_day * 7:
-                player.task_status = 0
-                player.task_id = []
+            if player.taskset.get_task_duration() > config.seconds_in_day * 7:
+                player.taskset.clean()
 
 
 @bot.message_handler(commands=["long"])
@@ -1046,7 +1065,7 @@ def pozor(message):
     i = 1
 
     for player in active_players:
-        if time.time() - player.last_task_time > 3600 * 500:
+        if player.taskset.get_task_duration() > 3600 * 500:
             try:
                 user = bot.get_chat_member(message.chat.id, player.user.id)
             except telebot.apihelper.ApiException:
