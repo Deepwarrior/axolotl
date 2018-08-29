@@ -5,7 +5,7 @@ from argparse import Namespace
 import task
 
 class Player:
-    def __init__(self, user=None, task_status=0, last_task_time=0, last_task_mssg=0, task_completed=0, task=None,
+    def __init__(self, user=None, task_status=0, last_task_time=0, last_task_mssg=0, task_completed=0,
                  task_id=[], antitask_id=-1, informed=False, mess_from_bot=False, mess_sended=False, alpha=0.0,
                  new_year=False, ng_task_id=-1, last_mess=0,
                  islove=False, love_task=None, pair=None, gnome_status=-1, message=None,
@@ -29,7 +29,7 @@ class Player:
         self.can_get_a_shield = can_get_a_shield
         self.dura_task = dura_task
         self.dura_started = dura_started
-        self.taskset = taskset
+        self.taskset = task.TaskSet(taskset) if taskset else task.TaskSet()
 
 
 def to_string(self):
