@@ -2,12 +2,15 @@ import config
 from argparse import Namespace
 import time
 import random
+import telebot
 
 class TaskSet:
     def __init__(self, tasks=[], modifier=-1, message=None, status=0):
         self.tasks = [Task(**t) for t in tasks] if tasks else []
         self.modifier = modifier
         self.message = Namespace(**message) if message else None
+        if message:
+            self.message.chat = Namespace(**self.message.chat)
         self.status = status
 
     def get_task_duration(self):
