@@ -29,7 +29,7 @@ class Player:
         self.can_get_a_shield = can_get_a_shield
         self.dura_task = dura_task
         self.dura_started = dura_started
-        self.taskset = task.TaskSet(taskset) if taskset else task.TaskSet()
+        self.taskset = task.TaskSet(**taskset) if taskset else task.TaskSet()
 
 
 def to_string(self):

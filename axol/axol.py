@@ -1176,8 +1176,7 @@ def get_task(message):
                          reply_to_message_id=message.message_id)
         return
 
-    player.task_status = 1
-    player.last_task_time = time.time()
+    player.taskset.status = 1
     player.taskset.message = message
 
     rand = random.randint(1, 500)

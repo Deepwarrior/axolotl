@@ -5,7 +5,7 @@ import random
 
 class TaskSet:
     def __init__(self, tasks=[], modifier=-1, message=None, status=0):
-        self.tasks = tasks
+        self.tasks = [Task(**t) for t in tasks] if tasks else []
         self.modifier = modifier
         self.message = Namespace(**message) if message else None
         self.status = status
@@ -47,7 +47,7 @@ class Task:
             return config.love_tasks
 
     def to_text(self):
-        return self.task_list()[self.id[1]]
+        return self.task_list()[self.id][1]
 
     def full_info(self):
         return self.task_list()[self.id]
