@@ -32,18 +32,18 @@ class TaskSet:
 
 class Task:
     def __init__(self, task_type, required, id=-1):
-        self.type = task_type
+        self.task_type = task_type
         self.id = id if id != -1 else random.randint(0, len(self.task_list()) - 1)
         self.required = required
 
     def task_list(self):
-        if self.type == 'normal':
+        if self.task_type == 'normal':
             return config.tasks
-        elif self.type == 'black':
+        elif self.task_type == 'black':
             return config.black_tasks
-        elif self.type == 'ng':
+        elif self.task_type == 'ng':
             return config.ng_tasks
-        elif self.type == 'love':
+        elif self.task_type == 'love':
             return config.love_tasks
 
     def to_text(self):
