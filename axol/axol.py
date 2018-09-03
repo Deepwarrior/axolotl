@@ -766,9 +766,16 @@ def kill(message):
                     player.has_a_shield = False
                     winner_check = True
                 else:
-                    for chat in dura_chat:
-                        bot.send_message(chat, killer +
-                                         " УРОНИЛ ВЕРХОВНУЮ СТРЕЛУ МАГИИ И ПОТЕРЯЛ ЕЁ, АЗАЗА.")
+                    if chance == 1:
+                        for chat in dura_chat:
+                            bot.send_message(chat, killer +
+                                             " УРОНИЛ ВЕРХОВНУЮ СТРЕЛУ МАГИИ И ПОТЕРЯЛ ЕЁ, АЗАЗА.")
+                    else:
+                        for chat in dura_chat:
+                            bot.send_message(chat, killer +
+                                             " ДЕЛАЕТ ТАК:")
+                            bot.send_document(chat, 'CgADAgADaQEAAtmjWUtJal60t9pcOwI')
+
                     player.dura_status = 0
                     player.can_get_a_shield = True
                     return
@@ -879,7 +886,12 @@ def dura_reg(message):
                 bot.send_message(message.chat.id, 'ТЫ НЕ ДУРА, ТЫ ТОРМОЗ.', reply_to_message_id=message.message_id)
                 return
             player.isdura = True
-            bot.send_message(message.chat.id, "ДОРОГИ НАЗАД НЕ БУДЕТ, ТЫ В КУРСЕ?")
+            bot.send_message(message.chat.id, random.choice(["ДОРОГИ НАЗАД НЕ БУДЕТ, ТЫ В КУРСЕ?",
+                                                             "НАДЕЮСЬ, ТЫ КАК СЛЕДУЕТ ПРОКАЧАЛ МЕТКОСТЬ.",
+                                                             "ОТЛИЧНО! ТЕПЕРЬ ЖДИ НАЧАЛА ИГРЫ."]))
+    else:
+        bot.send_message(message.chat.id, 'ТЫ СОБРАЛСЯ РЕГАТЬСЯ У ВСЕХ НА ВИДУ? ГО КО МНЕ В ЛИЧКУ ;)',
+                         reply_to_message_id=message.message_id)
 
 
 def dura_approve(reaction, message):
@@ -925,8 +937,7 @@ def get_dura_nums(message):
                 if player.user.last_name:
                     answer += str(player.user.last_name) + '\t'
                 if player.user.username:
-                    answer += '@' + str(player.user.username) + '.\t'
-                answer += "("+str(player.dura_num)+")"+'\n'
+                    answer += '@' + str(player.user.username) + '.\n'
         if does_someone_participate:
             bot.send_message(message.chat.id, answer)
         else:
@@ -970,6 +981,15 @@ def clean_dura_list(message):
         player.can_get_a_shield = True
         player.has_a_shield = False
 
+def random_task():
+    task = ''
+    task += "ТЫ " + random.choice(config.dura_who) + ". "
+    task += random.choice(config.dura_do) + " "
+    task += random.choice(config.dura_what) + " "
+    task += random.choice(config.dura_how) + "."
+
+    return task
+
 
 @bot.message_handler(commands=["dura_task"])
 def get_dura_task(message):
@@ -988,11 +1008,7 @@ def get_dura_task(message):
                 bot.send_sticker(message.chat.id, sticker)
             except telebot.apihelper.ApiException:
                 print("STICKER WAS NOT SEND", sticker)
-            task = ''
-            task += "ТЫ " + random.choice(config.dura_who) + ". "
-            task += random.choice(config.dura_do) + " "
-            task += random.choice(config.dura_what) + " "
-            task += random.choice(config.dura_how) + "."
+            task = random_task()
             bot.send_message(message.chat.id, task)
             player.dura_task = task
         if player.dura_status == 2:
@@ -1693,6 +1709,45 @@ def task_check(message):
             current_task_funcs.remove(func)
             remove_task_check(player, message)
 
+#CHANGE CHAT IN LEVEL_UP(), NO() AND message_parsing_to_bday_game(message)!!1
+level = -1
+def level_up():
+    global level
+    level += 1
+    print(level)
+    if level <= len(config.questions)-1:
+        question = "ДЕРЖИ ВОПРОС:\n" + config.questions[level]
+        bot.send_message(vip_chat_id, question)
+    elif level == len(config.questions):
+        bot.send_message(vip_chat_id, "ТЫ ПОДЕБИЛ")
+
+@bot.message_handler(commands=["NEXT", "next"])
+def next_level(message):
+    if message.from_user.username in config.root:
+        level_up()
+
+@bot.message_handler(commands=["no", "NO"])
+def send_fuck(message):
+    if message.from_user.username in config.root:
+        bot.send_sticker(vip_chat_id, random.choice(config.fuck_list))
+
+@bot.message_handler(commands=["level", "LEVEL"])
+def to_level(message):
+    text = str(message.text[7:])
+    try:
+        num = int(text)
+        global level
+        level = num-1
+        if num <= len(config.questions)-1:
+            bot.send_message(debug_chat_id, "ЕСЛИ НАЖАТЬ НЕКСТ, ТО В ЧАТ ОТПРАВИТСЯ СЛЕДУЮЩЕЕ ЗАДАНИЕ:\n" +
+                             config.questions[level+1])
+        else:
+            bot.send_message(debug_chat_id, "ЗАДАНИЙ БОЛЬШЕ НЕТ")
+    except telebot.apihelper.ApiException:
+        bot.send_message(debug_chat_id, "ПЕРЕДЕВЫВАЙ")
+
+grammar_nazi_dictionary = { "ЭАЛО": "ЭАЛЛО", "ЭА1ЛО": "ЭА2ЛО", "ДЛИННОМОЗГ": "ДЛИНОМОЗГ"}
+
 
 @bot.message_handler(content_types=["sticker"])
 def sticker_parsing(message):
@@ -1727,6 +1782,34 @@ def message_parsing(message):
     task_check(message)
     player = findplayer(message.from_user)
     player.last_mess = time.time()
+    
+    if message.chat.id == vip_chat_id:
+        text = message.text.upper()
+        global level
+        if level < len(config.questions) - 1:
+            if text == config.answers[level]:
+                level_up()
+
+    if message.chat.id == vip_chat_id:
+        text = message.text.upper()
+        rnd = random.randint(0, 4)
+        for word in grammar_nazi_dictionary.keys():
+            if word in text:
+                if not rnd:
+                    try:
+                        bot.restrict_chat_member(message.chat.id, message.from_user.id, 1 * 60 * 60, False, False, False,
+                                                 False)
+                        bot.send_message(message.chat.id, "ПОДУМОЙ НАД СВОИМ ПОВЕДЕНИЕМ.",
+                                         reply_to_message_id=message.message_id)
+                    except telebot.apihelper.ApiException:
+                        bot.send_message(message.chat.id, "ВРОДЕ СО ЗВЁЗДОЧКОЙ, А ТАКОЙ НУБ.",
+                                         reply_to_message_id=message.message_id)
+                else:
+                    str = random.choice(config.grammar_nazi_explanation)
+                    answer = str[0] + grammar_nazi_dictionary[word] + str[1]
+                    bot.send_message(message.chat.id, answer, reply_to_message_id=message.message_id)
+
+
 
 
 #@bot.message_handler(content_types=["voice"])

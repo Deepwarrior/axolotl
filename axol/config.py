@@ -60,7 +60,7 @@ reactions = [
     [['КОГО?', 'КОГО'], [], 0, ["МИРАКЛЮ"], []],
     [["МИРАКЛЮ", "МИРАКЛЮ."], [], 0, ["КОГО?"], []],
     [['D:', 'ВЖ'], [], 0, ['/UTYUG'], ['CAADAgADAQADjW7LE45SqDkRKtyzAg', 'CAADAgADGwADsjRGHuBFiQgG41R0Ag',
-                                       'CAADAgADjAADsjRGHrkIcAsCdzOMAg']],
+                                       'CAADAgADjAADsjRGHrkIcAsCdzOMAg', 'CAADAgADmAADsjRGHtmnGfSSrTedAg']],
     [[], ['CAADAgADAQADjW7LE45SqDkRKtyzAg'], undo_chat, ["УНДЮЖОЧЕК!"], ["CAADAgADMgADg8cnEWp3ie4jNHg-Ag"]],
     [['D: D: D:', 'ВЖ ВЖ ВЖ'], [], 0, [], ['CAADAgADAgADjW7LE_v50VPsaKSvAg']],
     [[], dlinnohead, cifr_chat, ['СПАСИБО ЗА ДЛИННОКОТА, СЕРЁЖА!', '', ''],
@@ -88,7 +88,7 @@ reactions = [
     [['РИННЕКО', 'РИН-НЕ-КО', 'РИННЕКО!', 'РИН-НЕ-КО!'], [], rinneko_chat, [], ['CAADAgADxAADP_vRD-wohLnM0GMRAg']],
     [[], ['CAADAgADKwQAAuce7AWo_pyLoNBvLgI'], 196345058, ['О, НАТАЛИЯ НАЧАЛАСЬ'], []],
     [["ВОУ ВОУ", "ВОУ-ВОУ", "ВОУ ВОУ!", "ВОУ-ВОУ!"], [], 0, [], ['CAADAgAD9wADP_vRD4s-yYzXKDzSAg']],
-    [["ЭАЛО"], [], 0, ["2Л"], []], [["ДЛИННОМОЗГ"], [], 0, ["1Н"], []],
+    [["1Л"], [], 0, ["2Л"], []],
     [["/ТИХО РЖЁТЬ/"], [], osa_chat, ["ГРОМЧЕ!"], []],
     [["/АРЁТ/"], [], osa_chat, [], ['CAADAgADDQADdUTxCP-onsxKIsJqAg']],
 
@@ -484,3 +484,58 @@ pings = [
     ['ПОМОГИТЕ МНЕ ПИНГОВАТЬ ', ', А ТО Я САМ НЕ СПРАВЛЯЮСЬ. АЖ ', ' БЕЗ НАС ЖИВЁТ!'],
     ['', ', СНАЧАЛА ТЫ ПРОВОДИШЬ ', ' ВРЕМЕНИ БЕЗ ЧАТА, А ПОТОМ И В ГОДВИЛЛЬ ИГРАТЬ ПЕРЕСТАНЕШЬ?']
 ]
+
+fuck_list = [
+        'CAADAgADBgEAAnu13QoSNQMabLHvRQI', 'CAADAgADfQADSuYQF0Na2sxDYGZpAg', 'CAADAgADfAADSuYQF-lRxTqOpJTJAg',
+        'CAADAgAD2AADRQt-Djm8BrmNUv9jAg', 'CAADAgADlQADeR3TB_Im_HDSpS97Ag', 'CAADAgADfAcAAlSlcgjkdMMPu9csLAI',
+        'CAADBAADpgADFhjnE7rVP1fQ4k1EAg', 'CAADAgADDgAD9QAB8hVVLwJDNtD1ZAI', 'CAADAgADYwADkostA5e4UgiiGtiNAg',
+        'CAADAgADZgADkostA4V0tCAWSjW_Ag', 'CAADAgADaAADkostA14Oj1YXIhAuAg', 'CAADAgADcgADkostA_0zTSUXrzGkAg',
+        'CAADAgADSgAD-Aq8Al50paCcuOcVAg', 'CAADAgADVwAD4aRlBQ66H46naPqlAg', 'CAADAgAD0gEAAjwDWRXEF8DRoSG6zgI',
+        'CAADAgADfQEAAjwDWRXJ5c_2lN2_SwI', 'CAADAgADpgMAAs7Y6AsBGW7oU-wJAwI', 'CAADAQAD-gADru5-BSTq6hwYOcqjAg',
+        'CAADAgADggEAAonq5QfEW2_6yo1h0AI', 'CAADAgADHgUAAmvEygoUWHovvcjG4gI', 'CAADAgADfwMAAulVBRjxY2aaFwTyVwI',
+        'CAADAgADFAEAAu7EoQoCbdLGMXpJkAI', 'CAADAgADnwADsjRGHk3E17jRmhkDAg', 'CAADAgADiAUAApb6EgUmJA3lDX-IQAI',
+        'CAADAgADZAEAAiyLDwAB8t_s5Cm5D_cC', 'CAADAgADVAEAAiyLDwAB9GkS4z-PAVMC'
+            ]
+
+questions = [
+    "А ЧТО СЛУЧИЛОСЬ-ТО?",
+    'КТО СТАЛ ПЕРВЫМ ПИДОРОМ ДНЯ?',
+    'КАК ЗОВУТ ТЁТУШКУ АКСОЛОТЛЯ?',
+    'ЗАДАНИЕ РИТЕРА РАНЬШЕ БЫЛО ИЗВЕСТНО ПОД ДРУГИМ НИКОМ. КАКИМ ЖЕ?',
+    'ОДНАЖДЫ ДИП ПРОСПОРИЛ ЦЫТРУСУ ЛИМЕРИК. О ЧЁМ БЫЛ СПОР?',
+    'КАК В МУМЫРЯХ ПОЯВИЛОСЬ СОЛНЦЕСТОЯНИЕ?',
+    'ЧТО БЫЛО РАНЬШЕ, БОТ ИЛИ ЗАДАНИЯ?',
+    'ЧТО СКРЫВАЕТСЯ ЗА ТОПОМ САРАСТИ?',
+    'ИЗ-ЗА КОГО ПОЯВИЛИСЬ РАЗНЫЕ ВАРИАНТЫ МОЛОДЦЕВАНИЯ?',
+    'КАКАЯ ФИЧА ТАК И НЕ ЗАРАБОТАЛА, ХОТЯ СУЩЕСТВУЕТ БОЛЬШЕ ГОДА?',
+    'ЧТО ЕЩЁ ЕСТЬ В ДОМИКЕ ЗЕЛЁНОГО АКСОЛОТЛЯ?',
+    'КАКОМУ ШИЗИКУ ПРИНАДЛЕЖИТ ЗНАМЕНИТЫЕ ФРАЗЫ "РАКОНЫ ТАКИЕ ГАДКИЕ" И "ПЕРЛОВКА ОТВРАТИТЕЛЬНА"?',
+    "ЕСЛИ ПРИСМОТРЕТЬСЯ К СЕРДЕЧКУ НА ПАЛОЧКЕ, МОЖНО ЗАМЕТИТЬ АКСОЛОТЛЯ В ТЕЛЬНЯШКЕ. ЧТО ОН ДЕЛАЕТ?",
+    "КАКОЕ НОВОГОДНЕЕ ЗАДАНИЕ ДОСТАЛОСЬ ЭТР И ЧТО ОНА СДЕЛАЛА?"
+            ]
+
+answers = [
+    "АКСОЛОТЛЬ СТАЛ ТАКИМ, КАК ГОД НАЗАД",
+    'ИСКУСАТЕЛЬНИЦА',
+    'САШЕНЬКА',
+    'ЮИ-ЛАЛЛИ',
+    'ДОГАДАЕТСЯ ЛИ КТО-НИБУДЬ, ЧТО ИХ НИКИ -- ЭТО НОВЫЕ КОМАНДЫ АКСОЛОТЛЯ',
+    'В ПРОЦЕССЕ ИГРЫ В КВИЗ',
+    'ТОЛЬКО НУБЫ СЧИТАЮТ, ЧТО БОТ',
+    'ПУСИЧКА',
+    'ШЬЮЗЕН',
+    'ПРИВЕТСТВИЕ НОВЫХ МЕМБЕРОВ',
+    "ДУРНИР",
+    "РЕЛЬС",
+    "ОТКРЫВАЕТ ГЛАЗОМ ПИВНУЮ БУТЫЛКУ",
+    "ПРИГОТОВИТЬ НЕОБЫЧНЫЙ САЛАТ. ЭТР ЕГО ПРИГОТОВИЛА И СЪЕЛА"
+]
+
+grammar_nazi_explanation = [
+    ['ТЫ СОВЕРШИЛ ОШИБКУ В СЛОВЕ "', '", БОЛЬШЕ ТАК НЕ ДЕЛАЙ.'],
+    ['ЧТО ЗА ЖАЛКАЯ ПАРОДИЯ НА СЛОВО "', '"?'],
+    ['ТОЛЬКО НУБЫ ПИШУТ СЛОВО "', '" С ОШИБКАМИ, НЕ УПОДОБЛЯЙСЯ ИМ.'],
+    ['МНЕ НЕ НРАВИТСЯ, КОГДА СЛОВО "', '" ТАК КОВЕРКАЮТ. Я БУДУ ВЫНУЖДЕН ПРИНЯТЬ МЕРЫ, ЕСЛИ ЭТО НЕ РЕКРАТИТСЯ.'],
+    ['ГРАМОТНЫЕ ДЕВОЧКИ И МАЛЬЧИКИ ПИШУТ "', '".'],
+    ['И ВСЁ-ТАКИ "', '"!']
+                           ]
