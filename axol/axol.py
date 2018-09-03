@@ -1832,6 +1832,7 @@ if __name__ == '__main__':
     f.close()
     zrena_timers_init()
     random.seed()
+    print(dir(bot))
 
     # bot.send_message(debug_chat_id, '*CAADAgADMgADsj* _RGHiKRfQaAeEsnAg_', parse_mode="Markdown")
     for chat in allow_chats:
@@ -1842,7 +1843,7 @@ if __name__ == '__main__':
             continue
     while True:
         try:
-            bot.polling(none_stop=True)
+            bot.infinity_polling()
         except (ReadTimeout, socket.timeout, urllib3.exceptions.ReadTimeoutError):
             print("die?")
             time.sleep(60)
