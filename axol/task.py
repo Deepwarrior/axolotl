@@ -32,6 +32,12 @@ class TaskSet:
     def new(self, task_type, req):
         self.tasks.append(Task(task_type, req))
 
+    def check_normal(self):
+        for task in self.tasks:
+            if task.required:
+                return True
+        return False
+
 
 class Task:
     def __init__(self, task_type, required, id=-1):

@@ -34,22 +34,14 @@ class Player:
 
 def to_string(self):
     res = str(self.user.first_name) + ' ' + str(self.user.last_name) + ' @' + str(self.user.username) + '\n'
-    secs = time.time() - self.last_task_time
+    secs = self.taskset.get_task_duration()
     res += 'Time: ' + str(secs // 3600) + 'h ' + str(secs // 60 % 60) + 'm ' + str(secs // 1 % 60) + 's\n'
 
-    if self.task_completed < 100:
-        tasks = config.tasks
-    else:
-        tasks = config.black_tasks
+    for task in self.taskset.tasks:
+        if task.required:
+            res += task.to_text() + '\n'
 
-    if self.task_completed >= 150 and len(self.task_id):
-        res += config.black_tasks[self.task_id[0]][1] + '\n'
-        res += config.tasks[self.task_id[1]][1] + '\n'
-    elif len(self.task_id):
-        for idx in self.task_id:
-            res += tasks[idx][1] + '\n'
-
-    if self.antitask_id != -1:
-        res += config.anti_tasks[self.antitask_id]
+    if self.taskset.modifier != -1:
+        res += config.anti_tasks[self.taskset.modifier] + '\n'
 
     return res

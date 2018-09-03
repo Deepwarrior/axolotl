@@ -10,6 +10,8 @@ import socket
 import urllib3
 from requests.exceptions import ReadTimeout
 from threading import Timer
+import operator
+
 
 bot = telebot.TeleBot(str(os.environ['TOKEN']))
 active_players = []
@@ -1222,11 +1224,12 @@ def get_task(message):
     backup(None)
 
     for task in player.taskset.tasks:
-        task_full = task.full_info()
-        if len(task_full) > 4:
-            current_task_funcs.append(check_func_costruct(player, task_funcs[task_full[4]]))
-        else:
-            current_task_funcs.append(check_func_costruct(player, infinity_check))
+        if task.required:
+            task_full = task.full_info()
+            if len(task_full) > 4:
+                current_task_funcs.append(check_func_costruct(player, task_funcs[task_full[4]]))
+            else:
+                current_task_funcs.append(check_func_costruct(player, infinity_check))
 
 
 # root command. See all players with tasks.
@@ -1234,7 +1237,7 @@ def get_task(message):
 def all_tasks(message):
     if message.from_user.username in config.root:
         for player in active_players:
-            if len(player.task_id) and player.task_status == 1:
+            if player.taskset.check_normal() and player.taskset.status == 1:
                 bot.send_message(message.chat.id, players.to_string(player))
         logging(message)
 
@@ -1270,45 +1273,47 @@ def react(reaction, message):
 def task_rework(reaction, message):
     if message.from_user.username in config.root and message.reply_to_message:
         player = findplayer(message.reply_to_message.from_user)
-        if len(player.task_id):
-            if player.task_status == 0:
-                player.task_status = 1
+        if player.taskset.check_normal():
+            if player.taskset.status == 0:
+                player.taskset.status = 1
                 player.task_completed -= 1
                 bot.send_message(message.chat.id, "НЕ, АДМИНАМ НЕ НРАВИТСЯ")
 
-                if player.task_completed < 100:
-                    tasks = config.tasks
-                else:
-                    tasks = config.black_tasks
-                for task_id in player.task_id:
-                    if len(tasks[task_id]) > 4:
-                        current_task_funcs.append(check_func_costruct(player, task_funcs[tasks[task_id][4]]))
-                    else:
-                        current_task_funcs.append(check_func_costruct(player, infinity_check))
+                for task in player.taskset.tasks:
+                    if task.required:
+                        task_full = task.full_info()
+                        if len(task_full) > 4:
+                            current_task_funcs.append(check_func_costruct(player, task_funcs[task_full[4]]))
+                        else:
+                            current_task_funcs.append(check_func_costruct(player, infinity_check))
+
         logging(message)
+        backup(None)
 
 
 def task_fail(reaction, message):
     if message.reply_to_message and message.from_user.username in config.root:
         player = findplayer(message.reply_to_message.from_user)
-        if player.task_status == 1:
-            player.task_status = 2
+        if player.taskset.status == 1:
+            player.taskset.status = 2
             remove_task_check(player, message)
             bot.send_message(message.chat.id, "ЗАДАНИЕ ПРОВАЛЕНО!",
                              reply_to_message_id=message.reply_to_message.message_id)
             if player.mess_from_bot:
                 bot.send_message(player.user.id, "К СОЖАЛЕНИЮ, ЗАДАНИЕ ПРОВАЛЕНО.")
         logging(message)
+        backup(None)
 
 
 def task_complete(reaction, message):
     if message.reply_to_message and message.from_user.username in config.root:
         logging(message)
         player = findplayer(message.reply_to_message.from_user)
-        if player.task_status == 1:
-            player.task_status = 0
+        if player.taskset.status == 1:
+            player.taskset.status = 0
             remove_task_check(player, message)
             player.task_completed += 1
+            backup(None)
             if player.task_completed == 50:
                 bot.send_message(player.user.id, "АЗАЗА, ТЫ УМИР")
             elif player.task_completed == 100:
@@ -1318,6 +1323,8 @@ def task_complete(reaction, message):
             elif player.task_completed == 200:
                 bot.send_message(player.user.id, "ЧОМУ ТАК ХОЛОДНО МЕНІ\nІ ЩО БОЛИТЬ У ГОЛОВІ\nЯ ДУМАВ ПІСЛЯ СМЕРТІ\n"
                                                  "Я СТАНУ КУПОЮ ЗЕМЛІ")
+            elif player.task_completed == 250:
+                bot.send_sticker(player.user.id, 'CAADAgADCAIAAqEdYEjI2O5iJkD4qQI')
             if player.task_completed % 50 == 0:
                 bot.send_message(message.chat.id, "ЗАДАНИЕ ВЫПОЛНЕНО!\nВСЕГО СДЕЛАНО 50 ЗАДАНИЙ!",
                                  reply_to_message_id=message.reply_to_message.message_id)
@@ -1325,7 +1332,7 @@ def task_complete(reaction, message):
                 bot.send_message(message.chat.id, "ХОТЯЯЯЯ...")
                 time.sleep(1)
                 mess = "АНТИКЛАЦ!\n"
-                for player in range(49):
+                for player in range(48):
                     mess += "АНТИКЛАЦ!\n"
                 bot.send_message(message.chat.id, mess)
                 return
@@ -1354,63 +1361,63 @@ def message_above(reaction, message):
         except telebot.apihelper.ApiException:
             i += 1
 
-secret_santa = [336595041]
-sherif = [347438021]
-
-
-@bot.message_handler(commands=["send_ng_tasks"])
-def send_ng_tasks(message):
-    if message.from_user.id == message.chat.id and message.from_user.username in config.root:
-        for player in active_players:
-            if player.new_year and player.user.id not in secret_santa and player.user.id not in sherif:
-                try:
-                    n = random.randint(0, len(config.ng_tasks) - 1)
-                    task = config.ng_tasks[n]
-                    player.ng_task_id = n
-                    bot.send_sticker(player.user.id, 'CAADAgADJQADsjRGHuRrNOA7RLqJAg')
-                    bot.send_message(player.user.id, task)
-                except telebot.apihelper.ApiException:
-                    continue
-            elif player.user.id in secret_santa:
-                try:
-                    player.ng_task_id = -1
-                    bot.send_sticker(player.user.id, 'CAADAgADJQADsjRGHuRrNOA7RLqJAg')
-                    bot.send_message(player.user.id, "ТЫ ТАЙНЫЙ САНТА. ПОБЕДИШЬ, ЕСЛИ НИКТО НЕ ОТГАДАЕТ ТВОЮ РОЛЬ ДО "
-                                                     "НОВОГО ГОДА.")
-                except telebot.apihelper.ApiException:
-                    continue
-            elif player.user.id in sherif:
-                try:
-                    player.ng_task_id = -2
-                    bot.send_sticker(player.user.id, 'CAADAgADJQADsjRGHuRrNOA7RLqJAg')
-                    bot.send_message(player.user.id,
-                                     "ТЫ ОЛЕНЬ. КТО-ТО ИЗ ВЗЯВШИХ НОВОГОДНЕЕ ЗАДАНИЕ - ТАЙНЫЙ САНТА. ТВОЯ "
-                                     "ЗАДАЧА - ЕГО ОТЫСКАТЬ. У ТЕБЯ ОДНА ПОПЫТКА. ОТВЕТ ПРИСЫЛАТЬ ЧЕРЕЗ В "
-                                     "ЛИЧКУ @Deepwarrior ИЛИ @Uhi_Official.")
-                except telebot.apihelper.ApiException:
-                    continue
-
-
-@bot.message_handler(commands=["all_ng"])
-def all_ng_tasks(message):
-    if message.from_user.id == message.chat.id and message.from_user.username in config.root:
-        spisok = ""
-        for player in active_players:
-            if player.new_year:
-                if player.user.first_name:
-                    spisok += str(player.user.first_name) + '\t'
-                if player.user.last_name:
-                    spisok += str(player.user.last_name) + '\t'
-                if player.user.username:
-                    spisok += '@' + str(player.user.username) + '.\t'
-                if player.user.id not in secret_santa and player.user.id not in sherif:
-                    spisok += config.ng_tasks[player.ng_task_id]
-                elif player.user.id in secret_santa:
-                    spisok += "ТАЙНЫЙ САНТА"
-                elif player.user.id in sherif:
-                    spisok += "ШЕРИФ"
-                spisok += '\n'
-        bot.send_message(message.chat.id, spisok)
+# secret_santa = [336595041]
+# sherif = [347438021]
+# 
+# 
+# @bot.message_handler(commands=["send_ng_tasks"])
+# def send_ng_tasks(message):
+#     if message.from_user.id == message.chat.id and message.from_user.username in config.root:
+#         for player in active_players:
+#             if player.new_year and player.user.id not in secret_santa and player.user.id not in sherif:
+#                 try:
+#                     n = random.randint(0, len(config.ng_tasks) - 1)
+#                     task = config.ng_tasks[n]
+#                     player.ng_task_id = n
+#                     bot.send_sticker(player.user.id, 'CAADAgADJQADsjRGHuRrNOA7RLqJAg')
+#                     bot.send_message(player.user.id, task)
+#                 except telebot.apihelper.ApiException:
+#                     continue
+#             elif player.user.id in secret_santa:
+#                 try:
+#                     player.ng_task_id = -1
+#                     bot.send_sticker(player.user.id, 'CAADAgADJQADsjRGHuRrNOA7RLqJAg')
+#                     bot.send_message(player.user.id, "ТЫ ТАЙНЫЙ САНТА. ПОБЕДИШЬ, ЕСЛИ НИКТО НЕ ОТГАДАЕТ ТВОЮ РОЛЬ ДО "
+#                                                      "НОВОГО ГОДА.")
+#                 except telebot.apihelper.ApiException:
+#                     continue
+#             elif player.user.id in sherif:
+#                 try:
+#                     player.ng_task_id = -2
+#                     bot.send_sticker(player.user.id, 'CAADAgADJQADsjRGHuRrNOA7RLqJAg')
+#                     bot.send_message(player.user.id,
+#                                      "ТЫ ОЛЕНЬ. КТО-ТО ИЗ ВЗЯВШИХ НОВОГОДНЕЕ ЗАДАНИЕ - ТАЙНЫЙ САНТА. ТВОЯ "
+#                                      "ЗАДАЧА - ЕГО ОТЫСКАТЬ. У ТЕБЯ ОДНА ПОПЫТКА. ОТВЕТ ПРИСЫЛАТЬ ЧЕРЕЗ В "
+#                                      "ЛИЧКУ @Deepwarrior ИЛИ @Uhi_Official.")
+#                 except telebot.apihelper.ApiException:
+#                     continue
+# 
+# 
+# @bot.message_handler(commands=["all_ng"])
+# def all_ng_tasks(message):
+#     if message.from_user.id == message.chat.id and message.from_user.username in config.root:
+#         spisok = ""
+#         for player in active_players:
+#             if player.new_year:
+#                 if player.user.first_name:
+#                     spisok += str(player.user.first_name) + '\t'
+#                 if player.user.last_name:
+#                     spisok += str(player.user.last_name) + '\t'
+#                 if player.user.username:
+#                     spisok += '@' + str(player.user.username) + '.\t'
+#                 if player.user.id not in secret_santa and player.user.id not in sherif:
+#                     spisok += config.ng_tasks[player.ng_task_id]
+#                 elif player.user.id in secret_santa:
+#                     spisok += "ТАЙНЫЙ САНТА"
+#                 elif player.user.id in sherif:
+#                     spisok += "ШЕРИФ"
+#                 spisok += '\n'
+#         bot.send_message(message.chat.id, spisok)
 
 
 def task_extra(reaction, message):
@@ -1426,6 +1433,12 @@ def task_extra(reaction, message):
                                              "А ПОКА ТЫ ВЫИГРАЛ СЕКРЕТНЫЙ ДУРНИРНЫЙ СТИКЕР, ИСПОЛЬЗУЙ ЕГО С УМОМ")
             bot.send_sticker(player.user.id, stick)
 
+        if player.task_completed % 50 == 0:
+            player.task_completed -= 1
+            bot.send_message(message.chat.id, "АЗАЗА. НЕТ.",
+                             reply_to_message_id=message.reply_to_message.message_id)
+        backup(None)
+
 
 def anti_task(reaction, message):
     if message.reply_to_message and message.from_user.username in config.root:
@@ -1433,6 +1446,11 @@ def anti_task(reaction, message):
         player = findplayer(message.reply_to_message.from_user)
         player.task_completed -= 1
         bot.send_message(message.chat.id, "ОТМЕНА, ОТМЕНА!", reply_to_message_id=message.reply_to_message.message_id)
+        if player.task_completed % 50 == 49:
+            player.task_completed -= 1
+            bot.send_message(message.chat.id, "АЗАЗА. НЕТ.",
+                             reply_to_message_id=message.reply_to_message.message_id)
+        backup(None)
 
 
 def drig(arg):
@@ -1467,6 +1485,7 @@ def natalka(reaction, message):
         all_timers.append(timer)
     else:
         react(reaction, message)
+    #0⃣1⃣2⃣3⃣4⃣5⃣6⃣7⃣8⃣9⃣🔟
 
 
 def kick_bots(reaction, message):
@@ -1480,9 +1499,15 @@ def kick_bots(reaction, message):
             time.sleep(1)
 
 
+def razbanb(arg):
+    bot.restrict_chat_member(arg[0], arg[1], 0, True, True, True, True)
+
+
 def kick_lyuds(reaction, message):
     try:
-        bot.restrict_chat_member(message.chat.id, message.from_user.id, 2 * 60 * 60, False, False, False, False)
+        bot.restrict_chat_member(message.chat.id, message.from_user.id, 0, False, False, False, False)
+        timer = Timer(10, razbanb, [[message.chat.id, message.from_user.id]])
+        timer.start()
     except telebot.apihelper.ApiException:
         time.sleep(1)
 
@@ -1520,7 +1545,7 @@ def stop_stickers(message):
 def whois(reaction, message):
     if message.reply_to_message and message.from_user.username in config.root:
         player = findplayer(message.reply_to_message.from_user)
-        if len(player.task_id) and player.task_status == 1:
+        if player.taskset.check_normal() and player.taskset.status == 1:
             bot.send_message(message.chat.id, players.to_string(player))
         else:
             bot.send_message(message.chat.id, "ТЫ НИКТО, АЗАЗА")
@@ -1567,8 +1592,10 @@ def alpha_change(reaction, message):
             player.alpha -= 0.1
         backup(None)
 
+
 def change_invite_link(arg):
     bot.export_chat_invite_link(vip_chat_id)
+
 
 def dura_win(reaction, message):
     if message.chat.id == 336595041:
@@ -1688,13 +1715,15 @@ def sticker_parsing(message):
 @bot.message_handler(content_types=["text"])
 def message_parsing(message):
     notify(message)
-    for reaction in config.reactions:
-        if not reaction[2] or message.from_user.id == reaction[2]:
-            if message.text.upper() in reaction[0]:
-                if len(reaction) > 5:
-                    reaction_funcs[reaction[5]](reaction, message)
-                else:
-                    react(reaction, message)
+    for reactions, oper in zip([config.reactions, config.superreactions], [operator.eq, operator.contains]):
+        for reaction in reactions:
+            if not reaction[2] or message.from_user.id == reaction[2]:
+                for text in reaction[0]:
+                    if oper(message.text.upper(), text):
+                        if len(reaction) > 5:
+                            reaction_funcs[reaction[5]](reaction, message)
+                        else:
+                            react(reaction, message)
     task_check(message)
     player = findplayer(message.from_user)
     player.last_mess = time.time()
