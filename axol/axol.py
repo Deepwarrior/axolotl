@@ -180,7 +180,7 @@ def bumaga_check(message, player, data):
     player = findplayer(message.reply_to_message.from_user)
     if "ПОБЕЖДАЮ" in message.text.upper():
         for task in player.taskset.tasks:
-            if 20 in task.id and task.type == 'normal':
+            if 20 == task.id and task.type == 'normal':
                 return "+"
 
 
@@ -190,7 +190,7 @@ def kamen_check(message, player, data):
     player = findplayer(message.reply_to_message.from_user)
     if "ПОБЕЖДАЮ" in message.text.upper():
         for task in player.taskset.tasks:
-            if 21 in task.id and task.type == 'normal':
+            if 21 == task.id and task.type == 'normal':
                 return "+"
 
 
@@ -201,7 +201,7 @@ def nozhn_check(message, player, data):
     if "ПОБЕЖДАЮ" in message.text.upper():
         for task in player.taskset.tasks:
             # У МИШИ НЕ 19
-            if 19 in task.id and task.type == 'normal':
+            if 19 == task.id and task.type == 'normal':
                 return "+"
 
 
@@ -1121,7 +1121,7 @@ def task_status(message):
         if player.task_completed % 100 < 40 and player.task_completed < 200:
             for task in player.taskset.tasks:
                 if task.required:
-                    answer += task.to_text()
+                    answer += task.to_text() + "\n"
         else:
             answer += ")))\n"
         for task in player.taskset.tasks:
