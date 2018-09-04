@@ -1124,7 +1124,8 @@ def task_status(message):
                     answer += task.to_text()
         else:
             answer += ")))\n"
-            for task in player.taskset.tasks:
+        for task in player.taskset.tasks:
+            if task.required:
                 task_full = task.full_info()
                 if task_full[2] * 60 - player.taskset.get_task_duration() // 60 > tm:
                     tm = task_full[2] * 60 - player.taskset.get_task_duration() // 60
@@ -1178,9 +1179,7 @@ def get_task(message):
     player = findplayer(message.from_user)
     if player.taskset.get_task_duration() > config.seconds_in_day:
         player.taskset.status = 0
-        for task in player.taskset.tasks:
-            if task.required:
-                player.taskset.tasks.remove(task)
+        player.taskset.clean()
         remove_task_check(player, message)
     if player.taskset.status == 1:
         bot.send_message(message.chat.id, "ТЫ УЖЕ ЧТО-ТО ДЕЛАЕШЬ!", reply_to_message_id=message.message_id)
@@ -1227,15 +1226,15 @@ def get_task(message):
     if 99 >= player.task_completed >= 70 or player.task_completed >= 150:
         bot.send_message(message.chat.id, "А ВОТ ЕЩЁ ТЕБЕ...")
         give_task(player, 'normal', message.chat.id)
+    if player.task_completed % 100 == 99:
+        give_task(player, 'normal', message.chat.id)
+        give_task(player, 'normal', message.chat.id)
+        bot.send_message(message.chat.id, "АЗАЗА, УДАЧИ")
     if player.task_completed > 200:
         rand = random.randint(0, len(config.anti_tasks) - 1)
         podtask = config.anti_tasks[rand]
         player.taskset.modifier = rand
         bot.send_message(message.chat.id, podtask)
-    if player.task_completed % 100 == 99:
-        give_task(player, 'normal', message.chat.id)
-        give_task(player, 'normal', message.chat.id)
-        bot.send_message(message.chat.id, "АЗАЗА, УДАЧИ")
 
     backup(None)
 
@@ -1832,7 +1831,6 @@ if __name__ == '__main__':
     f.close()
     zrena_timers_init()
     random.seed()
-    print(dir(bot))
 
     # bot.send_message(debug_chat_id, '*CAADAgADMgADsj* _RGHiKRfQaAeEsnAg_', parse_mode="Markdown")
     for chat in allow_chats:
