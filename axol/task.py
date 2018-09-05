@@ -24,7 +24,7 @@ class TaskSet:
         return self.message.message_id
 
     def clean(self):
-        for task in self.tasks:
+        for task in self.tasks[:]:
             if task.required:
                 self.tasks.remove(task)
         self.status = 0
