@@ -1841,7 +1841,7 @@ if __name__ == '__main__':
             continue
     while True:
         try:
-            bot.infinity_polling()
+            bot.polling(none_stop=True)
         except (ReadTimeout, socket.timeout, urllib3.exceptions.ReadTimeoutError):
             print("die?")
             time.sleep(60)
@@ -1853,5 +1853,4 @@ if __name__ == '__main__':
                 print("My face is hidden behind a mask")
             except (ReadTimeout, socket.timeout, urllib3.exceptions.ReadTimeoutError):
                 print("My face is hidden behind a mask. Elon Mask.")
-        finally:
-            backup(None)
+
