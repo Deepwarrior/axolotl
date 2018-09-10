@@ -1841,7 +1841,10 @@ if __name__ == '__main__':
     f.close()
     zrena_timers_init()
     random.seed()
-    rrena_bot.send_message(265419583, "МААААМ, ПОСТАВЬ МНЕ АВАТАРКУ!")
+    try:
+        rrena_bot.send_message(265419583, "МААААМ, ПОСТАВЬ МНЕ АВАТАРКУ!")
+    except telebot.apihelper.ApiException:
+        print("NE MAMKAY")
     # bot.send_message(debug_chat_id, '*CAADAgADMgADsj* _RGHiKRfQaAeEsnAg_', parse_mode="Markdown")
     for chat in allow_chats:
         try:
