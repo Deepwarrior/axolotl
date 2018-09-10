@@ -1764,7 +1764,7 @@ grammar_nazi_dictionary = { "ЭАЛО": "ЭАЛЛО", "ЭА1ЛО": "ЭА2ЛО", 
 def fast_reply(message):
     if message.from_user.username in config.root and last_mess:
         text = message.text[3:]
-        bot.send_sticker(last_mess, text)
+        bot.send_message(last_mess, text)
 
 
 def bot_AI(message):
