@@ -1761,7 +1761,7 @@ grammar_nazi_dictionary = { "ЭАЛО": "ЭАЛЛО", "ЭА1ЛО": "ЭА2ЛО", 
 
 def bot_AI(message):
     if message.from_user.id == message.chat.id:
-        bot.forward_message(spy_chat, message.chat.id, message.reply_to_message.message_id)
+        bot.forward_message(spy_chat, message.chat.id, message.message_id)
         bot.send_message(spy_chat, "/mess " + str(message.from_user.id) + '  ' + message.from_user.first_name)
 
 @bot.message_handler(content_types=["sticker"])
