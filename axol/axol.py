@@ -36,6 +36,7 @@ dura_chat = [bitva_magov_chat]
 fur_fur_fur_chat = -1001132289884
 dlan_chat = -1001172376896
 spy_chat = -1001231436175
+last_mess = 0
 
 zrenki = [vip_chat_id, -1001345532965, fur_fur_fur_chat, dlan_chat]
 def zrena():
@@ -1759,10 +1760,18 @@ def to_level(message):
 grammar_nazi_dictionary = { "ЭАЛО": "ЭАЛЛО", "ЭА1ЛО": "ЭА2ЛО", "ДЛИННОМОЗГ": "ДЛИНОМОЗГ"}
 
 
+@bot.message_handler(commands=["R", "r"])
+def fast_reply(message):
+    if message.from_user.username in config.root and last_mess:
+        text = message.text[3:]
+        bot.send_sticker(last_mess, text)
+
+
 def bot_AI(message):
     if message.from_user.id == message.chat.id:
         bot.forward_message(spy_chat, message.chat.id, message.message_id)
         bot.send_message(spy_chat, "/mess " + str(message.from_user.id) + '  ' + message.from_user.first_name)
+        last_mess = message.from_user.id
 
 @bot.message_handler(content_types=["sticker"])
 def sticker_parsing(message):
