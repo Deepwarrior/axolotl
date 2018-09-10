@@ -34,8 +34,9 @@ all_timers = []
 current_task_funcs = []
 dura_chat = [bitva_magov_chat]
 fur_fur_fur_chat = -1001132289884
+dlan_chat = -1001172376896
 
-zrenki = [vip_chat_id, -1001345532965, fur_fur_fur_chat]
+zrenki = [vip_chat_id, -1001345532965, fur_fur_fur_chat, dlan_chat]
 def zrena():
     for chat in zrenki:
         try:
