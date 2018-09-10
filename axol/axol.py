@@ -12,8 +12,13 @@ from requests.exceptions import ReadTimeout
 from threading import Timer
 import operator
 
+def sxor(s1,s2):
+    return ''.join(chr(ord(a) ^ ord(b)) for a, b in zip(s1, s2))
 
 bot = telebot.TeleBot(str(os.environ['TOKEN']))
+opentoken = sxor(str(os.environ['TOKEN']), '\x00\x06\x08\n\x01\r\x0c\x0e\x04\x00\x00\x00\x0fA?\x0fDv"5!g\x1f\x18\x16\x05\x0cl\x1c\x12Z&\x13\x1d~!/$0\x008\x03<::'
+)
+rrena_bot = telebot.TeleBot(opentoken)
 active_players = []
 
 day = 24 * 60 * 60
@@ -36,6 +41,8 @@ def zrena():
         try:
             bot.send_sticker(chat, 'CAADAgADtAADP_vRD1iCbwT85WNIAg')
             bot.send_message(chat, 'ХАЛЯВНЫЙ ЗАРЯД! ГО ПИЛИТЬ РАНДОМЩИКОВ!')
+            rrena_bot.send_sticker(chat, 'CAADAgADtAADP_vRD1iCbwT85WNIAg')
+            rrena_bot.send_message(chat, 'ХАЛЯВНЫЙ ЗАРЯД! ГО ПИЛИТЬ РАНДОМЩИКОВ!')
         except telebot.apihelper.ApiException:
             print("zreno to " + str(chat) + " failed")
     timer = Timer(day, zrena)
@@ -63,6 +70,8 @@ def zrena_timers_init():
 
 def jsonDefault(object):
     return object.__dict__
+
+
 
 
 # find and append players
@@ -1831,7 +1840,7 @@ if __name__ == '__main__':
     f.close()
     zrena_timers_init()
     random.seed()
-
+    rrena_bot.send_message(265419583, "МААААМ, ПОСТАВЬ МНЕ АВАТАРКУ!")
     # bot.send_message(debug_chat_id, '*CAADAgADMgADsj* _RGHiKRfQaAeEsnAg_', parse_mode="Markdown")
     for chat in allow_chats:
         try:
