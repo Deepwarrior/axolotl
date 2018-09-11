@@ -58,7 +58,6 @@ reactions = [
     [[], ['CAADAgADZgADhzHUD8vWtQEsl3zaAg', 'CAADAgADCQADO9HBD09qppDfqW_HAg', 'CAADAgADcAADhzHUD82gOZvLAAFdEAI'],
      0, ['УЛЕЙ'], []],
     [['КОГО?', 'КОГО'], [], 0, ["МИРАКЛЮ"], []],
-    [["МИРАКЛЮ", "МИРАКЛЮ."], [], 0, ["КОГО?"], []],
     [['D:', 'ВЖ'], [], 0, ['/UTYUG'], ['CAADAgADAQADjW7LE45SqDkRKtyzAg', 'CAADAgADGwADsjRGHuBFiQgG41R0Ag',
                                        'CAADAgADjAADsjRGHrkIcAsCdzOMAg', 'CAADAgADmAADsjRGHtmnGfSSrTedAg']],
     [[], ['CAADAgADAQADjW7LE45SqDkRKtyzAg'], undo_chat, ["УНДЮЖОЧЕК!"], ["CAADAgADMgADg8cnEWp3ie4jNHg-Ag"]],
@@ -87,7 +86,6 @@ reactions = [
     [[':D:'], [], 0, [], ['CAADAgADGgADjW7LE0g-GMhzIUFiAg']],
     [['РИННЕКО', 'РИН-НЕ-КО', 'РИННЕКО!', 'РИН-НЕ-КО!'], [], rinneko_chat, [], ['CAADAgADxAADP_vRD-wohLnM0GMRAg']],
     [[], ['CAADAgADKwQAAuce7AWo_pyLoNBvLgI'], 196345058, ['О, НАТАЛИЯ НАЧАЛАСЬ'], []],
-    [["ВОУ ВОУ", "ВОУ-ВОУ", "ВОУ ВОУ!", "ВОУ-ВОУ!"], [], 0, [], ['CAADAgAD9wADP_vRD4s-yYzXKDzSAg']],
     [["1Л"], [], 0, ["2Л"], []],
     [["/ТИХО РЖЁТЬ/"], [], osa_chat, ["ГРОМЧЕ!"], []],
     [["/АРЁТ/"], [], osa_chat, [], ['CAADAgADDQADdUTxCP-onsxKIsJqAg']],
@@ -100,9 +98,7 @@ reactions = [
         ['НАТАЛИРУЙ', "@Abi_Abigale"], ["CAADAgADJAADP_vRDykJokH6fiyLAg"], "natalka"],
     [['ВЫГОНИ ПРОЧЬ ЭТИХ НАДОЕДЛИВЫХ БОТОВ!'], [], citrus_chat, [], [], "kick_bots"],
     [['ЗАБАНЬТЕ МЕНЯ НА ПАРУ ЧАСИКОВ'], [], 0, [], [], "kick_lyuds"],
-    [memory, [], 0, ["МЕМОРИ!", "ОППА!", "ПЕЙ!"], ['CAADAgADKgADjW7LE7-3bb9S-fuoAg'], "mem_react"],
     [['АНТИКЛАЦ!'], [], 0, [], [], "anti_task"],
-    [['ДАЙТЕ ЗВЁЗДОЧКУ!', 'ПОДАРИ МНЕ ЗВЕЗДУ!'], [], 0, [], [], "set_admin"],
     [[], ['CAADAgADnAADg8cnESB0jVNnakYoAg'], 0, [], [], "whois"],
     [["ПЕРЕНОСИМ"], [], 0, [], [], "stop_natalka"],
     [[], ['CAADAgADLgADsjRGHsGbRuS2PA26Ag'], 0, [], [], "kick_citrus"],
@@ -115,7 +111,14 @@ reactions = [
     [[], ['CAADAgADkQADsjRGHofugN6VvDUUAg'], 0, [], [], "dura_win"]
 ]
 
-superreactions = ['ЭТО НАДО ПОЩАПОЛНЯТЬ']
+superreactions = [
+    [["МИРАКЛЮ"], [], 0, ["КОГО?"], []],
+    [["ВОУ ВОУ", "ВОУ-ВОУ"], [], 0, [], ['CAADAgAD9wADP_vRD4s-yYzXKDzSAg']],
+    [memory, [], 0, ["МЕМОРИ!", "ОППА!", "ПЕЙ!"], ['CAADAgADKgADjW7LE7-3bb9S-fuoAg'], "mem_react"],
+    [['ДАЙТЕ ЗВЁЗДОЧКУ', 'ПОДАРИ МНЕ ЗВЕЗДУ'], [], 0, [], [], "set_admin"]
+
+
+                  ]
 
 mssg_bv = ["ДА ННА!", "ДЕРЖЫ", "НИЧЕГО БЕЗ МЕНЯ НЕ МОЖЕШЬ", 'А ЧТО ОТВЕТИТЬ-ТО?']
 

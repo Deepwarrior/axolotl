@@ -1807,6 +1807,7 @@ def message_parsing(message):
                             reaction_funcs[reaction[5]](reaction, message)
                         else:
                             react(reaction, message)
+                        break
     task_check(message)
     player = findplayer(message.from_user)
     player.last_mess = time.time()
