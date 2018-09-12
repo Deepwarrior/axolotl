@@ -1223,7 +1223,7 @@ def get_task(message):
         bot.send_message(message.chat.id, task[1])
         return
 
-    if player.task_completed > 100:
+    if player.task_completed >= 100:
         task = give_task(player, 'black', message.chat.id)
     else:
         task = give_task(player, 'normal', message.chat.id)
