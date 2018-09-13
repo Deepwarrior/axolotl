@@ -1476,7 +1476,7 @@ def anti_task(reaction, message):
         player.task_completed -= 1
         bot.send_message(message.chat.id, "ОТМЕНА, ОТМЕНА!", reply_to_message_id=message.reply_to_message.message_id)
         if player.task_completed % 50 == 49:
-            player.task_completed -= 1
+            player.task_completed += 1
             bot.send_message(message.chat.id, "АЗАЗА. НЕТ.",
                              reply_to_message_id=message.reply_to_message.message_id)
         backup(None)
@@ -1534,7 +1534,7 @@ def razbanb(arg):
 
 def kick_lyuds(reaction, message):
     try:
-        bot.restrict_chat_member(message.chat.id, message.from_user.id, 0, False, False, False, False)
+        bot.restrict_chat_member(message.chat.id, message.from_user.id, 2*60*60, False, False, False, False)
         timer = Timer(10, razbanb, [[message.chat.id, message.from_user.id]])
         timer.start()
     except telebot.apihelper.ApiException:
