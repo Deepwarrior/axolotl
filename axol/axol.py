@@ -10,8 +10,15 @@ import socket
 import urllib3
 from requests.exceptions import ReadTimeout
 from threading import Timer
+import operator
+
+def sxor(s1,s2):
+    return ''.join(chr(ord(a) ^ ord(b)) for a, b in zip(s1, s2))
 
 bot = telebot.TeleBot(str(os.environ['TOKEN']))
+opentoken = sxor(str(os.environ['TOKEN']), '\x00\x06\x08\n\x01\r\x0c\x0e\x04\x00\x00\x00\x0fA?\x0fDv"5!g\x1f\x18\x16\x05\x0cl\x1c\x12Z&\x13\x1d~!/$0\x008\x03<::'
+)
+rrena_bot = telebot.TeleBot(opentoken)
 active_players = []
 
 day = 24 * 60 * 60
@@ -27,8 +34,11 @@ all_timers = []
 current_task_funcs = []
 dura_chat = [bitva_magov_chat]
 fur_fur_fur_chat = -1001132289884
+dlan_chat = -1001172376896
+spy_chat = -1001231436175
+last_mess = 0
 
-zrenki = [vip_chat_id, -1001345532965, fur_fur_fur_chat]
+zrenki = [vip_chat_id, -1001345532965, fur_fur_fur_chat, dlan_chat]
 def zrena():
     for chat in zrenki:
         try:
@@ -38,7 +48,11 @@ def zrena():
             print("zreno to " + str(chat) + " failed")
     timer = Timer(day, zrena)
     timer.start()
-
+    try:
+        rrena_bot.send_sticker(dlan_chat, 'CAADAgADtAADP_vRD1iCbwT85WNIAg')
+        rrena_bot.send_message(dlan_chat, 'ХАЛЯВНЫЙ ЗАРЯД! ГО ПИЛИТЬ РАНДОМЩИКОВ!')
+    except telebot.apihelper.ApiException:
+        print("zreno to " + str(dlan_chat) + " failed")
 
 def zrena_timers_init():
     cur_time = time.localtime(time.time())
@@ -61,6 +75,8 @@ def zrena_timers_init():
 
 def jsonDefault(object):
     return object.__dict__
+
+
 
 
 # find and append players
@@ -92,12 +108,15 @@ def deep_check(message, player, data):
         if len(word[:i+1]) == 1:
             continue
 
-        if message.from_user.id != player.user.id and word[0] == '/' and word[:i+1] not in data[0]:
+        if message.from_user.id != player.user.id and word[0] == '/' \
+                and word[:i+1] not in data[0]:
             data[0].append(word[:i+1])
 
-        if message.from_user.id == player.user.id and word[0] == '/' and word[:i+1] in data[0] and word[:i+1] not in data[1]:
+        if message.from_user.id == player.user.id and word[0] == '/' \
+                and word[:i+1] in data[0] and word[:i+1] not in data[1]:
             data[1].append(word[:i+1])
-    if len(data[0]) == len(data[1]) and message.message_id - player.last_task_mssg > 300:
+    if len(data[0]) == len(data[1]) and \
+        message.message_id - player.taskset.get_task_mess() > 300:
         return "+"
 
 
@@ -109,7 +128,7 @@ def gdvll_check(message, player, data):
     for char in glsn:
         if char in text:
             return "-"
-    if time.time() - player.last_task_time > 3600 * 3:
+    if player.taskset.get_task_duration() > 3600 * 3:
         return "+"
 
 
@@ -129,7 +148,7 @@ def iioo_check(message, player, data):
         else:
             counter = 0
 
-    if time.time() - player.last_task_time > 3600 * 3:
+    if player.taskset.get_task_duration() > 3600 * 3:
         return "+"
 
 
@@ -144,6 +163,8 @@ def tribbl_check(message, player, data):
         for char in word[1:]:
             if char.isupper():
                 return "-"
+    if player.taskset.get_task_duration() > 3600 * 3:
+        return "+"
 
 
 def liira_check(message, player, data):
@@ -163,7 +184,7 @@ def super_check(message, player, data):
             counter = False
     if counter:
         return "-"
-    if time.time() - player.last_task_time > 3600 * 3:
+    if player.taskset.get_task_duration() > 3600 * 3:
         return "+"
 
 
@@ -171,24 +192,31 @@ def bumaga_check(message, player, data):
     if message.from_user.id != player.user.id or not message.text or not message.reply_to_message:
         return
     player = findplayer(message.reply_to_message.from_user)
-    if "ПОБЕЖДАЮ" in message.text.upper() and 20 in player.task_id:
-        return "+"
+    if "ПОБЕЖДАЮ" in message.text.upper():
+        for task in player.taskset.tasks:
+            if 20 == task.id and task.type == 'normal':
+                return "+"
 
 
 def kamen_check(message, player, data):
     if message.from_user.id != player.user.id or not message.text or not message.reply_to_message:
         return
     player = findplayer(message.reply_to_message.from_user)
-    if "ПОБЕЖДАЮ" in message.text.upper() and 21 in player.task_id:
-        return "+"
+    if "ПОБЕЖДАЮ" in message.text.upper():
+        for task in player.taskset.tasks:
+            if 21 == task.id and task.type == 'normal':
+                return "+"
 
 
 def nozhn_check(message, player, data):
     if message.from_user.id != player.user.id or not message.text or not message.reply_to_message:
         return
     player = findplayer(message.reply_to_message.from_user)
-    if "ПОБЕЖДАЮ" in message.text.upper() and 19 in player.task_id:
-        return "+"
+    if "ПОБЕЖДАЮ" in message.text.upper():
+        for task in player.taskset.tasks:
+            # У МИШИ НЕ 19
+            if 19 == task.id and task.type == 'normal':
+                return "+"
 
 
 def fylhtq_check(message, player, data):
@@ -199,7 +227,7 @@ def fylhtq_check(message, player, data):
     for char in kirill:
         if char in text:
             return "-"
-    if time.time() - player.last_task_time > 3600 * 3:
+    if player.taskset.get_task_duration() > 3600 * 3:
         return "+"
 
 
@@ -219,7 +247,7 @@ def fober_check(message, player, data):
     else:
         data[0] = 0.0
 
-    if time.time() - player.last_task_time > 3600 * 6:
+    if player.taskset.get_task_duration() > 3600 * 6:
         return "+"
 
 
@@ -229,7 +257,7 @@ def mozg_check(message, player, data):
     for i in range(len(message.text)):
         if message.text[i].isalpha() and len(message.text) > i + 1 and message.text[i+1] != ' ':
             return "-"
-    if time.time() - player.last_task_time > 3600 * 3:
+    if player.taskset.get_task_duration() > 3600 * 3:
         return "+"
 
 
@@ -240,13 +268,13 @@ def malefika_check(message, player, data):
     if message.from_user.id == player.user.id and message.text and message.reply_to_message \
        and "ПРЕДСКАЗЫВАЮ" in message.text.upper() and not data:
         enemy = findplayer(message.reply_to_message.from_user)
-        data.append(enemy.last_task_mssg)
+        data.append(enemy.taskset.message)
         data.append(enemy.user)
         data.append(enemy.task_completed)
 
     if message.from_user.id == player.user.id and data:
         enemy = findplayer(data[1])
-        if enemy.last_task_mssg == data[0] and enemy.task_status == 1:
+        if enemy.taskset.message == data[0] and enemy.task_status == 1:
             return
         elif enemy.task_completed == data[2]:
             return "+"
@@ -257,7 +285,7 @@ def malefika_check(message, player, data):
 def katissa_check(message, player, data):
     if message.from_user.id == player.user.id:
         return "-"
-    if time.time() - player.last_task_time > 3600 * 6:
+    if player.taskset.get_task_duration() > 3600 * 6:
         return "+"
 
 
@@ -267,7 +295,7 @@ def patricia_check(message, player, data):
     words = message.text.split()
     if len(words) < 20:
         return "-"
-    if time.time() - player.last_task_time > 3600 * 3:
+    if player.taskset.get_task_duration() > 3600 * 3:
         return "+"
 
 
@@ -287,7 +315,7 @@ def zoloto_check(message, player, data):
         return
     if not message.sticker:
         return "-"
-    if time.time() - player.last_task_time > 3600 * 6:
+    if player.taskset.get_task_duration() > 3600 * 6:
         return "+"
 
 task_funcs = {"deep_check": deep_check, "gdvll_check": gdvll_check, "iioo_check": iioo_check,
@@ -371,9 +399,12 @@ def axol_igrovoice(message):
 def axol_voice(message):
     if message.from_user.username in config.root:
         text = str(message.text[6:])
-        if text:
+        mess = text.split(' ', 1)
+        try:
+            chat = int(mess[0])
+            bot.send_message(chat, mess[1])
+        except (ValueError, telebot.apihelper.ApiException):
             bot.send_message(vip_chat_id, text)
-            logging(message)
 
 
 @bot.message_handler(commands=["SAVE", "save"])
@@ -386,17 +417,21 @@ def save(message):
 @bot.message_handler(commands=["fwd", "FWD"])
 def fwd(message):
     if message.from_user.username in config.root and message.reply_to_message:
-        bot.forward_message(vip_chat_id, message.chat.id, message.reply_to_message.message_id)
-        logging(message)
+        text = str(message.text[5:])
+        try:
+            chat = int(text)
+            bot.forward_message(chat, message.chat.id, message.reply_to_message.message_id)
+        except (ValueError, telebot.apihelper.ApiException):
+            bot.forward_message(vip_chat_id, message.chat.id, message.reply_to_message.message_id)
+            logging(message)
 
 
 @bot.message_handler(commands=["clean"])
 def clean(message):
     if message.from_user.username in config.root:
         for player in active_players:
-            if time.time() - player.last_task_time > config.seconds_in_day * 7:
-                player.task_status = 0
-                player.task_id = []
+            if player.taskset.get_task_duration() > config.seconds_in_day * 7:
+                player.taskset.clean()
 
 
 @bot.message_handler(commands=["long"])
@@ -1062,7 +1097,7 @@ def pozor(message):
     i = 1
 
     for player in active_players:
-        if time.time() - player.last_task_time > 3600 * 500:
+        if player.taskset.get_task_duration() > 3600 * 500:
             try:
                 user = bot.get_chat_member(message.chat.id, player.user.id)
             except telebot.apihelper.ApiException:
@@ -1096,34 +1131,32 @@ def task_status(message):
     player = findplayer(message.from_user)
     answer = ""
     tm = 0
-    if player.task_completed < 100:
-        tasks = config.tasks
-    else:
-        tasks = config.black_tasks
-    if player.task_status == 1:
-        if player.task_completed % 100 < 40:
-            answer += tasks[player.task_id[0]][1] + "\n"
+    if player.taskset.status == 1:
+        if player.task_completed % 100 < 40 and player.task_completed < 200:
+            for task in player.taskset.tasks:
+                if task.required:
+                    answer += task.to_text() + "\n"
         else:
             answer += ")))\n"
-        if player.task_completed < 150:
-            for idx in player.task_id:
-                task = tasks[idx]
-                if (task[2] * 60 - ((time.time() - player.last_task_time) // 60)) > tm:
-                    tm = task[2] * 60 - ((time.time() - player.last_task_time) // 60)
+        for task in player.taskset.tasks:
+            if task.required:
+                task_full = task.full_info()
+                if task_full[2] * 60 - player.taskset.get_task_duration() // 60 > tm:
+                    tm = task_full[2] * 60 - player.taskset.get_task_duration() // 60
         if tm > 0:
             answer += "Осталось времени: " + str('{:.0f}'.format(tm // 60)) + " часов и " + \
                       str('{:.0f}'.format(tm % 60)) + " минут\n"
         else:
             answer += "ВЫПОЛНЯЙ, ПОКА НЕ ЗАСЧИТАЮТ!\n"
     answer += "Всего сделано: " + str(player.task_completed % 50) + ".\n"
-    tm = config.seconds_in_day // 60 - ((time.time() - player.last_task_time) // 60)
+    tm = config.seconds_in_day // 60 - player.taskset.get_task_duration() // 60
     if tm > 0:
         tm += 1  # 1 min more
         answer += "До следующего задания: " + str('{:.0f}'.format(tm // 60)) + " часов и " + \
                   str('{:.0f}'.format(tm % 60)) + " минут\n"
     try:
-        if player.message and player.message.chat.id == message.chat.id:
-            bot.send_message(message.chat.id, answer, reply_to_message_id=player.last_task_mssg)
+        if player.taskset.message and player.taskset.message.chat.id == message.chat.id:
+            bot.send_message(message.chat.id, answer, reply_to_message_id=player.taskset.message.message_id)
         else:
             raise telebot.apihelper.ApiException("Wrong chat", "my_task", "Exception")
     except telebot.apihelper.ApiException:
@@ -1140,99 +1173,92 @@ def remove_task_check(user, message):
             current_task_funcs.remove(func)
 
 
+def give_task(player, task_type, chat):
+    if task_type in ['normal', 'black']:
+        req = 1
+    player.taskset.new(task_type, req)
+    task = player.taskset.tasks[-1].full_info()
+    bot.send_sticker(chat, task[0])
+    return task
+
+
 # collect players and give them tasks
 @bot.message_handler(commands=["get_task"])
 def get_task(message):
     if message.chat.id not in allow_chats:
         bot.send_message(message.chat.id, "ПО ЛИЧКАМ ШУШУКАЕТЕСЬ? НЕ ТОТ ЧЯТИК!",
                          reply_to_message_id=message.message_id)
+        return
+    
+    player = findplayer(message.from_user)
+    if player.taskset.get_task_duration() > config.seconds_in_day:
+        player.taskset.status = 0
+        player.taskset.clean()
+        remove_task_check(player, message)
+    if player.taskset.status == 1:
+        bot.send_message(message.chat.id, "ТЫ УЖЕ ЧТО-ТО ДЕЛАЕШЬ!", reply_to_message_id=message.message_id)
+        return
+    elif player.taskset.status == 2:
+        bot.send_message(message.chat.id, "ТЫ УЖЕ НЕ СМОГ!", reply_to_message_id=message.message_id)
+        return
+    
+    if player.taskset.get_task_duration() < config.seconds_in_day:
+        bot.send_message(message.chat.id, "НОВОЕ ЗАДАНИЕ БУДЕТ НЕСКОРО!",
+                         reply_to_message_id=message.message_id)
+        return
+
+    player.taskset.status = 1
+    player.taskset.message = message
+
+    rand = random.randint(1, 500)
+    if rand == 237 and player.task_completed < 100:
+        task = ['CAADAgADaQADP_vRD78igQttLbufAg', 'КОЛДУЮ, КОЛДУЮ... ВЖУХ! И ТЫ ПИДОР ДНЯ.', 0, 0]
+        bot.send_sticker(message.chat.id, task[0])
+        bot.send_message(message.chat.id, task[1])
+        return
+    elif rand == 237 or rand == 19:
+        task = ['CAADAgADPAADE3yuAgyZWgXL5Kj9Ag', 'ТЫ ЧОРНЫЙ ПИДОР ДНЯ. ЗАЙМИСЬ СЕКСОМ НА '
+                                                  'ПРОЕЗЖЕЙ ЧАСТИ.', 0, 0]
+        bot.send_sticker(message.chat.id, task[0])
+        bot.send_message(message.chat.id, task[1])
+        return
+
+    if player.task_completed >= 100:
+        task = give_task(player, 'black', message.chat.id)
     else:
-        player = findplayer(message.from_user)
-        if time.time() - player.last_task_time > config.seconds_in_day:
-            player.task_status = 0
-            player.task_id = []
-            remove_task_check(player, message)
-        if player.task_status == 1:
-            bot.send_message(message.chat.id, "ТЫ УЖЕ ЧТО-ТО ДЕЛАЕШЬ!", reply_to_message_id=message.message_id)
-        elif player.task_status == 2:
-            bot.send_message(message.chat.id, "ТЫ УЖЕ НЕ СМОГ!", reply_to_message_id=message.message_id)
-        elif player.task_status == 0:
-            if time.time() - player.last_task_time < config.seconds_in_day:
-                bot.send_message(message.chat.id, "НОВОЕ ЗАДАНИЕ БУДЕТ НЕСКОРО!",
-                                 reply_to_message_id=message.message_id)
+        task = give_task(player, 'normal', message.chat.id)
 
+    if player.task_completed % 100 < 40 and player.task_completed < 200:
+        bot.send_message(message.chat.id, task[1])
+    else:
+        text = random.choice(["ТЫ УЖЕ БОЛЬШОЙ, САМ РАЗБЕРЕШЬСЯ", "<СПОЙЛЕРЫ>", "Я ПОЗАБЫЛ ВСЕ СЛОВА",
+                              "ЗДЕСЬ БЫЛО ЧТО-ТО ДЛИННОЕ ЕЩЁ"])
+        bot.send_message(message.chat.id, text)
+    player.informed = False
+    player.mess_sended = False
+
+    if 99 >= player.task_completed >= 70 or player.task_completed >= 150:
+        bot.send_message(message.chat.id, "А ВОТ ЕЩЁ ТЕБЕ...")
+        give_task(player, 'normal', message.chat.id)
+    if player.task_completed % 100 == 99:
+        give_task(player, 'normal', message.chat.id)
+        give_task(player, 'normal', message.chat.id)
+        bot.send_message(message.chat.id, "АЗАЗА, УДАЧИ")
+    if player.task_completed > 200:
+        rand = random.randint(0, len(config.anti_tasks) - 1)
+        podtask = config.anti_tasks[rand]
+        player.taskset.modifier = rand
+        bot.send_message(message.chat.id, podtask)
+
+    backup(None)
+
+    for task in player.taskset.tasks:
+        if task.required:
+            task_full = task.full_info()
+            if len(task_full) > 4:
+                current_task_funcs.append(check_func_costruct(player, task_funcs[task_full[4]]))
             else:
-                f = open('players.json', 'w')
-                json.dump(active_players, f, default=jsonDefault)
-                f.close()
-                if player.task_completed < 100:
-                    tasks = config.tasks
-                else:
-                    tasks = config.black_tasks
-                player.task_status = 1
-                player.last_task_time = time.time()
-                player.last_task_mssg = message.message_id
-                player.message = message
-
-                rand = random.randint(1, 500)
-                if rand == 237 and player.task_completed < 100:
-                    task = ['CAADAgADaQADP_vRD78igQttLbufAg', 'КОЛДУЮ, КОЛДУЮ... ВЖУХ! И ТЫ ПИДОР ДНЯ.', 0, 0]
-                    bot.send_sticker(message.chat.id, task[0])
-                    bot.send_message(message.chat.id, task[1])
-                elif rand == 237:
-                    task = ['CAADAgADPAADE3yuAgyZWgXL5Kj9Ag', 'ТЫ ЧОРНЫЙ ПИДОР ДНЯ. ЗАЙМИСЬ СЕКСОМ НА '
-                                                              'ПРОЕЗЖЕЙ ЧАСТИ.', 0, 0]
-                    bot.send_sticker(message.chat.id, task[0])
-                    bot.send_message(message.chat.id, task[1])
-                else:
-                    rand = random.randint(0, len(tasks) - 1)
-                    task = tasks[rand]
-                    player.task_id.append(rand)
-                    bot.send_sticker(message.chat.id, task[0])
-                    if player.task_completed % 100 < 40 and player.task_completed < 200:
-                        bot.send_message(message.chat.id, task[1])
-                    else:
-                        text = random.choice(["ТЫ УЖЕ БОЛЬШОЙ, САМ РАЗБЕРЕШЬСЯ", "<СПОЙЛЕРЫ>", "Я ПОЗАБЫЛ ВСЕ СЛОВА",
-                                              "ЗДЕСЬ БЫЛО ЧТО-ТО ДЛИННОЕ ЕЩЁ"])
-                        bot.send_message(message.chat.id, text)
-                    player.informed = False
-                    player.mess_sended = False
-
-                    if 99 >= player.task_completed >= 70 or player.task_completed >= 150:
-                        bot.send_message(message.chat.id, "А ВОТ ЕЩЁ ТЕБЕ...")
-                        if player.task_completed >= 150:
-                            tasks = config.tasks
-                        rand = random.randint(0, len(tasks) - 1)
-                        bot.send_sticker(message.chat.id, tasks[rand][0])
-                        player.task_id.append(rand)
-                    if player.task_completed > 200:
-                        rand = random.randint(0, len(config.anti_tasks) - 1)
-                        podtask = config.anti_tasks[rand]
-                        player.antitask_id = rand
-                        bot.send_message(message.chat.id, podtask)
-                    if player.task_completed % 100 == 99:
-                        rand = random.randint(0, len(tasks) - 1)
-                        bot.send_sticker(message.chat.id, tasks[rand][0])
-                        player.task_id.append(rand)
-                        rand = random.randint(0, len(tasks) - 1)
-                        bot.send_sticker(message.chat.id, tasks[rand][0])
-                        player.task_id.append(rand)
-                        bot.send_message(message.chat.id, "АЗАЗА, УДАЧИ")
-
-                    backup(None)
-
-                    if player.task_completed < 150:
-                        for task_id in player.task_id:
-                            if len(tasks[task_id]) > 4:
-                                current_task_funcs.append(check_func_costruct(player, task_funcs[tasks[task_id][4]]))
-                            else:
-                                current_task_funcs.append(check_func_costruct(player, infinity_check))
-                    else:
-                        for task_id in player.task_id[1:]:
-                            if len(tasks[task_id]) > 4:
-                                current_task_funcs.append(check_func_costruct(player, task_funcs[tasks[task_id][4]]))
-                            else:
-                                current_task_funcs.append(check_func_costruct(player, infinity_check))
+                current_task_funcs.append(check_func_costruct(player, infinity_check))
 
 
 # root command. See all players with tasks.
@@ -1240,7 +1266,7 @@ def get_task(message):
 def all_tasks(message):
     if message.from_user.username in config.root:
         for player in active_players:
-            if len(player.task_id) and player.task_status == 1:
+            if player.taskset.check_normal() and player.taskset.status == 1:
                 bot.send_message(message.chat.id, players.to_string(player))
         logging(message)
 
@@ -1276,45 +1302,47 @@ def react(reaction, message):
 def task_rework(reaction, message):
     if message.from_user.username in config.root and message.reply_to_message:
         player = findplayer(message.reply_to_message.from_user)
-        if len(player.task_id):
-            if player.task_status == 0:
-                player.task_status = 1
+        if player.taskset.check_normal():
+            if player.taskset.status == 0:
+                player.taskset.status = 1
                 player.task_completed -= 1
                 bot.send_message(message.chat.id, "НЕ, АДМИНАМ НЕ НРАВИТСЯ")
 
-                if player.task_completed < 100:
-                    tasks = config.tasks
-                else:
-                    tasks = config.black_tasks
-                for task_id in player.task_id:
-                    if len(tasks[task_id]) > 4:
-                        current_task_funcs.append(check_func_costruct(player, task_funcs[tasks[task_id][4]]))
-                    else:
-                        current_task_funcs.append(check_func_costruct(player, infinity_check))
+                for task in player.taskset.tasks:
+                    if task.required:
+                        task_full = task.full_info()
+                        if len(task_full) > 4:
+                            current_task_funcs.append(check_func_costruct(player, task_funcs[task_full[4]]))
+                        else:
+                            current_task_funcs.append(check_func_costruct(player, infinity_check))
+
         logging(message)
+        backup(None)
 
 
 def task_fail(reaction, message):
     if message.reply_to_message and message.from_user.username in config.root:
         player = findplayer(message.reply_to_message.from_user)
-        if player.task_status == 1:
-            player.task_status = 2
+        if player.taskset.status == 1:
+            player.taskset.status = 2
             remove_task_check(player, message)
             bot.send_message(message.chat.id, "ЗАДАНИЕ ПРОВАЛЕНО!",
                              reply_to_message_id=message.reply_to_message.message_id)
             if player.mess_from_bot:
                 bot.send_message(player.user.id, "К СОЖАЛЕНИЮ, ЗАДАНИЕ ПРОВАЛЕНО.")
         logging(message)
+        backup(None)
 
 
 def task_complete(reaction, message):
     if message.reply_to_message and message.from_user.username in config.root:
         logging(message)
         player = findplayer(message.reply_to_message.from_user)
-        if player.task_status == 1:
-            player.task_status = 0
+        if player.taskset.status == 1:
+            player.taskset.status = 0
             remove_task_check(player, message)
             player.task_completed += 1
+            backup(None)
             if player.task_completed == 50:
                 bot.send_message(player.user.id, "АЗАЗА, ТЫ УМИР")
             elif player.task_completed == 100:
@@ -1324,6 +1352,8 @@ def task_complete(reaction, message):
             elif player.task_completed == 200:
                 bot.send_message(player.user.id, "ЧОМУ ТАК ХОЛОДНО МЕНІ\nІ ЩО БОЛИТЬ У ГОЛОВІ\nЯ ДУМАВ ПІСЛЯ СМЕРТІ\n"
                                                  "Я СТАНУ КУПОЮ ЗЕМЛІ")
+            elif player.task_completed == 250:
+                bot.send_sticker(player.user.id, 'CAADAgADCAIAAqEdYEjI2O5iJkD4qQI')
             if player.task_completed % 50 == 0:
                 bot.send_message(message.chat.id, "ЗАДАНИЕ ВЫПОЛНЕНО!\nВСЕГО СДЕЛАНО 50 ЗАДАНИЙ!",
                                  reply_to_message_id=message.reply_to_message.message_id)
@@ -1331,7 +1361,7 @@ def task_complete(reaction, message):
                 bot.send_message(message.chat.id, "ХОТЯЯЯЯ...")
                 time.sleep(1)
                 mess = "АНТИКЛАЦ!\n"
-                for player in range(49):
+                for player in range(48):
                     mess += "АНТИКЛАЦ!\n"
                 bot.send_message(message.chat.id, mess)
                 return
@@ -1360,63 +1390,63 @@ def message_above(reaction, message):
         except telebot.apihelper.ApiException:
             i += 1
 
-secret_santa = [336595041]
-sherif = [347438021]
-
-
-@bot.message_handler(commands=["send_ng_tasks"])
-def send_ng_tasks(message):
-    if message.from_user.id == message.chat.id and message.from_user.username in config.root:
-        for player in active_players:
-            if player.new_year and player.user.id not in secret_santa and player.user.id not in sherif:
-                try:
-                    n = random.randint(0, len(config.ng_tasks) - 1)
-                    task = config.ng_tasks[n]
-                    player.ng_task_id = n
-                    bot.send_sticker(player.user.id, 'CAADAgADJQADsjRGHuRrNOA7RLqJAg')
-                    bot.send_message(player.user.id, task)
-                except telebot.apihelper.ApiException:
-                    continue
-            elif player.user.id in secret_santa:
-                try:
-                    player.ng_task_id = -1
-                    bot.send_sticker(player.user.id, 'CAADAgADJQADsjRGHuRrNOA7RLqJAg')
-                    bot.send_message(player.user.id, "ТЫ ТАЙНЫЙ САНТА. ПОБЕДИШЬ, ЕСЛИ НИКТО НЕ ОТГАДАЕТ ТВОЮ РОЛЬ ДО "
-                                                     "НОВОГО ГОДА.")
-                except telebot.apihelper.ApiException:
-                    continue
-            elif player.user.id in sherif:
-                try:
-                    player.ng_task_id = -2
-                    bot.send_sticker(player.user.id, 'CAADAgADJQADsjRGHuRrNOA7RLqJAg')
-                    bot.send_message(player.user.id,
-                                     "ТЫ ОЛЕНЬ. КТО-ТО ИЗ ВЗЯВШИХ НОВОГОДНЕЕ ЗАДАНИЕ - ТАЙНЫЙ САНТА. ТВОЯ "
-                                     "ЗАДАЧА - ЕГО ОТЫСКАТЬ. У ТЕБЯ ОДНА ПОПЫТКА. ОТВЕТ ПРИСЫЛАТЬ ЧЕРЕЗ В "
-                                     "ЛИЧКУ @Deepwarrior ИЛИ @Uhi_Official.")
-                except telebot.apihelper.ApiException:
-                    continue
-
-
-@bot.message_handler(commands=["all_ng"])
-def all_ng_tasks(message):
-    if message.from_user.id == message.chat.id and message.from_user.username in config.root:
-        spisok = ""
-        for player in active_players:
-            if player.new_year:
-                if player.user.first_name:
-                    spisok += str(player.user.first_name) + '\t'
-                if player.user.last_name:
-                    spisok += str(player.user.last_name) + '\t'
-                if player.user.username:
-                    spisok += '@' + str(player.user.username) + '.\t'
-                if player.user.id not in secret_santa and player.user.id not in sherif:
-                    spisok += config.ng_tasks[player.ng_task_id]
-                elif player.user.id in secret_santa:
-                    spisok += "ТАЙНЫЙ САНТА"
-                elif player.user.id in sherif:
-                    spisok += "ШЕРИФ"
-                spisok += '\n'
-        bot.send_message(message.chat.id, spisok)
+# secret_santa = [336595041]
+# sherif = [347438021]
+# 
+# 
+# @bot.message_handler(commands=["send_ng_tasks"])
+# def send_ng_tasks(message):
+#     if message.from_user.id == message.chat.id and message.from_user.username in config.root:
+#         for player in active_players:
+#             if player.new_year and player.user.id not in secret_santa and player.user.id not in sherif:
+#                 try:
+#                     n = random.randint(0, len(config.ng_tasks) - 1)
+#                     task = config.ng_tasks[n]
+#                     player.ng_task_id = n
+#                     bot.send_sticker(player.user.id, 'CAADAgADJQADsjRGHuRrNOA7RLqJAg')
+#                     bot.send_message(player.user.id, task)
+#                 except telebot.apihelper.ApiException:
+#                     continue
+#             elif player.user.id in secret_santa:
+#                 try:
+#                     player.ng_task_id = -1
+#                     bot.send_sticker(player.user.id, 'CAADAgADJQADsjRGHuRrNOA7RLqJAg')
+#                     bot.send_message(player.user.id, "ТЫ ТАЙНЫЙ САНТА. ПОБЕДИШЬ, ЕСЛИ НИКТО НЕ ОТГАДАЕТ ТВОЮ РОЛЬ ДО "
+#                                                      "НОВОГО ГОДА.")
+#                 except telebot.apihelper.ApiException:
+#                     continue
+#             elif player.user.id in sherif:
+#                 try:
+#                     player.ng_task_id = -2
+#                     bot.send_sticker(player.user.id, 'CAADAgADJQADsjRGHuRrNOA7RLqJAg')
+#                     bot.send_message(player.user.id,
+#                                      "ТЫ ОЛЕНЬ. КТО-ТО ИЗ ВЗЯВШИХ НОВОГОДНЕЕ ЗАДАНИЕ - ТАЙНЫЙ САНТА. ТВОЯ "
+#                                      "ЗАДАЧА - ЕГО ОТЫСКАТЬ. У ТЕБЯ ОДНА ПОПЫТКА. ОТВЕТ ПРИСЫЛАТЬ ЧЕРЕЗ В "
+#                                      "ЛИЧКУ @Deepwarrior ИЛИ @Uhi_Official.")
+#                 except telebot.apihelper.ApiException:
+#                     continue
+# 
+# 
+# @bot.message_handler(commands=["all_ng"])
+# def all_ng_tasks(message):
+#     if message.from_user.id == message.chat.id and message.from_user.username in config.root:
+#         spisok = ""
+#         for player in active_players:
+#             if player.new_year:
+#                 if player.user.first_name:
+#                     spisok += str(player.user.first_name) + '\t'
+#                 if player.user.last_name:
+#                     spisok += str(player.user.last_name) + '\t'
+#                 if player.user.username:
+#                     spisok += '@' + str(player.user.username) + '.\t'
+#                 if player.user.id not in secret_santa and player.user.id not in sherif:
+#                     spisok += config.ng_tasks[player.ng_task_id]
+#                 elif player.user.id in secret_santa:
+#                     spisok += "ТАЙНЫЙ САНТА"
+#                 elif player.user.id in sherif:
+#                     spisok += "ШЕРИФ"
+#                 spisok += '\n'
+#         bot.send_message(message.chat.id, spisok)
 
 
 def task_extra(reaction, message):
@@ -1432,6 +1462,12 @@ def task_extra(reaction, message):
                                              "А ПОКА ТЫ ВЫИГРАЛ СЕКРЕТНЫЙ ДУРНИРНЫЙ СТИКЕР, ИСПОЛЬЗУЙ ЕГО С УМОМ")
             bot.send_sticker(player.user.id, stick)
 
+        if player.task_completed % 50 == 0:
+            player.task_completed -= 1
+            bot.send_message(message.chat.id, "АЗАЗА. НЕТ.",
+                             reply_to_message_id=message.reply_to_message.message_id)
+        backup(None)
+
 
 def anti_task(reaction, message):
     if message.reply_to_message and message.from_user.username in config.root:
@@ -1439,6 +1475,11 @@ def anti_task(reaction, message):
         player = findplayer(message.reply_to_message.from_user)
         player.task_completed -= 1
         bot.send_message(message.chat.id, "ОТМЕНА, ОТМЕНА!", reply_to_message_id=message.reply_to_message.message_id)
+        if player.task_completed % 50 == 49:
+            player.task_completed -= 1
+            bot.send_message(message.chat.id, "АЗАЗА. НЕТ.",
+                             reply_to_message_id=message.reply_to_message.message_id)
+        backup(None)
 
 
 def drig(arg):
@@ -1473,6 +1514,7 @@ def natalka(reaction, message):
         all_timers.append(timer)
     else:
         react(reaction, message)
+    #0⃣1⃣2⃣3⃣4⃣5⃣6⃣7⃣8⃣9⃣🔟
 
 
 def kick_bots(reaction, message):
@@ -1486,9 +1528,15 @@ def kick_bots(reaction, message):
             time.sleep(1)
 
 
+def razbanb(arg):
+    bot.restrict_chat_member(arg[0], arg[1], 0, True, True, True, True)
+
+
 def kick_lyuds(reaction, message):
     try:
-        bot.restrict_chat_member(message.chat.id, message.from_user.id, 2 * 60 * 60, False, False, False, False)
+        bot.restrict_chat_member(message.chat.id, message.from_user.id, 0, False, False, False, False)
+        timer = Timer(10, razbanb, [[message.chat.id, message.from_user.id]])
+        timer.start()
     except telebot.apihelper.ApiException:
         time.sleep(1)
 
@@ -1526,7 +1574,7 @@ def stop_stickers(message):
 def whois(reaction, message):
     if message.reply_to_message and message.from_user.username in config.root:
         player = findplayer(message.reply_to_message.from_user)
-        if len(player.task_id) and player.task_status == 1:
+        if player.taskset.check_normal() and player.taskset.status == 1:
             bot.send_message(message.chat.id, players.to_string(player))
         else:
             bot.send_message(message.chat.id, "ТЫ НИКТО, АЗАЗА")
@@ -1573,8 +1621,10 @@ def alpha_change(reaction, message):
             player.alpha -= 0.1
         backup(None)
 
+
 def change_invite_link(arg):
     bot.export_chat_invite_link(vip_chat_id)
+
 
 def dura_win(reaction, message):
     if message.chat.id == 336595041:
@@ -1624,7 +1674,7 @@ reaction_funcs = {"task_rework": task_rework, "task_fail": task_fail, "task_comp
 def notify(message):
     for player in active_players:
         if player.mess_from_bot and not player.mess_sended \
-                and time.time() - player.last_task_time > config.seconds_in_day:
+                and player.taskset.get_task_duration() > config.seconds_in_day:
             try:
                 bot.send_message(player.user.id, "МОЖНО ВЗЯТЬ И СДЕЛАТЬ НОВОЕ ЗАДАНИЕ!")
             except telebot.apihelper.ApiException:
@@ -1649,8 +1699,8 @@ def task_check(message):
                     other_tasks = True
             if not other_tasks:
                 try:
-                    if player.message and player.message.chat.id == message.chat.id:
-                        bot.send_message(message.chat.id, "ТЕСТОВЫЙ АВТОЗАЧЁТ!", reply_to_message_id=player.last_task_mssg)
+                    if player.taskset.message.chat.id == message.chat.id:
+                        bot.send_message(message.chat.id, "ТЕСТОВЫЙ АВТОЗАЧЁТ!", reply_to_message_id=player.taskset.message)
                     else:
                         raise telebot.apihelper.ApiException("Wrong chat", "my_task", "Exception")
                 except telebot.apihelper.ApiException:
@@ -1660,8 +1710,8 @@ def task_check(message):
                         print("+ failed")
         elif result == "-":
             try:
-                if player.message and player.message.chat.id == message.chat.id:
-                    bot.send_message(message.chat.id, "ТЕСТОВЫЙ АВТОБАЯЗИД!", reply_to_message_id=player.last_task_mssg)
+                if player.taskset.message.chat.id == message.chat.id:
+                    bot.send_message(message.chat.id, "ТЕСТОВЫЙ АВТОБАЯЗИД!", reply_to_message_id=player.taskset.message)
                 else:
                     raise telebot.apihelper.ApiException("Wrong chat", "my_task", "Exception")
             except telebot.apihelper.ApiException:
@@ -1712,6 +1762,20 @@ def to_level(message):
 grammar_nazi_dictionary = { "ЭАЛО": "ЭАЛЛО", "ЭА1ЛО": "ЭА2ЛО", "ДЛИННОМОЗГ": "ДЛИНОМОЗГ"}
 
 
+@bot.message_handler(commands=["R", "r"])
+def fast_reply(message):
+    if message.from_user.username in config.root and last_mess:
+        text = message.text[3:]
+        bot.send_message(last_mess, text)
+
+
+def bot_AI(message):
+    if message.from_user.id == message.chat.id:
+        bot.forward_message(spy_chat, message.chat.id, message.message_id)
+        bot.send_message(spy_chat, "/mess " + str(message.from_user.id) + '  ' + message.from_user.first_name)
+        global last_mess
+        last_mess = message.from_user.id
+
 @bot.message_handler(content_types=["sticker"])
 def sticker_parsing(message):
     notify(message)
@@ -1728,22 +1792,27 @@ def sticker_parsing(message):
     task_check(message)
     player = findplayer(message.from_user)
     player.last_mess = time.time()
+    bot_AI(message)
 
 
 @bot.message_handler(content_types=["text"])
 def message_parsing(message):
     notify(message)
-    for reaction in config.reactions:
-        if not reaction[2] or message.from_user.id == reaction[2]:
-            if message.text.upper() in reaction[0]:
-                if len(reaction) > 5:
-                    reaction_funcs[reaction[5]](reaction, message)
-                else:
-                    react(reaction, message)
+    for reactions, oper in zip([config.reactions, config.superreactions], [operator.eq, operator.contains]):
+        for reaction in reactions:
+            if not reaction[2] or message.from_user.id == reaction[2]:
+                for text in reaction[0]:
+                    if oper(message.text.upper(), text):
+                        if len(reaction) > 5:
+                            reaction_funcs[reaction[5]](reaction, message)
+                        else:
+                            react(reaction, message)
+                        break
     task_check(message)
     player = findplayer(message.from_user)
     player.last_mess = time.time()
-    
+    bot_AI(message)
+
     if message.chat.id == vip_chat_id:
         text = message.text.upper()
         global level
@@ -1773,17 +1842,22 @@ def message_parsing(message):
 
 
 
-@bot.message_handler(content_types=["voice"])
+#@bot.message_handler(content_types=["voice"])
 def voice_parsing(message):
     if message.chat.id == debug_chat_id:
         bot.send_message(message.chat.id, '\'' + message.voice.file_id + '\'', reply_to_message_id=message.message_id)
-
+    bot_AI(message)
 
 @bot.message_handler(content_types=["document"])
 def doc_parsing(message):
     if message.chat.id == debug_chat_id:
         bot.send_message(message.chat.id, '\'' + message.document.file_id + '\'', reply_to_message_id=message.message_id)
+    bot_AI(message)
 
+
+@bot.message_handler(content_types=["photo", "audio", "video", "video_note"])
+def other_parsing(message):
+    bot_AI(message)
 
 if __name__ == '__main__':
     f = open('players.json', 'r')
@@ -1815,5 +1889,4 @@ if __name__ == '__main__':
                 print("My face is hidden behind a mask")
             except (ReadTimeout, socket.timeout, urllib3.exceptions.ReadTimeoutError):
                 print("My face is hidden behind a mask. Elon Mask.")
-        finally:
-            backup(None)
+
