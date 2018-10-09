@@ -97,7 +97,7 @@ reactions = [
     [["НАТАЛЬЯ?"], ['CAADAgADIwADP_vRD4CXRh4oYhhXAg', "CAADAgADHwADP_vRD3g8MWNndtchAg"], 0,
         ['НАТАЛИРУЙ', "@Abi_Abigale"], ["CAADAgADJAADP_vRDykJokH6fiyLAg"], "natalka"],
     [['ВЫГОНИ ПРОЧЬ ЭТИХ НАДОЕДЛИВЫХ БОТОВ!'], [], citrus_chat, [], [], "kick_bots"],
-    [['ЗАБАНЬТЕ МЕНЯ НА ПАРУ ЧАСИКОВ'], [], 0, [], [], "kick_lyuds"],
+
     [['АНТИКЛАЦ!'], [], 0, [], [], "anti_task"],
     [[], ['CAADAgADnAADg8cnESB0jVNnakYoAg'], 0, [], [], "whois"],
     [["ПЕРЕНОСИМ"], [], 0, [], [], "stop_natalka"],
@@ -115,7 +115,8 @@ superreactions = [
     [["МИРАКЛЮ"], [], 0, ["КОГО?"], []],
     [["ВОУ ВОУ", "ВОУ-ВОУ"], [], 0, [], ['CAADAgAD9wADP_vRD4s-yYzXKDzSAg']],
     [memory, [], 0, ["МЕМОРИ!", "ОППА!", "ПЕЙ!"], ['CAADAgADKgADjW7LE7-3bb9S-fuoAg'], "mem_react"],
-    [['ДАЙТЕ ЗВЁЗДОЧКУ', 'ПОДАРИ МНЕ ЗВЕЗДУ'], [], 0, [], [], "set_admin"]
+    [['ДАЙТЕ ЗВЁЗДОЧКУ', 'ПОДАРИ МНЕ ЗВЕЗДУ'], [], 0, [], [], "set_admin"],
+    [['ЗАБАНЬТЕ МЕНЯ НА ПАРУ ЧАСИКОВ'], [], 0, [], [], "kick_lyuds"]
 
 
                   ]

@@ -1535,7 +1535,7 @@ def razbanb(arg):
 def kick_lyuds(reaction, message):
     try:
         bot.restrict_chat_member(message.chat.id, message.from_user.id, 2*60*60, False, False, False, False)
-        timer = Timer(10, razbanb, [[message.chat.id, message.from_user.id]])
+        timer = Timer(2*60*60, razbanb, [[message.chat.id, message.from_user.id]])
         timer.start()
     except telebot.apihelper.ApiException:
         time.sleep(1)
