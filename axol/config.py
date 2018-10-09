@@ -99,7 +99,7 @@ reactions = [
     [['ВЫГОНИ ПРОЧЬ ЭТИХ НАДОЕДЛИВЫХ БОТОВ!'], [], citrus_chat, [], [], "kick_bots"],
 
     [['АНТИКЛАЦ!'], [], 0, [], [], "anti_task"],
-    [[], ['CAADAgADnAADg8cnESB0jVNnakYoAg'], 0, [], [], "whois"],
+    #[[], ['CAADAgADnAADg8cnESB0jVNnakYoAg'], 0, [], [], "whois"],
     [["ПЕРЕНОСИМ"], [], 0, [], [], "stop_natalka"],
     [[], ['CAADAgADLgADsjRGHsGbRuS2PA26Ag'], 0, [], [], "kick_citrus"],
     [[], ['CAADAgADKAADO9HBD1SvkhGZJT_BAg', 'CAADAgADVwADO9HBD35E69ryx07IAg'], 0, [], [], "kick_rels"],
