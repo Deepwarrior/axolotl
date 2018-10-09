@@ -1535,7 +1535,7 @@ def razbanb(arg):
 def kick_lyuds(reaction, message):
     try:
         bot.restrict_chat_member(message.chat.id, message.from_user.id, 2*60*60, False, False, False, False)
-        timer = Timer(10, razbanb, [[message.chat.id, message.from_user.id]])
+        timer = Timer(2*60*60, razbanb, [[message.chat.id, message.from_user.id]])
         timer.start()
     except telebot.apihelper.ApiException:
         time.sleep(1)
@@ -1820,7 +1820,7 @@ def message_parsing(message):
             if text == config.answers[level]:
                 level_up()
 
-    if message.chat.id == vip_chat_id:
+    if not message.chat.id == message.from_user.id:
         text = message.text.upper()
         rnd = random.randint(0, 4)
         for word in grammar_nazi_dictionary.keys():
@@ -1832,7 +1832,7 @@ def message_parsing(message):
                         bot.send_message(message.chat.id, "ПОДУМОЙ НАД СВОИМ ПОВЕДЕНИЕМ.",
                                          reply_to_message_id=message.message_id)
                     except telebot.apihelper.ApiException:
-                        bot.send_message(message.chat.id, "ВРОДЕ СО ЗВЁЗДОЧКОЙ, А ТАКОЙ НУБ.",
+                        bot.send_message(message.chat.id, "Я Б ТЕБЯ ЗАБАНИЛ, ДА ЛАПКИ МАРАТЬ НЕОХОТА.",
                                          reply_to_message_id=message.message_id)
                 else:
                     str = random.choice(config.grammar_nazi_explanation)
