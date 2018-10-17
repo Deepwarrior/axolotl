@@ -12,6 +12,7 @@ undo_chat = 332099213
 rels_chat = 44989459
 misha_chat = 53316498
 osa_chat = 299778732
+oj_chat = 358155068
 
 seconds_in_day = 85000
 

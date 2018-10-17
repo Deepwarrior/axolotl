@@ -1718,7 +1718,7 @@ def task_check(message):
             if not other_tasks:
                 try:
                     if player.taskset.message.chat.id == message.chat.id:
-                        bot.send_message(message.chat.id, "ТЕСТОВЫЙ АВТОЗАЧЁТ!", reply_to_message_id=player.taskset.message)
+                        bot.send_message(message.chat.id, "ТЕСТОВЫЙ АВТОЗАЧЁТ!", reply_to_message_id=player.taskset.message.message_id)
                     else:
                         raise telebot.apihelper.ApiException("Wrong chat", "my_task", "Exception")
                 except telebot.apihelper.ApiException:
@@ -1729,7 +1729,8 @@ def task_check(message):
         elif result == "-":
             try:
                 if player.taskset.message.chat.id == message.chat.id:
-                    bot.send_message(message.chat.id, "ТЕСТОВЫЙ АВТОБАЯЗИД!", reply_to_message_id=player.taskset.message)
+                    bot.forward_message(config.oj_chat, player.taskset.message.chat.id, player.taskset.message.message_id)
+                    bot.send_message(config.oj_chat, "ТЕСТОВЫЙ АВТОБАЯЗИД!")
                 else:
                     raise telebot.apihelper.ApiException("Wrong chat", "my_task", "Exception")
             except telebot.apihelper.ApiException:
