@@ -11,6 +11,7 @@ import urllib3
 from requests.exceptions import ReadTimeout
 from threading import Timer
 import operator
+import math
 
 def sxor(s1,s2):
     return ''.join(chr(ord(a) ^ ord(b)) for a, b in zip(s1, s2))
@@ -424,6 +425,23 @@ def fwd(message):
         except (ValueError, telebot.apihelper.ApiException):
             bot.forward_message(vip_chat_id, message.chat.id, message.reply_to_message.message_id)
             logging(message)
+
+
+@bot.message_handler(commands=["whereisthisfuckingpredmetattime"])
+def find_item(message):
+    if message.from_user.username in config.root:
+        text = str(message.text[len("whereisthisfuckingpredmetattime")+2:])
+        try:
+            time = int(text)
+            path = math.e * time
+            diag = 4
+            path -= math.floor(path / diag) * diag
+            path -= diag/2
+            path = abs(path)/2
+            x = str(1-path) + ','
+            bot.send_message(message.chat.id, x+x+x+x[:-1])
+        except (ValueError, telebot.apihelper.ApiException):
+            bot.send_message(message.chat.id, "НЕ ЗНАЮ. СПРОСИ У МИШИ")
 
 
 @bot.message_handler(commands=["clean"])
