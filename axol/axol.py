@@ -52,6 +52,8 @@ def zrena():
     try:
         rrena_bot.send_sticker(dlan_chat, 'CAADAgADtAADP_vRD1iCbwT85WNIAg')
         rrena_bot.send_message(dlan_chat, 'ХАЛЯВНЫЙ ЗАРЯД! ГО ПИЛИТЬ РАНДОМЩИКОВ!')
+        rrena_bot.send_sticker(-1001200533121, 'CAADAgADtAADP_vRD1iCbwT85WNIAg')
+        rrena_bot.send_message(-1001200533121, 'ХАЛЯВНЫЙ ЗАРЯД! ГО ПИЛИТЬ РАНДОМЩИКОВ!')
     except telebot.apihelper.ApiException:
         print("zreno to " + str(dlan_chat) + " failed")
 
@@ -1680,12 +1682,16 @@ def dura_win(reaction, message):
         except telebot.apihelper.ApiException:
             bot.send_sticker(message.chat.id, 'CAADAgAD2QADhzHUD6cgyh0aiKpjAg')
 
+
+def why_yellow(reaction, message):
+    bot.forward_message(message.chat.id, debug_chat_id, 57759)
+
 reaction_funcs = {"task_rework": task_rework, "task_fail": task_fail, "task_complete": task_complete,
                   "task_extra": task_extra, "natalka": natalka, "kick_bots": kick_bots, "kick_lyuds": kick_lyuds,
                   "mem_react": mem_react, "anti_task": anti_task, "set_admin": set_admin, "whois": whois,
                   "stop_natalka": stop_natalka, "kick_citrus": kick_citrus, "kick_rels": kick_rels,
                   "kick_misha": kick_misha, "message_above": message_above, "alpha_change": alpha_change,
-                  "dura_approve": dura_approve, "dura_fail": dura_fail, "dura_win": dura_win
+                  "dura_approve": dura_approve, "dura_fail": dura_fail, "dura_win": dura_win, "why_yellow": why_yellow
 }
 
 
