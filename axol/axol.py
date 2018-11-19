@@ -1236,7 +1236,7 @@ def get_task(message):
         bot.send_sticker(message.chat.id, task[0])
         bot.send_message(message.chat.id, task[1])
         return
-    elif rand == 237 or rand == 19:
+    elif rand == 237:
         task = ['CAADAgADPAADE3yuAgyZWgXL5Kj9Ag', 'ТЫ ЧОРНЫЙ ПИДОР ДНЯ. ЗАЙМИСЬ СЕКСОМ НА '
                                                   'ПРОЕЗЖЕЙ ЧАСТИ.', 0, 0]
         bot.send_sticker(message.chat.id, task[0])
