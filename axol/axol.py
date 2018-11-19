@@ -1375,6 +1375,9 @@ def task_complete(reaction, message):
                                                  "Я СТАНУ КУПОЮ ЗЕМЛІ")
             elif player.task_completed == 250:
                 bot.send_sticker(player.user.id, 'CAADAgADCAIAAqEdYEjI2O5iJkD4qQI')
+            elif player.task_completed == 300:
+                bot.send_message(player.user.id, "I'LL ESCAPE NOW FROM THAT WORLD\nFROM THE WORLD OF "
+                                 + player.user.username + "\nTHERE IS NOWHERE I CAN TURN\nTHERE IS NO WAY TO GO ON")
             if player.task_completed % 50 == 0:
                 bot.send_message(message.chat.id, "ЗАДАНИЕ ВЫПОЛНЕНО!\nВСЕГО СДЕЛАНО 50 ЗАДАНИЙ!",
                                  reply_to_message_id=message.reply_to_message.message_id)
