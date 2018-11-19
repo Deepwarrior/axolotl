@@ -39,7 +39,7 @@ dlan_chat = -1001172376896
 spy_chat = -1001231436175
 last_mess = 0
 
-zrenki = [vip_chat_id, -1001345532965, fur_fur_fur_chat, dlan_chat]
+zrenki = [vip_chat_id, -1001345532965, fur_fur_fur_chat, dlan_chat, -1001117989911]
 def zrena():
     for chat in zrenki:
         try:
@@ -568,6 +568,7 @@ def send(message):
         text = message.from_user.first_name + ' ' + text
     try:
         bot.send_message(-1001246951967, text)
+        bot.send_message(-1001479011046, text)
     except telebot.apihelper.ApiException:
         bot.send_message(debug_chat_id, text)
 
