@@ -54,6 +54,8 @@ class Task:
             return config.ng_tasks
         elif self.task_type == 'love':
             return config.love_tasks
+        elif self.task_type == 'long':
+            return config.long_tasks
 
     def to_text(self):
         return self.task_list()[self.id][1]

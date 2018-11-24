@@ -96,7 +96,7 @@ reactions = [
     [approve_phrase, ['CAADAgAD4QADNnYgDo3M52SK-Y3iAg'], 0, [], [], "task_complete"],
     [['КЛАЦ!'], [], 0, [], [], "task_extra"],
     [["НАТАЛЬЯ?"], ['CAADAgADIwADP_vRD4CXRh4oYhhXAg', "CAADAgADHwADP_vRD3g8MWNndtchAg"], 0,
-        ['НАТАЛИРУЙ', "@Abi_Abigale"], ["CAADAgADJAADP_vRDykJokH6fiyLAg"], "natalka"],
+        ['НАТАЛИРУЙ', "@Abi_Abigale", "ВЫ ЧО ТУТ, В ГОДВИЛЛЬ ИГРАЕТЕ?"], ["CAADAgADJAADP_vRDykJokH6fiyLAg"], "natalka"],
     [['ВЫГОНИ ПРОЧЬ ЭТИХ НАДОЕДЛИВЫХ БОТОВ!'], [], citrus_chat, [], [], "kick_bots"],
 
     [['АНТИКЛАЦ!'], [], 0, [], [], "anti_task"],
@@ -277,7 +277,8 @@ tasks = [['CAADAgADSgADP_vRD6EHNhBBV7W_Ag', 'ТЫ ДИП. ИСПОЛЬЗУЙ Д�
          ['CAADAgAD5QADP_vRD7Jr45-pXMzoAg', "ТЫ СВЯТАЯ ГИДРОПОНИКА. ПИШИ ЖЫРНЫМИ БУКВАМИ.", 6, 0],
          ['CAADAgADYQADP_vRD4wcSIht1HiGAg', "ТЫ ЮИ-ЛАЛЛИ. НЕ ОТВЕЧАЙ ПРЯМО НА ВОПРОСЫ. УХОДИ ОТ ОТВЕТОВ.", 6, 0],
          ['CAADAgAD4AADP_vRD5mrvGdVMhuvAg', "ТЫ САРАСТИ. У ТЕБЯ САРАМНЕЗИЯ, ДЛЯ ТЕБЯ ЭТО ПЕРВЫЙ ДЕНЬ В ЧАТЕ, И ТЫ О НЁМ НИЧЕГО НЕ ЗНАЕШЬ.", 16, 0],
-         ['CAADAgADRQADP_vRD8obt-z-NyEqAg', "ТЫ ПОПИТАС. ВЫБЕРИ ЛЮБОЙ ВЫМЫШЛЕННЫЙ МИР ДЛЯ СВОЕЙ ТРУБКИ И УПОРИСЬ ПО НЕМУ.", 16, 0]
+         ['CAADAgADRQADP_vRD8obt-z-NyEqAg', "ТЫ ПОПИТАС. ВЫБЕРИ ЛЮБОЙ ВЫМЫШЛЕННЫЙ МИР ДЛЯ СВОЕЙ ТРУБКИ И УПОРИСЬ ПО НЕМУ.", 16, 0],
+         ['CAADAgADTgADP_vRDwO-IwGrgVI8Ag', "ТЫ ОЙ-ОЙ-ОЙ. ПОВТОРЯЙ ВСЕМ ВСЁ ПО ТРИ РАЗА И ПО-РАЗНОМУ - ИНАЧЕ НЕ ПОЙМУТ.", 8, 0]
 
 
 
@@ -364,6 +365,15 @@ anti_tasks = [
     "if not hasattr(player, 'ЗЯКА'):\n\ttask_complete = NULL",
     "СДЕЛАЙ ЗАДАНИЕ НАОБОРОТ",
     "ВЫПОЛНИ ОДНО ИЗ ЗАДАНИЙ ДВАЖДЫ"
+]
+
+long_tasks = [
+    [['CAADAgADLQIAAtlSUwwecJYplCjUUgI','CAADAgADMgIAAtlSUwy0sVST_BbiywI','CAADAgADNwIAAtlSUwwhkxCKcOozkAI'],
+     "ТЫ ДЛИНОЦЫТРУС. ВЫСЛЕДИ СОЧАТОВЦА.", 161, 0],
+    [['CAADAgADLwIAAtlSUwzxG8x4EYlCmAI','CAADAgADNAIAAtlSUwzspldCPGMO-gI','CAADAgADOQIAAtlSUwzdhMVzr_6BvAI'],
+     "ТЫ ДЛИНОМNША. ПРОВЕДИ ДЛЯ ЧАТА ДЛИНОNГРУ.", 161, 0]
+
+
 ]
 
 ng_tasks = [
