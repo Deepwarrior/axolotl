@@ -371,7 +371,7 @@ long_tasks = [
     [['CAADAgADLQIAAtlSUwwecJYplCjUUgI','CAADAgADMgIAAtlSUwy0sVST_BbiywI','CAADAgADNwIAAtlSUwwhkxCKcOozkAI'],
      "ТЫ ДЛИНОЦЫТРУС. ВЫСЛЕДИ СОЧАТОВЦА.", 161, 0],
     [['CAADAgADLwIAAtlSUwzxG8x4EYlCmAI','CAADAgADNAIAAtlSUwzspldCPGMO-gI','CAADAgADOQIAAtlSUwzdhMVzr_6BvAI'],
-     "ТЫ ДЛИНОМNША. ПРОВЕДИ ДЛЯ ЧАТА ИГРУ.", 161, 0]
+     "ТЫ ДЛИНОМNША. ПРОВЕДИ ДЛЯ ЧАТА ДЛИНОNГРУ.", 161, 0]
 
 
 ]
