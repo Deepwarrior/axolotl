@@ -12,11 +12,14 @@ from requests.exceptions import ReadTimeout
 from threading import Timer
 import operator
 import math
+import chat_utils
+import types
 
 def sxor(s1,s2):
     return ''.join(chr(ord(a) ^ ord(b)) for a, b in zip(s1, s2))
 
 bot = telebot.TeleBot(str(os.environ['TOKEN']))
+bot.send_stickers = types.MethodType(chat_utils.send_stickers, bot)
 opentoken = sxor(str(os.environ['TOKEN']), '\x00\x06\x08\n\x01\r\x0c\x0e\x04\x00\x00\x00\x0fA?\x0fDv"5!g\x1f\x18\x16\x05\x0cl\x1c\x12Z&\x13\x1d~!/$0\x008\x03<::'
 )
 rrena_bot = telebot.TeleBot(opentoken)
@@ -30,13 +33,15 @@ igroklub_chat = -1001108031278
 alukr_chat = -1001031232765
 tipa_tri_skobki_chat = -1001246951967
 bitva_magov_chat = -1001272922314
-allow_chats = [vip_chat_id, debug_chat_id, -1001149068208, igroklub_chat, alukr_chat]
+chto_chat = -1001479011046
+allow_chats = [vip_chat_id, debug_chat_id, -1001149068208, igroklub_chat, alukr_chat, chto_chat]
 all_timers = []
 current_task_funcs = []
 dura_chat = [bitva_magov_chat]
 fur_fur_fur_chat = -1001132289884
 dlan_chat = -1001172376896
 spy_chat = -1001231436175
+
 last_mess = 0
 
 zrenki = [vip_chat_id, -1001345532965, fur_fur_fur_chat, dlan_chat, -1001117989911]
@@ -450,7 +455,7 @@ def find_item(message):
 def clean(message):
     if message.from_user.username in config.root:
         for player in active_players:
-            if player.taskset.get_task_duration() > config.seconds_in_day * 7:
+            if player.taskset.get_task_duration() > config.seconds_in_day * 14:
                 player.taskset.clean()
 
 
@@ -1153,7 +1158,8 @@ def task_status(message):
     answer = ""
     tm = 0
     if player.taskset.status == 1:
-        if player.task_completed % 100 < 40 and player.task_completed < 200:
+        if player.task_completed % 100 < 40 and player.task_completed < 200\
+                or player.task_completed >= 300:
             for task in player.taskset.tasks:
                 if task.required:
                     answer += task.to_text() + "\n"
@@ -1170,7 +1176,11 @@ def task_status(message):
         else:
             answer += "ВЫПОЛНЯЙ, ПОКА НЕ ЗАСЧИТАЮТ!\n"
     answer += "Всего сделано: " + str(player.task_completed % 50) + ".\n"
-    tm = config.seconds_in_day // 60 - player.taskset.get_task_duration() // 60
+    if player.task_completed < 300:
+        left = config.seconds_in_day
+    else:
+        left = config.seconds_in_day * 7
+    tm = left // 60 - player.taskset.get_task_duration() // 60
     if tm > 0:
         tm += 1  # 1 min more
         answer += "До следующего задания: " + str('{:.0f}'.format(tm // 60)) + " часов и " + \
@@ -1195,11 +1205,11 @@ def remove_task_check(user, message):
 
 
 def give_task(player, task_type, chat):
-    if task_type in ['normal', 'black']:
+    if task_type in ['normal', 'black', 'long']:
         req = 1
     player.taskset.new(task_type, req)
     task = player.taskset.tasks[-1].full_info()
-    bot.send_sticker(chat, task[0])
+    bot.send_stickers(chat, task[0])
     return task
 
 
@@ -1212,7 +1222,8 @@ def get_task(message):
         return
     
     player = findplayer(message.from_user)
-    if player.taskset.get_task_duration() > config.seconds_in_day:
+    if player.task_completed < 300 and player.taskset.get_task_duration() > config.seconds_in_day\
+            or player.taskset.get_task_duration() > 7 * config.seconds_in_day:
         player.taskset.status = 0
         player.taskset.clean()
         remove_task_check(player, message)
@@ -1244,12 +1255,15 @@ def get_task(message):
         bot.send_message(message.chat.id, task[1])
         return
 
-    if player.task_completed >= 100:
+    if player.task_completed >= 300:
+        task = give_task(player, 'long', message.chat.id)
+    elif 300 > player.task_completed >= 100:
         task = give_task(player, 'black', message.chat.id)
     else:
         task = give_task(player, 'normal', message.chat.id)
 
-    if player.task_completed % 100 < 40 and player.task_completed < 200:
+    if player.task_completed % 100 < 40 and player.task_completed < 200 \
+            or player.task_completed >= 300:
         bot.send_message(message.chat.id, task[1])
     else:
         text = random.choice(["ТЫ УЖЕ БОЛЬШОЙ, САМ РАЗБЕРЕШЬСЯ", "<СПОЙЛЕРЫ>", "Я ПОЗАБЫЛ ВСЕ СЛОВА",
@@ -1258,14 +1272,14 @@ def get_task(message):
     player.informed = False
     player.mess_sended = False
 
-    if 99 >= player.task_completed >= 70 or player.task_completed >= 150:
+    if 99 >= player.task_completed >= 70 or 300 > player.task_completed >= 150:
         bot.send_message(message.chat.id, "А ВОТ ЕЩЁ ТЕБЕ...")
         give_task(player, 'normal', message.chat.id)
     if player.task_completed % 100 == 99:
         give_task(player, 'normal', message.chat.id)
         give_task(player, 'normal', message.chat.id)
         bot.send_message(message.chat.id, "АЗАЗА, УДАЧИ")
-    if player.task_completed > 200:
+    if 300 > player.task_completed > 200:
         rand = random.randint(0, len(config.anti_tasks) - 1)
         podtask = config.anti_tasks[rand]
         player.taskset.modifier = rand
@@ -1867,8 +1881,6 @@ def message_parsing(message):
                     str = random.choice(config.grammar_nazi_explanation)
                     answer = str[0] + grammar_nazi_dictionary[word] + str[1]
                     bot.send_message(message.chat.id, answer, reply_to_message_id=message.message_id)
-
-
 
 
 #@bot.message_handler(content_types=["voice"])

@@ -96,7 +96,7 @@ reactions = [
     [approve_phrase, ['CAADAgAD4QADNnYgDo3M52SK-Y3iAg'], 0, [], [], "task_complete"],
     [['КЛАЦ!'], [], 0, [], [], "task_extra"],
     [["НАТАЛЬЯ?"], ['CAADAgADIwADP_vRD4CXRh4oYhhXAg', "CAADAgADHwADP_vRD3g8MWNndtchAg"], 0,
-        ['НАТАЛИРУЙ', "@Abi_Abigale"], ["CAADAgADJAADP_vRDykJokH6fiyLAg"], "natalka"],
+        ['НАТАЛИРУЙ', "@Abi_Abigale", "ВЫ ЧО ТУТ, В ГОДВИЛЛЬ ИГРАЕТЕ?"], ["CAADAgADJAADP_vRDykJokH6fiyLAg"], "natalka"],
     [['ВЫГОНИ ПРОЧЬ ЭТИХ НАДОЕДЛИВЫХ БОТОВ!'], [], citrus_chat, [], [], "kick_bots"],
 
     [['АНТИКЛАЦ!'], [], 0, [], [], "anti_task"],
@@ -364,6 +364,14 @@ anti_tasks = [
     "if not hasattr(player, 'ЗЯКА'):\n\ttask_complete = NULL",
     "СДЕЛАЙ ЗАДАНИЕ НАОБОРОТ",
     "ВЫПОЛНИ ОДНО ИЗ ЗАДАНИЙ ДВАЖДЫ"
+]
+
+long_tasks = [
+    [['CAADAgADLQIAAtlSUwwecJYplCjUUgI','CAADAgADMgIAAtlSUwy0sVST_BbiywI','CAADAgADNwIAAtlSUwwhkxCKcOozkAI'],
+     "ТЫ ДЛИННОЦЫТРУС. ВЫСЛЕДИ СОЧАТОВЦА.", 161, 0]
+
+
+
 ]
 
 ng_tasks = [
