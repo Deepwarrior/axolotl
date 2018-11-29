@@ -1813,7 +1813,10 @@ def fast_reply(message):
 
 
 def bot_AI(message):
-    text = message.text.upper()
+    if message.text:
+        text = message.text.upper()
+    else:
+        text = ""
     if message.from_user.id == message.chat.id and "ДЛИНОПУСИЧКА" not in text:
         bot.forward_message(spy_chat, message.chat.id, message.message_id)
         bot.send_message(spy_chat, "/mess " + str(message.from_user.id) + '  ' + message.from_user.first_name)
