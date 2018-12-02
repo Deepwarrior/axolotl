@@ -371,7 +371,11 @@ long_tasks = [
     [['CAADAgADLQIAAtlSUwwecJYplCjUUgI','CAADAgADMgIAAtlSUwy0sVST_BbiywI','CAADAgADNwIAAtlSUwwhkxCKcOozkAI'],
      "ТЫ ДЛИНОЦЫТРУС. ВЫСЛЕДИ СОЧАТОВЦА.", 161, 0],
     [['CAADAgADLwIAAtlSUwzxG8x4EYlCmAI','CAADAgADNAIAAtlSUwzspldCPGMO-gI','CAADAgADOQIAAtlSUwzdhMVzr_6BvAI'],
-     "ТЫ ДЛИНОМNША. ПРОВЕДИ ДЛЯ ЧАТА ДЛИНОNГРУ.", 161, 0]
+     "ТЫ ДЛИНОМNША. ПРОВЕДИ ДЛЯ ЧАТА ДЛИНОNГРУ.", 161, 0],
+    [['CAADAgADZwIAAtlSUwww1-oTKL6f1AI','CAADAgADaAIAAtlSUwwBemewONhMbQI','CAADAgADaQIAAtlSUwwNs9AY3sPylgI'],
+     "ТЫ ДЛИНОТРИББЛ. РАЗМНОЖАЙСЯ. К КОНЦУ НЕДЕЛИ ХОТЯ БЫ У ТРЕТИ ЧАТА ДОЛЖНЫ БЫТЬ ТВОИ НИК И АВАТАРКА", 161, 0],
+    [['CAADAgADLgIAAtlSUwwBLWkO5NscmwI','CAADAgADMwIAAtlSUwyzNEPan58O6QI','CAADAgADOAIAAtlSUwwBgLlBORApZAI'],
+     "ТЫ ДЛИНОРАДИО. ПРИДУМАЙ СЦЕНАРИЙ К ФИЛЬМУ И СНИМИ ЕГО. АКТЁРЫ - УЧАСТНИКИ ЧАТА.", 161, 0]
 
 
 ]
