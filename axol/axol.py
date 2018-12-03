@@ -1412,7 +1412,7 @@ def task_complete(reaction, message):
             elif player.task_completed == 301:
                 bot.send_message(player.user.id, "/СКУЧНО? НА САМОМ ДЕЛЕ ТЫ МОЖЕШЬ БРАТЬ ДОПОЛНИТЕЛЬНЫЕ ЗАДАНИЯ. "
                                                  "ПРАВДА, ЗАСЧИТЫВАТЬСЯ ОНИ НЕ БУДУТ, ТАК ЧТО ПРОДОЛЖАЙ ВЫПОЛНЯТЬ ЛОНГИ."
-                                                 " АХ ДА, ПОЧТИ ВСЕ ПРОВЕРЯТОРЫ ДАЖЕ НЕ ДОГАДЫВАЮТСЯ О ТАКОМ ;)")
+                                                 " АХ ДА, БОЛЬШИНСТВО ПРОВЕРЯТОРОВ ДАЖЕ НЕ ДОГАДЫВАЮТСЯ О ТАКОМ ;)")
             if player.task_completed % 50 == 0:
                 bot.send_message(message.chat.id, "ЗАДАНИЕ ВЫПОЛНЕНО!\nВСЕГО СДЕЛАНО 50 ЗАДАНИЙ!",
                                  reply_to_message_id=message.reply_to_message.message_id)
