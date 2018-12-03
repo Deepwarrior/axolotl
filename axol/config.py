@@ -375,7 +375,7 @@ long_tasks = [
     [['CAADAgADZwIAAtlSUwww1-oTKL6f1AI','CAADAgADaAIAAtlSUwwBemewONhMbQI','CAADAgADaQIAAtlSUwwNs9AY3sPylgI'],
      "ТЫ ДЛИНОТРИББЛ. РАЗМНОЖАЙСЯ. К КОНЦУ НЕДЕЛИ ХОТЯ БЫ У ТРЕТИ ЧАТА ДОЛЖНЫ БЫТЬ ТВОИ НИК И АВАТАРКА", 161, 0],
     [['CAADAgADLgIAAtlSUwwBLWkO5NscmwI','CAADAgADMwIAAtlSUwyzNEPan58O6QI','CAADAgADOAIAAtlSUwwBgLlBORApZAI'],
-     "ТЫ ДЛИНОРАДИО. ПРИДУМАЙ СЦЕНАРИЙ К ФИЛЬМУ И СНИМИ ЕГО. АКТЁРЫ - УЧАСТНИКИ ЧАТА.", 161, 0]
+     "ТЫ ДЛИНОРАДИО. ПРИДУМАЙ СЦЕНАРИЙ К ФИЛЬМУ И СНИМИ ЕГО. АКТЁРЫ — УЧАСТНИКИ ЧАТА.", 161, 0]
 
 
 ]
