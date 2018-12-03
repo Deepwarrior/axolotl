@@ -10,7 +10,7 @@ class Player:
                  new_year=False, ng_task_id=-1, last_mess=0,
                  islove=False, love_task=None, pair=None, gnome_status=-1, message=None,
                  dura_status=0, dura_num=0, isdura=False, has_a_shield=False, can_get_a_shield=True, dura_task=None,
-                 dura_started=False, taskset=None):
+                 dura_started=False, taskset=None, last_optional_task=0):
         self.user = Namespace(**user) if isinstance(user, dict) else user
         self.task_completed = task_completed
         self.last_mess = last_mess
@@ -30,6 +30,7 @@ class Player:
         self.dura_task = dura_task
         self.dura_started = dura_started
         self.taskset = task.TaskSet(**taskset) if taskset else task.TaskSet()
+        self.last_optional_task = last_optional_task
 
 
 def to_string(self):

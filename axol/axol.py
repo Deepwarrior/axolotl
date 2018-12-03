@@ -1323,6 +1323,23 @@ def backup(message):
     file.close()
 
 
+@bot.message_handler(commands=["СКУЧНО"])
+def bored(message):
+    player = findplayer(message.from_user)
+    if player.task_completed < 300 or message.chat.id != player.user.id or \
+        time.time() - player.last_optional_task < config.seconds_in_day:
+        return
+
+    try:
+        task1 = give_task(player, 'black', message.chat.id)
+        task2 = give_task(player, 'normal', message.chat.id)
+        player.last_optional_task = time.time()
+        bot.send_message(debug_chat_id, player.user.username + " СКУЧАЕТ")
+        bot.send_stickers(debug_chat_id, [task1[0], task2[0]])
+    except telebot.apihelper.ApiException:
+        print("boring failed")
+
+
 def react(reaction, message):
     if message.from_user.id == message.chat.id:
         return
@@ -1392,6 +1409,10 @@ def task_complete(reaction, message):
             elif player.task_completed == 300:
                 bot.send_message(player.user.id, "I'LL ESCAPE NOW FROM THAT WORLD\nFROM THE WORLD OF "
                                  + player.user.username + "\nTHERE IS NOWHERE I CAN TURN\nTHERE IS NO WAY TO GO ON")
+            elif player.task_completed == 301:
+                bot.send_message(player.user.id, "/СКУЧНО? НА САМОМ ДЕЛЕ ТЫ МОЖЕШЬ БРАТЬ ДОПОЛНИТЕЛЬНЫЕ ЗАДАНИЯ. "
+                                                 "ПРАВДА, ЗАСЧИТЫВАТЬСЯ ОНИ НЕ БУДУТ, ТАК ЧТО ПРОДОЛЖАЙ ВЫПОЛНЯТЬ ЛОНГИ."
+                                                 " АХ ДА, БОЛЬШИНСТВО ПРОВЕРЯТОРОВ ДАЖЕ НЕ ДОГАДЫВАЮТСЯ О ТАКОМ ;)")
             if player.task_completed % 50 == 0:
                 bot.send_message(message.chat.id, "ЗАДАНИЕ ВЫПОЛНЕНО!\nВСЕГО СДЕЛАНО 50 ЗАДАНИЙ!",
                                  reply_to_message_id=message.reply_to_message.message_id)
