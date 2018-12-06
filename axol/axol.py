@@ -1846,7 +1846,6 @@ def to_level(message):
     except telebot.apihelper.ApiException:
         bot.send_message(debug_chat_id, "ПЕРЕДЕВЫВАЙ")
 
-grammar_nazi_dictionary = { "ЭАЛО": "ЭАЛЛО", "ЭА1ЛО": "ЭА2ЛО", "ДЛИННОМОЗГ": "ДЛИНОМОЗГ"}
 
 
 @bot.message_handler(commands=["R", "r"])
@@ -1911,24 +1910,6 @@ def message_parsing(message):
             if text == config.answers[level]:
                 level_up()
 
-    if not message.chat.id == message.from_user.id:
-        text = message.text.upper()
-        rnd = random.randint(0, 4)
-        for word in grammar_nazi_dictionary.keys():
-            if word in text:
-                if not rnd:
-                    try:
-                        bot.restrict_chat_member(message.chat.id, message.from_user.id, 1 * 60 * 60, False, False, False,
-                                                 False)
-                        bot.send_message(message.chat.id, "ПОДУМОЙ НАД СВОИМ ПОВЕДЕНИЕМ.",
-                                         reply_to_message_id=message.message_id)
-                    except telebot.apihelper.ApiException:
-                        bot.send_message(message.chat.id, "Я Б ТЕБЯ ЗАБАНИЛ, ДА ЛАПКИ МАРАТЬ НЕОХОТА.",
-                                         reply_to_message_id=message.message_id)
-                else:
-                    str = random.choice(config.grammar_nazi_explanation)
-                    answer = str[0] + grammar_nazi_dictionary[word] + str[1]
-                    bot.send_message(message.chat.id, answer, reply_to_message_id=message.message_id)
 
 
 #@bot.message_handler(content_types=["voice"])

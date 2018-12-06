@@ -111,8 +111,10 @@ reactions = [
     [[], ['CAADAgADdwADg8cnESvsIyQE4i-zAg'], 0, [], [], "dura_fail"],
     [[], ['CAADAgADkQADsjRGHofugN6VvDUUAg'], 0, [], [], "dura_win"]
 ]
+grammar_nazi_dictionary = { "ЭАЛО": "ЭАЛЛО", "ЭА1ЛО": "ЭА2ЛО", "ДЛИННОМОЗГ": "ДЛИНОМОЗГ"}
 
 superreactions = [
+    [grammar_nazi_dictionary.keys(), [], 0, [], [], 'grammar_check'],
     [["МИРАКЛЮ"], [], 0, ["КОГО?"], []],
     [["ВОУ ВОУ", "ВОУ-ВОУ"], [], 0, [], ['CAADAgAD9wADP_vRD4s-yYzXKDzSAg']],
     [memory, [], 0, ["МЕМОРИ!", "ОППА!", "ПЕЙ!"], ['CAADAgADKgADjW7LE7-3bb9S-fuoAg'], "mem_react"],
