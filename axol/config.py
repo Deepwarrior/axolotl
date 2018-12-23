@@ -115,7 +115,7 @@ reactions = [
 superreactions = [
     [["МИРАКЛЮ"], [], 0, ["КОГО?"], []],
     [["ВОУ ВОУ", "ВОУ-ВОУ"], [], 0, [], ['CAADAgAD9wADP_vRD4s-yYzXKDzSAg']],
-    [memory, [], 0, ["МЕМОРИ!", "ОППА!", "ПЕЙ!"], ['CAADAgADKgADjW7LE7-3bb9S-fuoAg'], "mem_react"],
+    [memory, [], 0, ["МЕМОРИ!", "ОППА!", "ПЕЙ!", "НОВОГОДНИЕ МУМЫРИ!"], ['CAADAgADKgADjW7LE7-3bb9S-fuoAg'], "mem_react"],
     [['ДАЙТЕ ЗВЁЗДОЧКУ', 'ПОДАРИ МНЕ ЗВЕЗДУ'], [], 0, [], [], "set_admin"],
     [['ЗАБАНЬТЕ МЕНЯ НА ПАРУ ЧАСИКОВ'], [], 0, [], [], "kick_lyuds"],
     [['ЖОЛТЫЙ'], [], 0, [], [], "why_yellow"]
