@@ -1725,12 +1725,34 @@ def dura_win(reaction, message):
 def why_yellow(reaction, message):
     bot.forward_message(message.chat.id, debug_chat_id, 57759)
 
+
+def grammar_check(reaction, message):
+    if not message.chat.id == message.from_user.id:
+        text = message.text.upper()
+        for word in config.grammar_nazi_dictionary.keys():
+            if word in text:
+                if not random.randint(0, 3):
+                    try:
+                        bot.restrict_chat_member(message.chat.id, message.from_user.id, 1 * 60 * 60, False, False, False,
+                                                 False)
+                        bot.send_message(message.chat.id, "ПОДУМОЙ НАД СВОИМ ПОВЕДЕНИЕМ.",
+                                         reply_to_message_id=message.message_id)
+                    except telebot.apihelper.ApiException:
+                        bot.send_message(message.chat.id, "Я Б ТЕБЯ ЗАБАНИЛ, ДА ЛАПКИ МАРАТЬ НЕОХОТА.",
+                                         reply_to_message_id=message.message_id)
+                else:
+                    str = random.choice(config.grammar_nazi_explanation)
+                    answer = str[0] + config.grammar_nazi_dictionary[word] + str[1]
+                    bot.send_message(message.chat.id, answer, reply_to_message_id=message.message_id)
+
+
 reaction_funcs = {"task_rework": task_rework, "task_fail": task_fail, "task_complete": task_complete,
                   "task_extra": task_extra, "natalka": natalka, "kick_bots": kick_bots, "kick_lyuds": kick_lyuds,
                   "mem_react": mem_react, "anti_task": anti_task, "set_admin": set_admin, "whois": whois,
                   "stop_natalka": stop_natalka, "kick_citrus": kick_citrus, "kick_rels": kick_rels,
                   "kick_misha": kick_misha, "message_above": message_above, "alpha_change": alpha_change,
-                  "dura_approve": dura_approve, "dura_fail": dura_fail, "dura_win": dura_win, "why_yellow": why_yellow
+                  "dura_approve": dura_approve, "dura_fail": dura_fail, "dura_win": dura_win, "why_yellow": why_yellow,
+                  "grammar_check": grammar_check
 }
 
 
@@ -1823,7 +1845,6 @@ def to_level(message):
     except telebot.apihelper.ApiException:
         bot.send_message(debug_chat_id, "ПЕРЕДЕВЫВАЙ")
 
-grammar_nazi_dictionary = { "ЭАЛО": "ЭАЛЛО", "ЭА1ЛО": "ЭА2ЛО", "ДЛИННОМОЗГ": "ДЛИНОМОЗГ"}
 
 
 @bot.message_handler(commands=["R", "r"])
@@ -1888,24 +1909,6 @@ def message_parsing(message):
             if text == config.answers[level]:
                 level_up()
 
-    if not message.chat.id == message.from_user.id:
-        text = message.text.upper()
-        rnd = random.randint(0, 4)
-        for word in grammar_nazi_dictionary.keys():
-            if word in text:
-                if not rnd:
-                    try:
-                        bot.restrict_chat_member(message.chat.id, message.from_user.id, 1 * 60 * 60, False, False, False,
-                                                 False)
-                        bot.send_message(message.chat.id, "ПОДУМОЙ НАД СВОИМ ПОВЕДЕНИЕМ.",
-                                         reply_to_message_id=message.message_id)
-                    except telebot.apihelper.ApiException:
-                        bot.send_message(message.chat.id, "Я Б ТЕБЯ ЗАБАНИЛ, ДА ЛАПКИ МАРАТЬ НЕОХОТА.",
-                                         reply_to_message_id=message.message_id)
-                else:
-                    str = random.choice(config.grammar_nazi_explanation)
-                    answer = str[0] + grammar_nazi_dictionary[word] + str[1]
-                    bot.send_message(message.chat.id, answer, reply_to_message_id=message.message_id)
 
 
 #@bot.message_handler(content_types=["voice"])
