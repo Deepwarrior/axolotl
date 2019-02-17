@@ -1686,7 +1686,7 @@ def change_invite_link(arg):
 
 
 def dura_win(reaction, message):
-    if message.chat.id == 336595041:
+    if message.chat.id == 336595041 or message.chat.id == config.deep_chat:
         try:
             link = bot.export_chat_invite_link(vip_chat_id)
             bot.send_message(message.chat.id, link)
