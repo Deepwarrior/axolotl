@@ -333,8 +333,12 @@ def logging(message):
 @bot.message_handler(commands=["get_logs"])
 def log_output(message):
     global root_log
-    if message.from_user.username in config.root and root_log:
-        bot.send_message(debug_chat_id, root_log)
+    try:
+        if message.from_user.username in config.root and root_log:
+            bot.send_message(debug_chat_id, root_log)
+    except telebot.apihelper.ApiException:
+        bot.send_message(debug_chat_id, "log failed")
+    finally:
         root_log = ""
 
 
