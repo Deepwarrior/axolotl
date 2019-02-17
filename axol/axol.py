@@ -1851,7 +1851,6 @@ if __name__ == '__main__':
     for x in templist:
         active_players.append(players.Player(**x))
     f.close()
-    zrena_timers_init()
     random.seed()
 
     # bot.send_message(debug_chat_id, '*CAADAgADMgADsj* _RGHiKRfQaAeEsnAg_', parse_mode="Markdown")

@@ -1,5 +1,5 @@
 import telebot
-import Timer
+from threading import Timer
 import time
 
 vip_chat_id = -1001145739506
