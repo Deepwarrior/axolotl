@@ -15,19 +15,22 @@ import math
 import chat_utils
 import types
 from femka import femka_init
+from zrena import zrena_timers_init
 
 def sxor(s1,s2):
     return ''.join(chr(ord(a) ^ ord(b)) for a, b in zip(s1, s2))
 
 bot = telebot.TeleBot(str(os.environ['TOKEN']))
 bot.send_stickers = types.MethodType(chat_utils.send_stickers, bot)
-femka_init(bot)
 opentoken = sxor(str(os.environ['TOKEN']), '\x00\x06\x08\n\x01\r\x0c\x0e\x04\x00\x00\x00\x0fA?\x0fDv"5!g\x1f\x18\x16\x05\x0cl\x1c\x12Z&\x13\x1d~!/$0\x008\x03<::'
 )
 rrena_bot = telebot.TeleBot(opentoken)
-active_players = []
 
-day = 24 * 60 * 60
+femka_init(bot)
+zrena_timers_init(bot)
+zrena_timers_init(rrena_bot)
+
+active_players = []
 
 vip_chat_id = -1001145739506
 debug_chat_id = -1001107497089
@@ -46,48 +49,8 @@ spy_chat = -1001231436175
 
 last_mess = 0
 
-zrenki = [vip_chat_id, -1001345532965, fur_fur_fur_chat, dlan_chat, -1001117989911]
-def zrena():
-    for chat in zrenki:
-        try:
-            bot.send_sticker(chat, 'CAADAgADtAADP_vRD1iCbwT85WNIAg')
-            bot.send_message(chat, 'ХАЛЯВНЫЙ ЗАРЯД! ГО ПИЛИТЬ РАНДОМЩИКОВ!')
-        except telebot.apihelper.ApiException:
-            print("zreno to " + str(chat) + " failed")
-    timer = Timer(day, zrena)
-    timer.start()
-    try:
-        rrena_bot.send_sticker(dlan_chat, 'CAADAgADtAADP_vRD1iCbwT85WNIAg')
-        rrena_bot.send_message(dlan_chat, 'ХАЛЯВНЫЙ ЗАРЯД! ГО ПИЛИТЬ РАНДОМЩИКОВ!')
-        rrena_bot.send_sticker(-1001200533121, 'CAADAgADtAADP_vRD1iCbwT85WNIAg')
-        rrena_bot.send_message(-1001200533121, 'ХАЛЯВНЫЙ ЗАРЯД! ГО ПИЛИТЬ РАНДОМЩИКОВ!')
-    except telebot.apihelper.ApiException:
-        print("zreno to " + str(dlan_chat) + " failed")
-
-def zrena_timers_init():
-    cur_time = time.localtime(time.time())
-    mins = cur_time.tm_min
-    sec = cur_time.tm_sec
-    hours = cur_time.tm_hour
-    tim = (day + 55 * 60 - hours * 3600 - mins * 60 - sec) % day
-    timer = Timer(tim, zrena)
-    timer.start()
-    tim = (day + 5 * 60 + 9 * 3600 - hours * 3600 - mins * 60 - sec) % day
-    timer = Timer(tim, zrena)
-    timer.start()
-    tim = (day + 5 * 60 + 19 * 3600 - hours * 3600 - mins * 60 - sec) % day
-    timer = Timer(tim, zrena)
-    timer.start()
-    tim = (day + 5 * 60 + 14 * 3600 - hours * 3600 - mins * 60 - sec) % day
-    timer = Timer(tim, zrena)
-    timer.start()
-
-
 def jsonDefault(object):
     return object.__dict__
-
-
-
 
 # find and append players
 def findplayer(user):
