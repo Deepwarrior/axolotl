@@ -1729,10 +1729,9 @@ def why_yellow(reaction, message):
 def grammar_check(reaction, message):
     if not message.chat.id == message.from_user.id:
         text = message.text.upper()
-        rnd = random.randint(0, 3)
         for word in config.grammar_nazi_dictionary.keys():
             if word in text:
-                if not rnd:
+                if not random.randint(0, 3):
                     try:
                         bot.restrict_chat_member(message.chat.id, message.from_user.id, 1 * 60 * 60, False, False, False,
                                                  False)
