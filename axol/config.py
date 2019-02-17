@@ -378,7 +378,11 @@ long_tasks = [
     [['CAADAgADZwIAAtlSUwww1-oTKL6f1AI','CAADAgADaAIAAtlSUwwBemewONhMbQI','CAADAgADaQIAAtlSUwwNs9AY3sPylgI'],
      "ТЫ ДЛИНОТРИББЛ. РАЗМНОЖАЙСЯ. К КОНЦУ НЕДЕЛИ ХОТЯ БЫ У ТРЕТИ ЧАТА ДОЛЖНЫ БЫТЬ ТВОИ НИК И АВАТАРКА.", 161, 0],
     [['CAADAgADLgIAAtlSUwwBLWkO5NscmwI','CAADAgADMwIAAtlSUwyzNEPan58O6QI','CAADAgADOAIAAtlSUwwBgLlBORApZAI'],
-     "ТЫ ДЛИНОРАДИО. ПРИДУМАЙ СЦЕНАРИЙ К ФИЛЬМУ И СНИМИ ЕГО. АКТЁРЫ — УЧАСТНИКИ ЧАТА.", 161, 0]
+     "ТЫ ДЛИНОРАДИО. ПРИДУМАЙ СЦЕНАРИЙ К ФИЛЬМУ И СНИМИ ЕГО. АКТЁРЫ — УЧАСТНИКИ ЧАТА.", 161, 0],
+    [['CAADAgADTQIAAtlSUwyxFe2mEJQhNwI','CAADAgADUgIAAtlSUwwgCzbw4D5-FAI','CAADAgADVwIAAtlSUwyNGn_We6CE4QI'],
+     "ТЫ ДЛИНОО ДЛИНОЖИ. ПОЛУЧИ В ТРОФЕЙ ЧЬИ-ТО СБРИТЫЕ УСИШКИ.", 161, 0],
+    [['CAADAgADbwIAAtlSUwxCJcCLqN_uvAI','CAADAgADcAIAAtlSUwyJLSMIi4wCGwI','CAADAgADcQIAAtlSUww8BNSlF_VOQAI'],
+     "ТЫ ДЛИНОМИХЕЙ. НАПИШИ СТАТЬЮ В ЭНЦИКЛОБОГИЮ.", 161, 0]
 
 
 ]
