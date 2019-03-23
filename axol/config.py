@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-root = ['random_answer', 'Deepwarrior', 'kstera', 'uhi_official', 'alukr', 'Kotokotokotova', 'areatangent', 'Elstaar']
+root = ['random_answer', 'Deepwarrior', 'kstera', 'uhi_official', 'alukr', 'shlihta', 'areatangent', 'Elstaar']
 alpha_moder = [265419583, 206787289]
 
 deep_chat = 150029429
