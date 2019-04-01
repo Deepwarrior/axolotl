@@ -14,8 +14,12 @@ import operator
 import math
 import chat_utils
 import types
+from femka import femka_init
+from zrena import zrena_timers_init
+from mail import mail_init
 
-def sxor(s1,s2):
+
+def sxor(s1, s2):
     return ''.join(chr(ord(a) ^ ord(b)) for a, b in zip(s1, s2))
 
 bot = telebot.TeleBot(str(os.environ['TOKEN']))
@@ -23,9 +27,13 @@ bot.send_stickers = types.MethodType(chat_utils.send_stickers, bot)
 opentoken = sxor(str(os.environ['TOKEN']), '\x00\x06\x08\n\x01\r\x0c\x0e\x04\x00\x00\x00\x0fA?\x0fDv"5!g\x1f\x18\x16\x05\x0cl\x1c\x12Z&\x13\x1d~!/$0\x008\x03<::'
 )
 rrena_bot = telebot.TeleBot(opentoken)
-active_players = []
 
-day = 24 * 60 * 60
+femka_init(bot)
+zrena_timers_init(bot)
+zrena_timers_init(rrena_bot)
+mail_init(bot)
+
+active_players = []
 
 vip_chat_id = -1001145739506
 debug_chat_id = -1001107497089
@@ -44,48 +52,8 @@ spy_chat = -1001231436175
 
 last_mess = 0
 
-zrenki = [vip_chat_id, -1001345532965, fur_fur_fur_chat, dlan_chat, -1001117989911]
-def zrena():
-    for chat in zrenki:
-        try:
-            bot.send_sticker(chat, 'CAADAgADtAADP_vRD1iCbwT85WNIAg')
-            bot.send_message(chat, 'ХАЛЯВНЫЙ ЗАРЯД! ГО ПИЛИТЬ РАНДОМЩИКОВ!')
-        except telebot.apihelper.ApiException:
-            print("zreno to " + str(chat) + " failed")
-    timer = Timer(day, zrena)
-    timer.start()
-    try:
-        rrena_bot.send_sticker(dlan_chat, 'CAADAgADtAADP_vRD1iCbwT85WNIAg')
-        rrena_bot.send_message(dlan_chat, 'ХАЛЯВНЫЙ ЗАРЯД! ГО ПИЛИТЬ РАНДОМЩИКОВ!')
-        rrena_bot.send_sticker(-1001200533121, 'CAADAgADtAADP_vRD1iCbwT85WNIAg')
-        rrena_bot.send_message(-1001200533121, 'ХАЛЯВНЫЙ ЗАРЯД! ГО ПИЛИТЬ РАНДОМЩИКОВ!')
-    except telebot.apihelper.ApiException:
-        print("zreno to " + str(dlan_chat) + " failed")
-
-def zrena_timers_init():
-    cur_time = time.localtime(time.time())
-    mins = cur_time.tm_min
-    sec = cur_time.tm_sec
-    hours = cur_time.tm_hour
-    tim = (day + 55 * 60 - hours * 3600 - mins * 60 - sec) % day
-    timer = Timer(tim, zrena)
-    timer.start()
-    tim = (day + 5 * 60 + 9 * 3600 - hours * 3600 - mins * 60 - sec) % day
-    timer = Timer(tim, zrena)
-    timer.start()
-    tim = (day + 5 * 60 + 19 * 3600 - hours * 3600 - mins * 60 - sec) % day
-    timer = Timer(tim, zrena)
-    timer.start()
-    tim = (day + 5 * 60 + 14 * 3600 - hours * 3600 - mins * 60 - sec) % day
-    timer = Timer(tim, zrena)
-    timer.start()
-
-
 def jsonDefault(object):
     return object.__dict__
-
-
-
 
 # find and append players
 def findplayer(user):
@@ -368,8 +336,12 @@ def logging(message):
 @bot.message_handler(commands=["get_logs"])
 def log_output(message):
     global root_log
-    if message.from_user.username in config.root and root_log:
-        bot.send_message(debug_chat_id, root_log)
+    try:
+        if message.from_user.username in config.root and root_log:
+            bot.send_message(debug_chat_id, root_log)
+    except telebot.apihelper.ApiException:
+        bot.send_message(debug_chat_id, "log failed")
+    finally:
         root_log = ""
 
 
@@ -395,43 +367,6 @@ def left_member(message):
         bot.send_message(debug_chat_id, "КОГО-ТО КИКНУЛИ, ЕСЛИ ВАМ ЭТО ИНТЕРЕСНО")
 
 
-@bot.message_handler(commands=["IGRO", "igro"])
-def axol_igrovoice(message):
-    if message.from_user.username in config.root:
-        text = str(message.text[6:])
-        if text:
-            bot.send_message(igroklub_chat, text)
-
-
-@bot.message_handler(commands=["mess", "MESS"])
-def axol_voice(message):
-    if message.from_user.username in config.root:
-        text = str(message.text[6:])
-        mess = text.split(' ', 1)
-        try:
-            chat = int(mess[0])
-            bot.send_message(chat, mess[1])
-        except (ValueError, telebot.apihelper.ApiException):
-            bot.send_message(vip_chat_id, text)
-
-
-@bot.message_handler(commands=["SAVE", "save"])
-def save(message):
-    if message.from_user.username in config.root and message.reply_to_message:
-        bot.forward_message(debug_chat_id, message.chat.id, message.reply_to_message.message_id)
-        logging(message)
-
-
-@bot.message_handler(commands=["fwd", "FWD"])
-def fwd(message):
-    if message.from_user.username in config.root and message.reply_to_message:
-        text = str(message.text[5:])
-        try:
-            chat = int(text)
-            bot.forward_message(chat, message.chat.id, message.reply_to_message.message_id)
-        except (ValueError, telebot.apihelper.ApiException):
-            bot.forward_message(vip_chat_id, message.chat.id, message.reply_to_message.message_id)
-            logging(message)
 
 
 @bot.message_handler(commands=["whereisthisfuckingpredmetattime"])
@@ -522,19 +457,6 @@ def ping_start(message):
     timer.start()
 
 
-@bot.message_handler(commands=["send_deep"])
-def send_deep(message):
-    text = str(message.text[10:])
-    if not text:
-        return
-    text = ': ' + text
-    if message.from_user.last_name:
-        text = message.from_user.last_name + text
-    if message.from_user.first_name:
-        text = message.from_user.first_name + ' ' + text
-    bot.send_message(config.deep_chat, text)
-
-
 @bot.message_handler(commands=["send_all"])
 def send_all(message):
     text = str(message.text[9:])
@@ -545,37 +467,6 @@ def send_all(message):
             bot.send_message(player.user.id, text)
         except telebot.apihelper.ApiException:
             continue
-
-
-@bot.message_handler(commands=["send_uhi"])
-def send_uhi(message):
-    text = str(message.text[9:])
-    if not text:
-        return
-    text = ': ' + text
-    if message.from_user.last_name:
-        text = message.from_user.last_name + text
-    if message.from_user.first_name:
-        text = message.from_user.first_name + ' ' + text
-    bot.send_message(config.citrus_chat, text)
-
-
-@bot.message_handler(commands=["send"])
-def send(message):
-    text = str(message.text[6:])
-    if not text or text == "rakon_bot":
-        bot.send_message(message.chat.id, "НЕТ, НЕТ, НУЖНО ПИСАТЬ ПИСЬМО ПРОВЕРЯТОРАМ В ТОМ ЖЕ СООБЩЕНИИ, ЧТО И /send")
-        return
-    text = ': ' + text
-    if message.from_user.last_name:
-        text = message.from_user.last_name + text
-    if message.from_user.first_name:
-        text = message.from_user.first_name + ' ' + text
-    try:
-        bot.send_message(-1001246951967, text)
-        bot.send_message(-1001479011046, text)
-    except telebot.apihelper.ApiException:
-        bot.send_message(debug_chat_id, text)
 
 
 @bot.message_handler(commands=["on"])
@@ -594,58 +485,6 @@ def messages_off(message):
         player.mess_from_bot = False
         bot.send_message(message.chat.id, "ВЕРНИ КАК БЫЛО")
 
-
-@bot.message_handler(commands=["femka", "FEMKA"])
-def femka(message):
-    text = str(message.text[7:])
-    text = text.upper()
-    if not text or text == "rakon_bot":
-        bot.send_message(message.chat.id, "ЭАЛЛО, СЛОВО-ТО НАПИШИ")
-        return
-    if " " in text:
-        bot.send_message(message.chat.id, "Я ЧО, ПОХОЖ НА ПАТРИСИЮ? НАПИШИ ОДНО СЛОВО!")
-        return
-    if not text.isalpha():
-        bot.send_message(message.chat.id, "ПРИВЕТ, ЦИФЕРКА! 0/")
-        return
-
-    last_char = text[-1]  # You can do switch by value of this variable.
-    if last_char in "ИЫ" and text not in config.exception_spisok:
-        the_end = config.ends[:]
-    else:
-        the_end = config.end[:]
-
-    if last_char in "АЯ":
-        bot.send_message(message.chat.id, "СЛОВО «" + text + "» ИДЕАЛЬНО!")
-    else:
-        text = text[:-1]
-        for i in range(len(config.ends)):
-            if last_char in "ИЫ" and text + last_char not in config.exception_spisok:
-                # for i in range(len(config.ends)) and not in [0, 2, 5]:
-                #    the_end[i] = last_char + the_end[i]
-                if not(i == 0 or i == 2 or i == 5):
-                    the_end[i] = last_char + the_end[i]
-            else:
-                if last_char in "КГ":
-                    if i == 1:
-                        the_end[i] = "ЧКА"
-                    else:
-                        the_end[i] = last_char + the_end[i]
-
-                elif last_char in "ОЕУ" or text + last_char in config.exception_spisok:
-                    if not (i == 0 or i == 2 or i == 5):
-                        the_end[i] = last_char + the_end[i]
-
-                elif last_char == "Ь":
-                    if not (i == 2 or i == 4 or i == 5):
-                        the_end[i] = last_char + the_end[i]
-                else:
-                    the_end[i] = last_char + the_end[i]
-
-        ideal_spisok = "ДЕРЖИ ИДЕАЛЬНЫЕ СЛОВА:" + '\n' * 2
-        for i in the_end:
-            ideal_spisok += text + i.upper() + '\n'
-        bot.send_message(message.chat.id, ideal_spisok)
 
 '''
 @bot.message_handler(commands=["love_reg"])
@@ -1934,7 +1773,6 @@ if __name__ == '__main__':
     for x in templist:
         active_players.append(players.Player(**x))
     f.close()
-    zrena_timers_init()
     random.seed()
 
     # bot.send_message(debug_chat_id, '*CAADAgADMgADsj* _RGHiKRfQaAeEsnAg_', parse_mode="Markdown")
