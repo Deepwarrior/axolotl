@@ -54,13 +54,14 @@ def zrena():
             print("zreno to " + str(chat) + " failed")
     timer = Timer(day, zrena)
     timer.start()
-    try:
-        rrena_bot.send_sticker(dlan_chat, 'CAADAgADtAADP_vRD1iCbwT85WNIAg')
-        rrena_bot.send_message(dlan_chat, 'ХАЛЯВНЫЙ ЗАРЯД! ГО ПИЛИТЬ РАНДОМЩИКОВ!')
-        rrena_bot.send_sticker(-1001200533121, 'CAADAgADtAADP_vRD1iCbwT85WNIAg')
-        rrena_bot.send_message(-1001200533121, 'ХАЛЯВНЫЙ ЗАРЯД! ГО ПИЛИТЬ РАНДОМЩИКОВ!')
-    except telebot.apihelper.ApiException:
-        print("zreno to " + str(dlan_chat) + " failed")
+
+    dlanechats = [dlan_chat, -1001200533121]
+    for chat in dlanechats:
+        try:
+            rrena_bot.send_sticker(chat, 'CAADAgADLQADwt_QFaDEtP5SpCA4Ag')
+            rrena_bot.send_message(chat, 'ХАЛЯВНЫЙ ЗАРЯД! ГО ПИЛИТЬ РАНДОМЩИКОВ!')
+        except telebot.apihelper.ApiException:
+            print("zreno to " + str(chat) + " failed")
 
 def zrena_timers_init():
     cur_time = time.localtime(time.time())
