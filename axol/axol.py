@@ -55,13 +55,36 @@ def zrena():
     timer = Timer(day, zrena)
     timer.start()
 
-    dlanechats = [dlan_chat, -1001200533121]
+    dlanechats = [dlan_chat, -1001200533121, -1001488372630]
     for chat in dlanechats:
         try:
             rrena_bot.send_sticker(chat, 'CAADAgADLQADwt_QFaDEtP5SpCA4Ag')
-            rrena_bot.send_message(chat, 'ХАЛЯВНЫЙ ЗАРЯД! ГО ПИЛИТЬ РАНДОМЩИКОВ!')
+            mess = rrena_bot.send_message(chat, 'ХАЛЯВНЫЙ ЗАРЯД! ГО ПИЛИТЬ РАНДОМЩИКОВ!')
+            rrena_bot.pin_chat_message(chat, mess, False)
         except telebot.apihelper.ApiException:
             print("zreno to " + str(chat) + " failed")
+
+def skakanidy():
+    chat = -1001488372630
+    try:
+        rrena_bot.send_sticker(chat, 'CAADAgADAQADwt_QFTJzIDG-COPZAg')
+        message = "ДЛАНЕПРЫГ. ВСЕМ ПИЛИТЬ MARRKUS"
+        if random.randint(0, 500) == 228:
+            message += " В ПАМЯТЬ ОБ АЛЬФАРИИ"
+        mess = rrena_bot.send_message(chat, message)
+        rrena_bot.pin_chat_message(chat, mess, False)
+    except telebot.apihelper.ApiException:
+        print("zreno to " + str(chat) + " failed")
+
+def kakavozik():
+    chat = -1001488372630
+    try:
+        rrena_bot.send_sticker(chat, 'CAADAgADMgADwt_QFVfbq6zCMMpBAg')
+        mess = rrena_bot.send_message(chat, "НЕ ЗАБУДЬ ВЫВЕСТИ ГОВНОВОЗИК НА ВЫХОД")
+        rrena_bot.pin_chat_message(chat, mess, False)
+    except telebot.apihelper.ApiException:
+        print("zreno to " + str(chat) + " failed")
+
 
 def zrena_timers_init():
     cur_time = time.localtime(time.time())
@@ -79,6 +102,20 @@ def zrena_timers_init():
     timer.start()
     tim = (day + 5 * 60 + 14 * 3600 - hours * 3600 - mins * 60 - sec) % day
     timer = Timer(tim, zrena)
+    timer.start()
+
+    tim = (day + 37 * 60 + 9 * 3600 - hours * 3600 - mins * 60 - sec) % day
+    timer = Timer(tim, skakanidy)
+    timer.start()
+    tim = (day + 37 * 60 + 14 * 3600 - hours * 3600 - mins * 60 - sec) % day
+    timer = Timer(tim, skakanidy)
+    timer.start()
+    tim = (day + 37 * 60 + 19 * 3600 - hours * 3600 - mins * 60 - sec) % day
+    timer = Timer(tim, skakanidy)
+    timer.start()
+
+    tim = (day + 22 * 60 + 22 * 3600 - hours * 3600 - mins * 60 - sec) % day
+    timer = Timer(tim, kakavozik)
     timer.start()
 
 
