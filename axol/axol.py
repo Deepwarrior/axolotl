@@ -1974,10 +1974,7 @@ if __name__ == '__main__':
     f.close()
     zrena_timers_init()
     random.seed()
-    mess = bot.send_message(debug_chat_id, '1')
-    print(mess)
-
-                     # bot.send_message(debug_chat_id, '*CAADAgADMgADsj* _RGHiKRfQaAeEsnAg_', parse_mode="Markdown")
+    # bot.send_message(debug_chat_id, '*CAADAgADMgADsj* _RGHiKRfQaAeEsnAg_', parse_mode="Markdown")
     for chat in allow_chats:
         try:
             # bot.send_sticker(chat, 'CAADAgADhQADP_vRD-Do6Qz0fkeMAg')
