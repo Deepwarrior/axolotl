@@ -60,7 +60,7 @@ def zrena():
         try:
             rrena_bot.send_sticker(chat, 'CAADAgADLQADwt_QFaDEtP5SpCA4Ag')
             mess = rrena_bot.send_message(chat, 'ХАЛЯВНЫЙ ЗАРЯД! ГО ПИЛИТЬ РАНДОМЩИКОВ!')
-            rrena_bot.pin_chat_message(chat, mess, False)
+            rrena_bot.pin_chat_message(chat, mess.message_id, False)
         except telebot.apihelper.ApiException:
             print("zreno to " + str(chat) + " failed")
 
@@ -72,7 +72,7 @@ def skakanidy():
         if random.randint(0, 500) == 228:
             message += " В ПАМЯТЬ ОБ АЛЬФАРИИ"
         mess = rrena_bot.send_message(chat, message)
-        rrena_bot.pin_chat_message(chat, mess, False)
+        rrena_bot.pin_chat_message(chat, mess.message_id, False)
     except telebot.apihelper.ApiException:
         print("zreno to " + str(chat) + " failed")
 
@@ -81,7 +81,7 @@ def kakavozik():
     try:
         rrena_bot.send_sticker(chat, 'CAADAgADMgADwt_QFVfbq6zCMMpBAg')
         mess = rrena_bot.send_message(chat, "НЕ ЗАБУДЬ ВЫВЕСТИ ГОВНОВОЗИК НА ВЫХОД")
-        rrena_bot.pin_chat_message(chat, mess, False)
+        rrena_bot.pin_chat_message(chat, mess.message_id, False)
     except telebot.apihelper.ApiException:
         print("zreno to " + str(chat) + " failed")
 
@@ -1974,8 +1974,10 @@ if __name__ == '__main__':
     f.close()
     zrena_timers_init()
     random.seed()
+    mess = bot.send_message(debug_chat_id, '1')
+    print(mess)
 
-    # bot.send_message(debug_chat_id, '*CAADAgADMgADsj* _RGHiKRfQaAeEsnAg_', parse_mode="Markdown")
+                     # bot.send_message(debug_chat_id, '*CAADAgADMgADsj* _RGHiKRfQaAeEsnAg_', parse_mode="Markdown")
     for chat in allow_chats:
         try:
             # bot.send_sticker(chat, 'CAADAgADhQADP_vRD-Do6Qz0fkeMAg')
@@ -1996,4 +1998,3 @@ if __name__ == '__main__':
                 print("My face is hidden behind a mask")
             except (ReadTimeout, socket.timeout, urllib3.exceptions.ReadTimeoutError):
                 print("My face is hidden behind a mask. Elon Mask.")
-
