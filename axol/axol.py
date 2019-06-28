@@ -82,7 +82,7 @@ def kakavozik():
     chat = -1001488372630
     try:
         rrena_bot.send_sticker(chat, 'CAADAgADMgADwt_QFVfbq6zCMMpBAg')
-        mess = rrena_bot.send_message(chat, "НЕ ЗАБУДЬ ВЫВЕСТИ ГОВНОВОЗИК НА ВЫХОД")
+        mess = rrena_bot.send_message(chat, "МОЙ ДАНЖ. МОЙ РУЛЬ. МОЯ ОТВЕТСТВЕННОСТЬ.")
         rrena_bot.pin_chat_message(chat, mess.message_id, False)
     except telebot.apihelper.ApiException:
         print("zreno to " + str(chat) + " failed")
