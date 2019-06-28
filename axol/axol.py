@@ -75,6 +75,8 @@ def skakanidy():
         rrena_bot.pin_chat_message(chat, mess.message_id, False)
     except telebot.apihelper.ApiException:
         print("zreno to " + str(chat) + " failed")
+    timer = Timer(day, skakanidy)
+    timer.start()
 
 def kakavozik():
     chat = -1001488372630
@@ -84,7 +86,8 @@ def kakavozik():
         rrena_bot.pin_chat_message(chat, mess.message_id, False)
     except telebot.apihelper.ApiException:
         print("zreno to " + str(chat) + " failed")
-
+    timer = Timer(day, kakavozik)
+    timer.start()
 
 def zrena_timers_init():
     cur_time = time.localtime(time.time())
