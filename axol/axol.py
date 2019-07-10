@@ -68,7 +68,7 @@ def skakanidy():
     chat = -1001488372630
     try:
         rrena_bot.send_sticker(chat, 'CAADAgADAQADwt_QFTJzIDG-COPZAg')
-        message = "ДЛАНЕПРЫГ. ВСЕМ ПИЛИТЬ MARRKUS"
+        message = "ЧЕРЕЗ МИНУТУ ДЛАНЕПРЫГ. ВСЕМ ПИЛИТЬ MARRKUS"
         if random.randint(0, 500) == 228:
             message += " В ПАМЯТЬ ОБ АЛЬФАРИИ"
         mess = rrena_bot.send_message(chat, message)
@@ -107,13 +107,13 @@ def zrena_timers_init():
     timer = Timer(tim, zrena)
     timer.start()
 
-    tim = (day + 37 * 60 + 9 * 3600 - hours * 3600 - mins * 60 - sec) % day
+    tim = (day + 36 * 60 + 9 * 3600 - hours * 3600 - mins * 60 - sec) % day
     timer = Timer(tim, skakanidy)
     timer.start()
-    tim = (day + 37 * 60 + 14 * 3600 - hours * 3600 - mins * 60 - sec) % day
+    tim = (day + 36 * 60 + 14 * 3600 - hours * 3600 - mins * 60 - sec) % day
     timer = Timer(tim, skakanidy)
     timer.start()
-    tim = (day + 37 * 60 + 19 * 3600 - hours * 3600 - mins * 60 - sec) % day
+    tim = (day + 36 * 60 + 19 * 3600 - hours * 3600 - mins * 60 - sec) % day
     timer = Timer(tim, skakanidy)
     timer.start()
 
