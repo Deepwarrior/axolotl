@@ -91,6 +91,7 @@ reactions = [
     [["/ТИХО РЖЁТЬ/"], [], osa_chat, ["ГРОМЧЕ!"], []],
     [["/АРЁТ/"], [], osa_chat, [], ['CAADAgADDQADdUTxCP-onsxKIsJqAg']],
     [["/start"], [], 0, ["ТЫ КТО? И КАК ОБО МНЕ УЗНАЛ?"], []],
+    [["ДА", "ДА."],[],0,["ША"],[]],
 
     [[], ['CAADAgADpgEAAmDrzgNSIT8rlE3K0AI', 'CAADAgADVQADsjRGHmcXPWcGP2BfAg'], 0, [], [], "task_rework"],
     [fail_phrase, ['CAADAgADFAADjW7LE9E1TbwjuTk7Ag'], 0, [], [], "task_fail"],
