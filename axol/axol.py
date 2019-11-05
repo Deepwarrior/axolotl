@@ -81,7 +81,7 @@ def skakanidy():
 def kakavozik():
     chat = -1001488372630
     try:
-        rrena_bot.send_sticker(chat, 'CAADAgADMgADwt_QFVfbq6zCMMpBAg')
+        rrena_bot.send_sticker(chat, 'CAADAgADNwADwt_QFXi2yLdkj-Y0FgQ')
         mess = rrena_bot.send_message(chat, "МОЙ ДАНЖ. МОЙ РУЛЬ. МОЯ ОТВЕТСТВЕННОСТЬ.")
         rrena_bot.pin_chat_message(chat, mess.message_id, False)
     except telebot.apihelper.ApiException:
