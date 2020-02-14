@@ -89,6 +89,25 @@ def kakavozik():
     timer = Timer(day, kakavozik)
     timer.start()
 
+
+def remind():
+    try:
+        mess = bot.send_message(debug_chat_id, "Хм...")
+        something = random.randint(0, mess.message_id)
+        bot.send_message(debug_chat_id, "ГЛЯНЬТЕ ЧО", reply_to_message_id=something)
+    except telebot.apihelper.ApiException:
+        print("Ne to")
+
+def nostalgy():
+    mins = random.randint(0, 60)
+    hours = random.randint(0, 14)
+    sec = random.randint(0, 60)
+    timer = Timer(hours * 3600 + mins * 60 + sec, remind)
+    timer.start()
+
+    timer = Timer(day, nostalgy)
+    timer.start()
+
 def zrena_timers_init():
     cur_time = time.localtime(time.time())
     mins = cur_time.tm_min
@@ -120,6 +139,11 @@ def zrena_timers_init():
     tim = (day + 22 * 60 + 22 * 3600 - hours * 3600 - mins * 60 - sec) % day
     timer = Timer(tim, kakavozik)
     timer.start()
+
+    tim = (day + 5 * 60 + 8 * 3600 - hours * 3600 - mins * 60 - sec) % day
+    timer = Timer(tim, nostalgy)
+    timer.start()
+
 
 
 def jsonDefault(object):
@@ -1812,8 +1836,8 @@ def notify(message):
 
 def task_check(message):
     # return #remove this
-    if message.chat.id not in [vip_chat_id]:
-        return
+    #if message.chat.id not in [vip_chat_id]:
+    return
     for func in current_task_funcs:
         player, result = func(message, True)
         if result == "+":
@@ -1916,9 +1940,9 @@ def sticker_parsing(message):
                     reaction_funcs[reaction[5]](reaction, message)
                 else:
                     react(reaction, message)
-    if message.chat.id == debug_chat_id or message.chat.id == config.cifr_chat:
-        bot.send_message(message.chat.id, '\'' + message.sticker.file_id + '\'\n',# + message.sticker.set_name,
-                         reply_to_message_id=message.message_id)
+    #if message.chat.id == debug_chat_id or message.chat.id == config.cifr_chat:
+    #    bot.send_message(message.chat.id, '\'' + message.sticker.file_id + '\'\n',# + message.sticker.set_name,
+    #                     reply_to_message_id=message.message_id)
     task_check(message)
     player = findplayer(message.from_user)
     player.last_mess = time.time()
@@ -1977,6 +2001,7 @@ if __name__ == '__main__':
     f.close()
     zrena_timers_init()
     random.seed()
+    remind()
     # bot.send_message(debug_chat_id, '*CAADAgADMgADsj* _RGHiKRfQaAeEsnAg_', parse_mode="Markdown")
     for chat in allow_chats:
         try:
