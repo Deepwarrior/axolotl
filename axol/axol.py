@@ -92,9 +92,9 @@ def kakavozik():
 
 def remind():
     try:
-        mess = bot.send_message(debug_chat_id, "Хм...")
+        mess = bot.send_message(debug_chat_id, "КАЖЕТСЯ, МЫ СТАЛИ ЗАБЫВАТЬ...")
         something = random.randint(0, mess.message_id)
-        bot.send_message(debug_chat_id, "ГЛЯНЬТЕ ЧО", reply_to_message_id=something)
+        bot.send_message(debug_chat_id, "/НАПОМИНАЕТ О ВЕЧНОМ ОБНОВЛЕНИИ ЛИКУЮЩЕЙ ПРИРОДЫ/", reply_to_message_id=something)
     except telebot.apihelper.ApiException:
         print("Ne to")
 
@@ -2001,7 +2001,6 @@ if __name__ == '__main__':
     f.close()
     zrena_timers_init()
     random.seed()
-    remind()
     # bot.send_message(debug_chat_id, '*CAADAgADMgADsj* _RGHiKRfQaAeEsnAg_', parse_mode="Markdown")
     for chat in allow_chats:
         try:
