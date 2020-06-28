@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-root = ['random_answer', 'Deepwarrior', 'kstera', 'uhi_official', 'alukr', 'shlihta', 'areatangent', 'Elstaar']
+root = ['Deepwarrior', 'kstera', 'uhi_official', 'alukr', 'shlihta', 'areatangent', 'Elstaar']
 alpha_moder = [265419583, 206787289]
 
 deep_chat = 150029429
@@ -13,6 +13,7 @@ rels_chat = 44989459
 misha_chat = 53316498
 osa_chat = 299778732
 oj_chat = 358155068
+nata_chat = 196345058
 
 seconds_in_day = 85000
 
@@ -51,67 +52,61 @@ hermite_gaussian_modes = ['CAADAgADEQADkostA3DN6NzApx5JAg', 'CAADAgADEgADkostA9s
 # format: message_list, sticker_list, user, reaction_messages_list, reaction_stickers_list, func for executing
 # "[[], [], 0, [], [], None],"
 reactions = [
-    [[], hi_stickers, citrus_chat, hi_citrus, []],
-    [[], ['CAADAQADpwADQPhSDLndcqosubnnAg', 'CAADAgADMwAD2VJTDPcbC8T2BqMOAg'], cifr_chat, hi_cifr,
+    [[], ['AgADWwQAAm4y2AAB', 'AgADhAEAAjZ2IA4'], citrus_chat, hi_citrus, []],
+    [[], ['AgADpwADQPhSDA'], cifr_chat, hi_cifr,
      ['CAADAgADjAADg8cnEZz_9rSktUkNAg']],
-    [['🐬🐬🐬'], ['CAADAgADiQADP_vRD4cJCxtGkwY0Ag'], 0, ["О, ИТАЛИЯ НАЧАЛАСЬ"], []],
-    [[], ['CAADAgADHgAD6gKUEl9xLyPpAAFHBgI'], zoloto_chat, ["Погоди, сейчас выдам Дипа"], []],
-    [[], ['CAADAgADZgADhzHUD8vWtQEsl3zaAg', 'CAADAgADCQADO9HBD09qppDfqW_HAg', 'CAADAgADcAADhzHUD82gOZvLAAFdEAI'],
-     0, ['УЛЕЙ'], []],
+    [['🐬🐬🐬'], ['AgADiQADP_vRDw'], 0, ["О, ИТАЛИЯ НАЧАЛАСЬ"], []],
+    [[], ['AgADHgAD6gKUEg'], zoloto_chat, ["Погоди, сейчас выдам Дипа"], []],
+    [[], ['AgADCQADO9HBDw'], 0, ['УЛЕЙ'], []],
     [['КОГО?', 'КОГО'], [], 0, ["МИРАКЛЮ"], []],
     [['D:', 'ВЖ'], [], 0, ['/UTYUG'], ['CAADAgADAQADjW7LE45SqDkRKtyzAg', 'CAADAgADGwADsjRGHuBFiQgG41R0Ag',
                                        'CAADAgADjAADsjRGHrkIcAsCdzOMAg']],
-    [[], ['CAADAgADAQADjW7LE45SqDkRKtyzAg'], undo_chat, ["УНДЮЖОЧЕК!"], ["CAADAgADMgADg8cnEWp3ie4jNHg-Ag"]],
+    [[], ['AgADAQADjW7LEw'], undo_chat, ["УНДЮЖОЧЕК!"], ["CAADAgADMgADg8cnEWp3ie4jNHg-Ag"]],
     [['D: D: D:', 'ВЖ ВЖ ВЖ'], [], 0, [], ['CAADAgADAgADjW7LE_v50VPsaKSvAg']],
-    [[], dlinnohead, cifr_chat, ['СПАСИБО ЗА ДЛИННОКОТА, СЕРЁЖА!', '', ''],
-     ['CAADAgADawADg8cnEX6Ppa2_ElfUAg', 'CAADAgADlgIAAmMr4glN9I0DbTqtTgI', 'CAADAgADjAADg8cnEZz_9rSktUkNAg']],
-    [[], ['CAADAgADBQAD2VJTDOfoIDVZCU5zAg'], cifr_chat, [], ['CAADAgADAwAD2VJTDHENEIKamV7uAg']],
     [['ДИТЯ МОЁ!'], [], citrus_chat, ['ЧТО ТАКОЕ, МАМОЧКА?'], []],
     [["НА ЛУГУ ПАСУТСЯ КО?"], [], 0, ['РИН-НЕ-КО!'], []],
-    [[], ['CAADAgADFQADjW7LE9KuwWZCfoYDAg'], 53316498, [],
+    [[], ['AgADFQADjW7LEw'], misha_chat, [],
      ['CAADAgADFwEAAjZ2IA7giFsvKRgOLgI', 'CAADAgADXAQAAuce7AUmmbsbikWzNAI', 'CAADAgADIQEAAlUvqgHwAAEIkuRrIU0C']],
-    [[], ['CAADAgADIQADjW7LE9g1jqY9nf9XAg'], 0,
+    [[], ['AgADIQADjW7LEw'], 0,
       ['https://youtu.be/pzUYYUuk2ys', 'https://youtu.be/Sh85jKmNhaE', 'https://youtu.be/nimqH_NDpdU',
        'https://youtu.be/hTaaKpJmt40', 'https://youtu.be/6nY9Cp4WZnI', 'https://youtu.be/8fFrEiKqGEA',
        'https://youtu.be/0ZF3rm86Ws4', 'https://youtu.be/3AZ5f_4_t1o', 'https://youtu.be/kZ2V8tJ-Q4c',
        'https://youtu.be/j6rrI6X0to4', 'https://youtu.be/JaciHAcvlyA', 'https://youtu.be/1Vxet85Bk0c',
        'https://youtu.be/L4H4uy9DAK4', 'https://youtu.be/QtnM-igAaTE', 'https://youtu.be/XvVij3q0sk0',
-       'https://youtu.be/7OaoxICcBoM', 'https://youtu.be/k4UU-iHLc1s', 'https://youtu.be/5WxHF_NTnC8'], []],
+       'https://youtu.be/7OaoxICcBoM', 'https://youtu.be/k4UU-iHLc1s', 'https://youtu.be/5WxHF_NTnC8'],
+        ['CAACAgQAAx0CQgMQgQABAYl4XvUIi9fLohxAaOtNNNMAAWDCmYO-AAKZAAMVdukH9Btqq0RjzZgaBA']],
     [['D: D: D: D: D: D: D: D: D: D:'], [], 0, [], ['CAADAgADHQADjW7LE5T5heR8tu6uAg']],
-    [[], ['CAADAgADHQADO9HBD8DTsJ6PcoXXAg'], rinneko_chat, ['О, РИНЕЙКА.\nЗАКИДЫВАТЬ МОЛНИЯМИ!',
+    [[], ['AgADHQADO9HBDw'], rinneko_chat, ['О, РИНЕЙКА.\nЗАКИДЫВАТЬ МОЛНИЯМИ!',
                                                             'О, РИННЕКО.\nЗАКИДЫВАТЬ МОЛНИЯМИ!',
                                                             'О, РИНЖЕНЕР.\nЗАКИДЫВАТЬ МОЛНИЯМИ!',
                                                             'О, КОТЕЙКА.\nЗАКИДЫВАТЬ МОЛНИЯМИ!'], []],
-    [[], ['CAADAgADjQADP_vRD6t7L9YKnP1eAg'], 44989459,
-     ["https://pp.userapi.com/c639627/v639627599/5b009/flPJ3T4a_o8.jpg"], ['CAADAgADoQADg8cnEW-_9xNR4RKLAg']],
     [[':D:'], [], 0, [], ['CAADAgADGgADjW7LE0g-GMhzIUFiAg']],
     [['РИННЕКО', 'РИН-НЕ-КО', 'РИННЕКО!', 'РИН-НЕ-КО!'], [], rinneko_chat, [], ['CAADAgADxAADP_vRD-wohLnM0GMRAg']],
-    [[], ['CAADAgADKwQAAuce7AWo_pyLoNBvLgI'], 196345058, ['О, НАТАЛИЯ НАЧАЛАСЬ'], []],
+    [[], ['AgADKwQAAuce7AU'], nata_chat, ['О, НАТАЛИЯ НАЧАЛАСЬ'], []],
     [["1Л"], [], 0, ["2Л"], []],
     [["/ТИХО РЖЁТЬ/"], [], osa_chat, ["ГРОМЧЕ!"], []],
     [["/АРЁТ/"], [], osa_chat, [], ['CAADAgADDQADdUTxCP-onsxKIsJqAg']],
     [["/start"], [], 0, ["ТЫ КТО? И КАК ОБО МНЕ УЗНАЛ?"], []],
-    [["ДА", "ДА."],[],0,["ША"],[]],
 
-    [[], ['CAADAgADpgEAAmDrzgNSIT8rlE3K0AI', 'CAADAgADVQADsjRGHmcXPWcGP2BfAg'], 0, [], [], "task_rework"],
-    [fail_phrase, ['CAADAgADFAADjW7LE9E1TbwjuTk7Ag'], 0, [], [], "task_fail"],
-    [approve_phrase, ['CAADAgAD4QADNnYgDo3M52SK-Y3iAg'], 0, [], [], "task_complete"],
+    [[], ['AgADpgEAAmDrzgM', 'AgADVQADsjRGHg'], 0, [], [], "task_rework"],
+    [fail_phrase, ['AgADFAADjW7LEw'], 0, [], [], "task_fail"],
+    [approve_phrase, ['AgAD4QADNnYgDg'], 0, [], [], "task_complete"],
     [['КЛАЦ!'], [], 0, [], [], "task_extra"],
-    [["НАТАЛЬЯ?"], ['CAADAgADIwADP_vRD4CXRh4oYhhXAg', "CAADAgADHwADP_vRD3g8MWNndtchAg"], 0,
+    [["НАТАЛЬЯ?"], ['AgADHwADP_vRDw'], 0,
         ['НАТАЛИРУЙ', "@Abi_Abigale", "ВЫ ЧО ТУТ, В ГОДВИЛЛЬ ИГРАЕТЕ?"], ["CAADAgADJAADP_vRDykJokH6fiyLAg"], "natalka"],
     [['ВЫГОНИ ПРОЧЬ ЭТИХ НАДОЕДЛИВЫХ БОТОВ!'], [], citrus_chat, [], [], "kick_bots"],
 
     [['АНТИКЛАЦ!'], [], 0, [], [], "anti_task"],
-    #[[], ['CAADAgADnAADg8cnESB0jVNnakYoAg'], 0, [], [], "whois"],
+    #[[], ['AgADnAADg8cnEQ'], 0, [], [], "whois"],
     [["ПЕРЕНОСИМ"], [], 0, [], [], "stop_natalka"],
-    [[], ['CAADAgADLgADsjRGHsGbRuS2PA26Ag'], 0, [], [], "kick_citrus"],
-    [[], ['CAADAgADKAADO9HBD1SvkhGZJT_BAg', 'CAADAgADVwADO9HBD35E69ryx07IAg'], 0, [], [], "kick_rels"],
-    [[], ['CAADAgADLwADsjRGHvSXP4ESf3tIAg'], 0, [], [], "kick_misha"],
+    [[], ['AgADLgADsjRGHg'], 0, [], [], "kick_citrus"],
+    [[], ['AgADKAADO9HBDw', 'CAADAgADVwADO9HBD35E69ryx07IAg'], 0, [], [], "kick_rels"],
+    [[], ['AgADLwADsjRGHg'], 0, [], [], "kick_misha"],
     [["ОТВЕТЬ НА СООБЩЕНИЕ НАД ЭТИМ", "ЧАТ ЗАЖЕВАЛО"], [], 0, [], [], "message_above"],
     [["АЛЬФА", "ОМЕГА"], [], 0, [], [], "alpha_change"],
     [['С ПЕРВЫМ АПРЕЛЯ!'], ['CAADAgADKAADsjRGHteLnmyyI7GCAg'], 0, [], [], "dura_approve"],
-    [[], ['CAADAgADdwADg8cnESvsIyQE4i-zAg'], 0, [], [], "dura_fail"],
-    [[], ['CAADAgADkQADsjRGHofugN6VvDUUAg'], 0, [], [], "dura_win"]
+    [[], ['CAADAgADdwADg8cnESvsIyQE4i-zAg'], 0, [], [], "dura_fail"], #what was that
+    [[], ['AgADkQADsjRGHg'], 0, [], [], "dura_win"]
 ]
 grammar_nazi_dictionary = { "ЭАЛО": "ЭАЛЛО", "ЭА1ЛО": "ЭА2ЛО", "ДЛИННОМОЗГ": "ДЛИНОМОЗГ"}
 
@@ -151,7 +146,7 @@ donate_list = ['С ТЕБЯ ПИВО', 'С ТЕБЯ ЛИМЕРИК', 'С ТЕБ�
                "ТЕПЕРЬ ТЫ ПОПЛАТИШЬСЯ!", "ОТ РАСПЛАТЫ НЕ УЙДЁШЬ!", "РАБОТАЮ ЗА СПАСИБУ. А ПАПА С МАМОЙ - НЕТ",
                "Я ТЕБЯ ЗАПОМНИЛ!", "ПРОИГРАЛ", 'НАРИСУЙ СТИКЕР С АКСОЛОТЛЕМ. БОЛЬШЕ СТИКЕРОВ — БОЛЬШЕ ЗАДАНИЙ']
 
-bonus_20 = ['CAADAgADVAADg8cnEcm03ptpBsCDAg','CAADAgADYgADg8cnEdE4AfXc_eRPAg', 'CAADAgADrAADg8cnEVlHYI9p1ns9Ag',
+bonus_20 = ['CAADAgADVAADg8cnEcm03ptpBsCDAg', 'CAADAgADYgADg8cnEdE4AfXc_eRPAg', 'CAADAgADrAADg8cnEVlHYI9p1ns9Ag',
             'CAADAgADZgADg8cnEZrVXf7N7QlVAg', 'CAADAgADtgADg8cnEajz_hf3D4kDAg',
             'CAADAgADtwADg8cnEfE3BUFfws6pAg', 'CAADAgADBgADsjRGHsWkhlxIc8GWAg']
 
