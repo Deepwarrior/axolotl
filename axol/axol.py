@@ -1935,7 +1935,7 @@ def sticker_parsing(message):
     notify(message)
     for reaction in config.reactions:
         if not reaction[2] or message.from_user.id == reaction[2]:
-            if message.sticker.file_id in reaction[1]:
+            if message.json['sticker']['file_unique_id'] in reaction[1]:
                 if len(reaction) > 5:
                     reaction_funcs[reaction[5]](reaction, message)
                 else:
