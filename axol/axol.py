@@ -1788,7 +1788,12 @@ def dura_win(reaction, message):
 
 
 def why_yellow(reaction, message):
-    bot.forward_message(message.chat.id, debug_chat_id, 57759)
+    answer = ""
+    for word in message.text.upper().split():
+        if "ЖОЛТ" in word:
+            answer += "ДА ПОЧЕМУ %s-ТО" % word
+            break
+    bot.send_message(message.chat.id, answer)
 
 
 def grammar_check(reaction, message):
