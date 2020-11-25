@@ -34,7 +34,7 @@ alukr_chat = -1001031232765
 tipa_tri_skobki_chat = -1001246951967
 bitva_magov_chat = -1001272922314
 chto_chat = -1001479011046
-allow_chats = [-1001160037336, -1001492970087, debug_chat_id, -1001149068208, igroklub_chat, alukr_chat, chto_chat]
+allow_chats = [-1001160037336, -1001492970087, debug_chat_id, -1001149068208, igroklub_chat, alukr_chat, chto_chat, -1001489975901]
 all_timers = []
 current_task_funcs = []
 dura_chat = [bitva_magov_chat]
@@ -1948,7 +1948,7 @@ def sticker_parsing(message):
     #if message.chat.id == debug_chat_id or message.chat.id == config.cifr_chat:
     #    bot.send_message(message.chat.id, '\'' + message.sticker.file_id + '\'\n',# + message.sticker.set_name,
     #                     reply_to_message_id=message.message_id)
-    task_check(message)
+    #task_check(message)
     player = findplayer(message.from_user)
     player.last_mess = time.time()
     bot_AI(message)
@@ -1967,7 +1967,7 @@ def message_parsing(message):
                         else:
                             react(reaction, message)
                         break
-    task_check(message)
+    #task_check(message)
     player = findplayer(message.from_user)
     player.last_mess = time.time()
     bot_AI(message)
@@ -1997,6 +1997,7 @@ def doc_parsing(message):
 @bot.message_handler(content_types=["photo", "audio", "video", "video_note"])
 def other_parsing(message):
     bot_AI(message)
+
 
 if __name__ == '__main__':
     f = open('players.json', 'r')
