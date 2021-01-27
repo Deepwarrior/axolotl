@@ -91,12 +91,13 @@ def kakavozik():
 
 
 def remind():
-    try:
-        mess = bot.send_message(debug_chat_id, "КАЖЕТСЯ, МЫ СТАЛИ ЗАБЫВАТЬ...")
-        something = random.randint(0, mess.message_id)
-        bot.send_message(debug_chat_id, "/НАПОМИНАЕТ О ВЕЧНОМ ОБНОВЛЕНИИ ЛИКУЮЩЕЙ ПРИРОДЫ/", reply_to_message_id=something)
-    except telebot.apihelper.ApiException:
-        print("Ne to")
+    for chat in [debug_chat_id, vip_chat_id]:
+        try:
+            mess = bot.send_message(chat, "КАЖЕТСЯ, МЫ СТАЛИ ЗАБЫВАТЬ...")
+            something = random.randint(0, mess.message_id)
+            bot.send_message(chat, "/НАПОМИНАЕТ О ВЕЧНОМ ОБНОВЛЕНИИ ЛИКУЮЩЕЙ ПРИРОДЫ/", reply_to_message_id=something)
+        except telebot.apihelper.ApiException:
+            print("Ne to")
 
 def nostalgy():
     mins = random.randint(0, 60)
