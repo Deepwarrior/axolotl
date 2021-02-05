@@ -15,13 +15,16 @@ import math
 import chat_utils
 import types
 
-def sxor(s1,s2):
+
+def sxor(s1, s2):
     return ''.join(chr(ord(a) ^ ord(b)) for a, b in zip(s1, s2))
+
 
 bot = telebot.TeleBot(str(os.environ['TOKEN']))
 bot.send_stickers = types.MethodType(chat_utils.send_stickers, bot)
-opentoken = sxor(str(os.environ['TOKEN']), '\x00\x06\x08\n\x01\r\x0c\x0e\x04\x00\x00\x00\x0fA?\x0fDv"5!g\x1f\x18\x16\x05\x0cl\x1c\x12Z&\x13\x1d~!/$0\x008\x03<::'
-)
+opentoken = sxor(str(os.environ['TOKEN']),
+                 '\x00\x06\x08\n\x01\r\x0c\x0e\x04\x00\x00\x00\x0fA?\x0fDv"5!g\x1f\x18\x16\x05\x0cl\x1c\x12Z&\x13\x1d~!/$0\x008\x03<::'
+                 )
 rrena_bot = telebot.TeleBot(opentoken)
 active_players = []
 
@@ -45,6 +48,8 @@ spy_chat = -1001231436175
 last_mess = 0
 
 zrenki = [vip_chat_id, -1001345532965, fur_fur_fur_chat, dlan_chat, -1001117989911]
+
+
 def zrena():
     for chat in zrenki:
         try:
@@ -64,6 +69,7 @@ def zrena():
         except telebot.apihelper.ApiException:
             print("zreno to " + str(chat) + " failed")
 
+
 def skakanidy():
     chat = -1001488372630
     try:
@@ -77,6 +83,7 @@ def skakanidy():
         print("zreno to " + str(chat) + " failed")
     timer = Timer(day, skakanidy)
     timer.start()
+
 
 def kakavozik():
     chat = -1001488372630
@@ -94,9 +101,11 @@ def remind():
     try:
         mess = bot.send_message(debug_chat_id, "КАЖЕТСЯ, МЫ СТАЛИ ЗАБЫВАТЬ...")
         something = random.randint(0, mess.message_id)
-        bot.send_message(debug_chat_id, "/НАПОМИНАЕТ О ВЕЧНОМ ОБНОВЛЕНИИ ЛИКУЮЩЕЙ ПРИРОДЫ/", reply_to_message_id=something)
+        bot.send_message(debug_chat_id, "/НАПОМИНАЕТ О ВЕЧНОМ ОБНОВЛЕНИИ ЛИКУЮЩЕЙ ПРИРОДЫ/",
+                         reply_to_message_id=something)
     except telebot.apihelper.ApiException:
         print("Ne to")
+
 
 def nostalgy():
     mins = random.randint(0, 60)
@@ -107,6 +116,7 @@ def nostalgy():
 
     timer = Timer(day, nostalgy)
     timer.start()
+
 
 def zrena_timers_init():
     cur_time = time.localtime(time.time())
@@ -145,11 +155,8 @@ def zrena_timers_init():
     timer.start()
 
 
-
 def jsonDefault(object):
     return object.__dict__
-
-
 
 
 # find and append players
@@ -178,18 +185,18 @@ def deep_check(message, player, data):
             if not word[i].isalpha() and word[i] != '_' and not word[i].isdigit():
                 i -= 1
                 break
-        if len(word[:i+1]) == 1:
+        if len(word[:i + 1]) == 1:
             continue
 
         if message.from_user.id != player.user.id and word[0] == '/' \
-                and word[:i+1] not in data[0]:
-            data[0].append(word[:i+1])
+                and word[:i + 1] not in data[0]:
+            data[0].append(word[:i + 1])
 
         if message.from_user.id == player.user.id and word[0] == '/' \
-                and word[:i+1] in data[0] and word[:i+1] not in data[1]:
-            data[1].append(word[:i+1])
+                and word[:i + 1] in data[0] and word[:i + 1] not in data[1]:
+            data[1].append(word[:i + 1])
     if len(data[0]) == len(data[1]) and \
-        message.message_id - player.taskset.get_task_mess() > 300:
+            message.message_id - player.taskset.get_task_mess() > 300:
         return "+"
 
 
@@ -241,7 +248,7 @@ def tribbl_check(message, player, data):
 
 
 def liira_check(message, player, data):
-    if message.from_user.id != 265419583 or not message.text or not message.reply_to_message\
+    if message.from_user.id != 265419583 or not message.text or not message.reply_to_message \
             or not message.reply_to_message.from_user.id != player.user.id:
         return
     if "КРАСИВО" in message.text.upper():
@@ -328,7 +335,7 @@ def mozg_check(message, player, data):
     if message.from_user.id != player.user.id or not message.text:
         return
     for i in range(len(message.text)):
-        if message.text[i].isalpha() and len(message.text) > i + 1 and message.text[i+1] != ' ':
+        if message.text[i].isalpha() and len(message.text) > i + 1 and message.text[i + 1] != ' ':
             return "-"
     if player.taskset.get_task_duration() > 3600 * 3:
         return "+"
@@ -339,7 +346,7 @@ def malefika_check(message, player, data):
         return
 
     if message.from_user.id == player.user.id and message.text and message.reply_to_message \
-       and "ПРЕДСКАЗЫВАЮ" in message.text.upper() and not data:
+            and "ПРЕДСКАЗЫВАЮ" in message.text.upper() and not data:
         enemy = findplayer(message.reply_to_message.from_user)
         data.append(enemy.taskset.message)
         data.append(enemy.user)
@@ -391,6 +398,7 @@ def zoloto_check(message, player, data):
     if player.taskset.get_task_duration() > 3600 * 6:
         return "+"
 
+
 task_funcs = {"deep_check": deep_check, "gdvll_check": gdvll_check, "iioo_check": iioo_check,
               "tribbl_check": tribbl_check, "liira_check": liira_check, "super_check": super_check,
               "bumaga_check": bumaga_check, "kamen_check": kamen_check, "nozhn_check": nozhn_check,
@@ -412,10 +420,15 @@ def check_func_costruct(player, func):
         else:
             result = 0
         return player, result
+
     return check_func
+
+
 # check functions
 
 root_log = ""
+
+
 def logging(message):
     global root_log
     cur_time = time.localtime(time.time())
@@ -502,16 +515,16 @@ def fwd(message):
 @bot.message_handler(commands=["whereisthisfuckingpredmetattime"])
 def find_item(message):
     if message.from_user.username in config.root:
-        text = str(message.text[len("whereisthisfuckingpredmetattime")+2:])
+        text = str(message.text[len("whereisthisfuckingpredmetattime") + 2:])
         try:
             time = int(text)
             path = math.e * time
             diag = 4
             path -= math.floor(path / diag) * diag
-            path -= diag/2
-            path = abs(path)/2
-            x = str(1-path) + ','
-            bot.send_message(message.chat.id, x+x+x+x[:-1])
+            path -= diag / 2
+            path = abs(path) / 2
+            x = str(1 - path) + ','
+            bot.send_message(message.chat.id, x + x + x + x[:-1])
         except (ValueError, telebot.apihelper.ApiException):
             bot.send_message(message.chat.id, "НЕ ЗНАЮ. СПРОСИ У МИШИ")
 
@@ -688,7 +701,7 @@ def femka(message):
             if last_char in "ИЫ" and text + last_char not in config.exception_spisok:
                 # for i in range(len(config.ends)) and not in [0, 2, 5]:
                 #    the_end[i] = last_char + the_end[i]
-                if not(i == 0 or i == 2 or i == 5):
+                if not (i == 0 or i == 2 or i == 5):
                     the_end[i] = last_char + the_end[i]
             else:
                 if last_char in "КГ":
@@ -712,13 +725,21 @@ def femka(message):
             ideal_spisok += text + i.upper() + '\n'
         bot.send_message(message.chat.id, ideal_spisok)
 
-'''
+
+love_chats = [debug_chat_id]
+
+
 @bot.message_handler(commands=["love_reg"])
 def love_reg(message):
     if message.from_user.id == message.chat.id:
         player = findplayer(message.from_user)
-        player.islove = True
-        bot.send_message(message.chat.id, "СПАСИБО ЗА РЕГИСТРАЦИЮ, КОТИК \u2764 \u2764 \u2764")
+        if not player.islove:
+            player.islove = True
+            bot.send_message(message.chat.id, "СПАСИБО ЗА РЕГИСТРАЦИЮ, КОТИК \u2764 \u2764 \u2764")
+        else:
+            bot.send_message(message.chat.id, "ТЫ УЖЕ В СПИСКЕ, ОЖИДАЙ НАЧАЛА ИГРЫ \u2764")
+    else:
+        bot.send_message(message.chat.id, "ПРИШЛИ МНЕ ЭТО В ЛИЧКУ ;)")
 
 
 @bot.message_handler(commands=["love_send"])
@@ -731,27 +752,31 @@ def love_send(message):
         return
     text = "#валентинка" + "\n" + text
     try:
-        bot.send_message(vip_chat_id, text)
+        for chat in love_chats:
+            bot.send_message(chat, text)
     except telebot.apihelper.ApiException:
         bot.send_message(message.chat.id, "НЕ ВЫШЛО ОТПРАВИТЬ СООБЩЕНИЕ :(")
 
 
 @bot.message_handler(commands=["love_set"])
-def love_set(message):
+def love_set(self):
+    if check_love_tasks_exist():
+        return
     players_in_love = []
     for player in active_players:
         if player.islove:
             try:
-                status = bot.get_chat_member(vip_chat_id, player.user.id)
+                status = bot.get_chat_member(love_chats, player.user.id)
             except telebot.apihelper.ApiException:
                 continue
-            if status and status.status in ["member", "creator", "administrator"] and not player.user.username == "rakon_bot":
+            if status and status.status in ["member", "creator", "administrator"] \
+                    and not player.user.username == "rakon_bot":
                 players_in_love.append(player)
     random.shuffle(players_in_love)
     lovers = len(players_in_love)
     for i in range(lovers):
         player = players_in_love[i]
-        pair = players_in_love[(i+1) % lovers]
+        pair = players_in_love[(i + 1) % lovers]
         player.pair = ""
         if player.user.first_name:
             player.pair += str(pair.user.first_name) + '\t'
@@ -762,8 +787,8 @@ def love_set(message):
         player.love_task = random.choice(config.love_tasks)
         try:
             bot.send_message(player.user.id, 'АКСОЛОТЛЬ-КУПИДОН НАУДАЧУ ЗАПУСТИЛ'
-                                            ' СВОЮ СТРЕЛУ. ТВОЯ ВТОРАЯ ПОЛОВИНКА '
-                                      + player.pair + ' УЖЕ ЖДЁТ ОТ ТЕБЯ ЗНАКА ВНИМАНИЯ!')
+                                             ' СВОЮ СТРЕЛУ. ТВОЯ ВТОРАЯ ПОЛОВИНКА '
+                             + player.pair + ' УЖЕ ЖДЁТ ОТ ТЕБЯ ЗНАКА ВНИМАНИЯ!')
             bot.send_sticker(player.user.id, 'CAADAgADUgADsjRGHr5CgRYMzRQNAg')
             bot.send_message(player.user.id, player.love_task + ' \u2764 \u2764 \u2764')
         except telebot.apihelper.ApiException:
@@ -777,11 +802,11 @@ def love(message):
         for player in active_players:
             if player.islove:
                 try:
-                    status = bot.get_chat_member(vip_chat_id, player.user.id)
+                    status = bot.get_chat_member(love_chats, player.user.id)
                 except telebot.apihelper.ApiException:
                     continue
                 if status and status.status in ["member", "creator",
-                                            "administrator"] and not player.user.username == "rakon_bot":
+                                                "administrator"] and not player.user.username == "rakon_bot":
                     if player.user.first_name:
                         answer += str(player.user.first_name) + '\t'
                     if player.user.last_name:
@@ -795,28 +820,37 @@ def love(message):
 @bot.message_handler(commands=["love_all"])
 def love_all(message):
     if message.from_user.id == message.chat.id and message.from_user.username in config.root:
-        list = ""
+        lovers = ""
         for player in active_players:
-            if player.islove:
+            if player.pair:
                 try:
-                    status = bot.get_chat_member(vip_chat_id, player.user.id)
+                    status = bot.get_chat_member(love_chats, player.user.id)
                 except telebot.apihelper.ApiException:
                     continue
                 if status and status.status in ["member", "creator",
-                                            "administrator"] and not player.user.username == "rakon_bot":
+                                                "administrator"] and not player.user.username == "rakon_bot":
                     if player.user.first_name:
-                        list += str(player.user.first_name) + '\t'
+                        lovers += str(player.user.first_name) + '\t'
                     if player.user.last_name:
-                        list += str(player.user.last_name) + '\t'
+                        lovers += str(player.user.last_name) + '\t'
                     if player.user.username:
-                        list += '@' + str(player.user.username) + '\t'
-                    list += "И ПОЛОВИНКА " + player.pair + '\t'
-                    list += "С ЗАДАНИЕМ "
-                    list += player.love_task + '.\t'
-                    list += '\n'*2
-        bot.send_message(message.chat.id, list)
+                        lovers += '@' + str(player.user.username) + '\t'
+                    lovers += "И ПОЛОВИНКА " + player.pair + '\t'
+                    lovers += "С ЗАДАНИЕМ "
+                    lovers += player.love_task + '.\t'
+                    lovers += '\n' * 2
+        if lovers:
+            bot.send_message(message.chat.id, lovers)
 
 
+def check_love_tasks_exist():
+    for player in active_players:
+        if player.love_task:
+            return True
+    return False
+
+
+'''
 @bot.message_handler(commands=["new_year"])
 def new_year_reg(message):
     if message.from_user.id == message.chat.id:
@@ -840,6 +874,8 @@ def new_year_reg_get(message):
                 answer += '\n'
         bot.send_message(message.chat.id, answer)
 '''
+
+
 @bot.message_handler(commands=["kill", "KILL"])
 def kill(message):
     player = findplayer(message.from_user)
@@ -864,8 +900,8 @@ def kill(message):
                 if chance == 0:
                     for chat in dura_chat:
                         bot.send_message(chat, killer + " УРОНИЛ ВЕРХОВНУЮ СТРЕЛУ МАГИИ, "
-                                                               "ОНА ОТСКОЧИЛА ОТ ПОЛА И УДАРИЛА В ЛЮСТРУ. "
-                                                               "ЛЮСТРА УПАЛА НА ИГРОКА И УБИЛА ЕГО. НЯПОКА.")
+                                                        "ОНА ОТСКОЧИЛА ОТ ПОЛА И УДАРИЛА В ЛЮСТРУ. "
+                                                        "ЛЮСТРА УПАЛА НА ИГРОКА И УБИЛА ЕГО. НЯПОКА.")
                     player.dura_status = 3
                     player.isdura = False
                     player.has_a_shield = False
@@ -896,7 +932,8 @@ def kill(message):
             try:
                 bot.send_message(player.user.id, "ВЫБОР СДЕЛАН, ПУЩЕНА СТРЕЛА.")
             except telebot.apihelper.ApiException:
-                bot.send_message(message.chat.id, "ВЫБОР СДЕЛАН, ПУЩЕНА СТРЕЛА.", reply_to_message_id=message.message_id)
+                bot.send_message(message.chat.id, "ВЫБОР СДЕЛАН, ПУЩЕНА СТРЕЛА.",
+                                 reply_to_message_id=message.message_id)
             for victim in active_players:
                 if victim.isdura:
                     how_many_victims += 1
@@ -915,12 +952,12 @@ def kill(message):
                             victim.dura_status = 3
                             for chat in dura_chat:
                                 bot.send_message(chat, killer + " СТРЕЛЯЕТ ВЕРХОВНОЙ СТРЕЛОЙ "
-                                                                        "МАГИИ. ТЕБЯ УБИЛИ, " + name + " :(")
+                                                                "МАГИИ. ТЕБЯ УБИЛИ, " + name + " :(")
                         else:
                             victim.has_a_shield = False
                             for chat in dura_chat:
                                 bot.send_message(chat, killer + " СТРЕЛЯЕТ. CТРЕЛА УДАРЯЕТСЯ О ЩИТ И ЛОМАЕТСЯ, "
-                                                   "А ЩИТ ПАДАЕТ НА ПОЛ И РАЗБИВАЕТСЯ НА МЕЛКИЕ КУСОЧКИ. " + name + " ВЫЖИЛ.")
+                                                                "А ЩИТ ПАДАЕТ НА ПОЛ И РАЗБИВАЕТСЯ НА МЕЛКИЕ КУСОЧКИ. " + name + " ВЫЖИЛ.")
                             has_arrow_been_thrown = True
             if has_murder_been_done or has_arrow_been_thrown:
                 player.can_get_a_shield = True
@@ -931,14 +968,14 @@ def kill(message):
                         if winner.user.first_name:
                             winner_name += str(winner.user.first_name) + " "
                         if winner.user.last_name:
-                                winner_name += str(winner.user.last_name) + " "
+                            winner_name += str(winner.user.last_name) + " "
                         if winner.user.username:
                             winner_name += '@' + str(winner.user.username) + " "
                 for chat in dura_chat:
                     bot.send_message(chat, winner_name + "ПОДЕБИЛ В ЭТОЙ ЖЕСТОКОЙ ИГРЕ! ОУРА, ТОВАРИЩИ!")
                 try:
                     bot.send_message(tipa_tri_skobki_chat, "ТОВАРИЩИ ПРОВЕРЯТОРЫ, ТУТ ЧЕЛОВЕЧКА НАГРАДИТЬ НУЖНО, ЭТО " +
-                                 winner_name)
+                                     winner_name)
                 except telebot.apihelper.ApiException:
                     bot.send_message(debug_chat_id, "ТОВАРИЩИ ПРОВЕРЯТОРЫ, ТУТ ЧЕЛОВЕЧКА НАГРАДИТЬ НУЖНО, ЭТО " +
                                      winner_name)
@@ -961,7 +998,7 @@ def shield(message):
                 player.dura_status = 0
                 player.can_get_a_shield = False
                 bot.send_message(message.chat.id, 'ТЕПЕРЬ ТЫ ЗАЩИЩЁН ОТ ОДНОЙ АТАКИ.',
-                                                                                reply_to_message_id=message.message_id)
+                                 reply_to_message_id=message.message_id)
                 name = ""
                 if player.user.username:
                     name += '@' + str(player.user.username)
@@ -975,7 +1012,7 @@ def shield(message):
                 return
             else:
                 bot.send_message(message.chat.id, 'ТЫ НЕ МОЖЕШЬ ЗАЩИЩАТЬСЯ 2 РАЗА ПОДРЯД. ВРЕМЯ АТАКОВАТЬ!',
-                                                                                reply_to_message_id=message.message_id)
+                                 reply_to_message_id=message.message_id)
         else:
             bot.send_message(message.chat.id, 'ОБОЙДЁШЬСЯ.', reply_to_message_id=message.message_id)
 
@@ -1035,7 +1072,7 @@ def get_dura_nums(message):
         answer = ""
         does_someone_participate = False
         for player in active_players:
-             if player.isdura:
+            if player.isdura:
                 does_someone_participate = True
                 if player.user.first_name:
                     answer += str(player.user.first_name) + '\t'
@@ -1057,7 +1094,8 @@ def dura_fail(reaction, message):
             player.dura_status = 0
             player.dura_task = None
             bot.send_message(message.chat.id, "ЛАДНО, НИЧТОЖЕСТВО, БЕРИ ДРУГОЕ ЗАДАНИЕ.",
-                                                                reply_to_message_id=message.reply_to_message.message_id)
+                             reply_to_message_id=message.reply_to_message.message_id)
+
 
 @bot.message_handler(commands=["start_dura"])
 def start_dura(message):
@@ -1069,12 +1107,13 @@ def start_dura(message):
             num += 1
             try:
                 bot.send_message(player.user.id, "ЕСЛИ ТЕБЕ ПРИШЛО ЭТО СООБЩЕНИЕ, ЗНАЧИТ ТЫ РЕГИСТРИРОВАЛСЯ НА "
-                                 "<b>БИТВУ МАГОВ</b>. ИГРА НАЧАЛАСЬ!", parse_mode="HTML")
+                                                 "<b>БИТВУ МАГОВ</b>. ИГРА НАЧАЛАСЬ!", parse_mode="HTML")
             except telebot.apihelper.ApiException:
                 continue
         player.dura_started = True
     for chat in dura_chat:
         bot.send_message(chat, "ИГРА НАЧАЛАСЬ! НАЖИМАЙТЕ /dura_task И СПАСАЙТЕСЬ, ГЛУПЦЫ!")
+
 
 @bot.message_handler(commands=["clean_dura"])
 def clean_dura_list(message):
@@ -1085,6 +1124,7 @@ def clean_dura_list(message):
         player.isdura = False
         player.can_get_a_shield = True
         player.has_a_shield = False
+
 
 def random_task():
     task = ''
@@ -1101,11 +1141,12 @@ def get_dura_task(message):
     player = findplayer(message.from_user)
     if player.isdura and player.dura_started:
         if player.dura_status == 1:
-            bot.send_message(message.chat.id, 'ТЫ ДУРА? У ТЕБЯ УЖЕ ЕСТЬ ЗАДАНИЕ.', reply_to_message_id=message.message_id)
+            bot.send_message(message.chat.id, 'ТЫ ДУРА? У ТЕБЯ УЖЕ ЕСТЬ ЗАДАНИЕ.',
+                             reply_to_message_id=message.message_id)
         if player.dura_status == 0:
             if message.from_user.id == message.chat.id:
                 bot.send_message(message.chat.id, 'ТЫ ДУРА? БЕРИ ЗАДАНИЕ У ВСЕХ НА ВИДУ!',
-                                                                                reply_to_message_id=message.message_id)
+                                 reply_to_message_id=message.message_id)
                 return
             player.dura_status = 1
             sticker = random.choice(config.dura_stickers)
@@ -1118,9 +1159,10 @@ def get_dura_task(message):
             player.dura_task = task
         if player.dura_status == 2:
             bot.send_message(message.chat.id, "ПРЕЖДЕ ЧЕМ ВЗЯТЬ НОВОЕ ЗАДАНИЕ, НУЖНО КОГО-ТО УБИТЬ!",
-                                                                                reply_to_message_id=message.message_id)
+                             reply_to_message_id=message.message_id)
     if player.dura_status == 3:
-        bot.send_message(message.chat.id, "УСПОКОЙСЯ, ТЫ УЖЕ НИЧЕГО НЕ РЕШАЕШЬ.", reply_to_message_id=message.message_id)
+        bot.send_message(message.chat.id, "УСПОКОЙСЯ, ТЫ УЖЕ НИЧЕГО НЕ РЕШАЕШЬ.",
+                         reply_to_message_id=message.message_id)
 
 
 @bot.message_handler(commands=["my_dura"])
@@ -1129,11 +1171,12 @@ def check_my_dura_task(message):
     if player.isdura and player.dura_status == 0:
         bot.send_message(message.chat.id, "НАЖМИ /dura_task!", reply_to_message_id=message.message_id)
     if player.dura_status == 1:
-        bot.send_message(message.chat.id, player.dura_task,  reply_to_message_id=message.message_id)
+        bot.send_message(message.chat.id, player.dura_task, reply_to_message_id=message.message_id)
     if player.dura_status == 2:
         bot.send_message(message.chat.id, "ПОКА ЧТО У ТЕБЯ НЕТ ЗАДАНИЯ.", reply_to_message_id=message.message_id)
     if player.dura_status == 3:
-        bot.send_message(message.chat.id, "УСПОКОЙСЯ, ТЫ УЖЕ НИЧЕГО НЕ РЕШАЕШЬ.", reply_to_message_id=message.message_id)
+        bot.send_message(message.chat.id, "УСПОКОЙСЯ, ТЫ УЖЕ НИЧЕГО НЕ РЕШАЕШЬ.",
+                         reply_to_message_id=message.message_id)
 
 
 @bot.message_handler(commands=["panteon"])
@@ -1193,7 +1236,7 @@ def pozor(message):
                 user = bot.get_chat_member(message.chat.id, player.user.id)
             except telebot.apihelper.ApiException:
                 continue
-            if user and user.status in ["member", "creator", "administrator"] and not user.user.username == "rakon_bot"\
+            if user and user.status in ["member", "creator", "administrator"] and not user.user.username == "rakon_bot" \
                     and not user.user.username == "uhi_official":
                 text += str(i) + '. '
                 if user.user.first_name:
@@ -1223,7 +1266,7 @@ def task_status(message):
     answer = ""
     tm = 0
     if player.taskset.status == 1:
-        if player.task_completed % 100 < 40 and player.task_completed < 200\
+        if player.task_completed % 100 < 40 and player.task_completed < 200 \
                 or player.task_completed >= 300:
             for task in player.taskset.tasks:
                 if task.required:
@@ -1285,9 +1328,9 @@ def get_task(message):
         bot.send_message(message.chat.id, "ПО ЛИЧКАМ ШУШУКАЕТЕСЬ? НЕ ТОТ ЧЯТИК!",
                          reply_to_message_id=message.message_id)
         return
-    
+
     player = findplayer(message.from_user)
-    if player.task_completed < 300 and player.taskset.get_task_duration() > config.seconds_in_day\
+    if player.task_completed < 300 and player.taskset.get_task_duration() > config.seconds_in_day \
             or player.taskset.get_task_duration() > 7 * config.seconds_in_day:
         player.taskset.status = 0
         player.taskset.clean()
@@ -1298,7 +1341,7 @@ def get_task(message):
     elif player.taskset.status == 2:
         bot.send_message(message.chat.id, "ТЫ УЖЕ НЕ СМОГ!", reply_to_message_id=message.message_id)
         return
-    
+
     if player.taskset.get_task_duration() < config.seconds_in_day:
         bot.send_message(message.chat.id, "НОВОЕ ЗАДАНИЕ БУДЕТ НЕСКОРО!",
                          reply_to_message_id=message.message_id)
@@ -1392,7 +1435,7 @@ def backup(message):
 def bored(message):
     player = findplayer(message.from_user)
     if player.task_completed < 300 or message.chat.id != player.user.id or \
-        time.time() - player.last_optional_task < config.seconds_in_day:
+            time.time() - player.last_optional_task < config.seconds_in_day:
         return
 
     try:
@@ -1509,10 +1552,12 @@ def message_above(reaction, message):
         try:
             if message.reply_to_message:
                 k = random.randint(0, len(config.mssg_bv) - 1)
-                bot.send_message(message.chat.id, config.mssg_bv[k], reply_to_message_id=message.reply_to_message.message_id - i)
+                bot.send_message(message.chat.id, config.mssg_bv[k],
+                                 reply_to_message_id=message.reply_to_message.message_id - i)
                 break
         except telebot.apihelper.ApiException:
             i += 1
+
 
 # secret_santa = [336595041]
 # sherif = [347438021]
@@ -1638,7 +1683,7 @@ def natalka(reaction, message):
         all_timers.append(timer)
     else:
         react(reaction, message)
-    #0⃣1⃣2⃣3⃣4⃣5⃣6⃣7⃣8⃣9⃣🔟
+    # 0⃣1⃣2⃣3⃣4⃣5⃣6⃣7⃣8⃣9⃣🔟
 
 
 def kick_bots(reaction, message):
@@ -1658,8 +1703,8 @@ def razbanb(arg):
 
 def kick_lyuds(reaction, message):
     try:
-        bot.restrict_chat_member(message.chat.id, message.from_user.id, 2*60*60, False, False, False, False)
-        timer = Timer(2*60*60, razbanb, [[message.chat.id, message.from_user.id]])
+        bot.restrict_chat_member(message.chat.id, message.from_user.id, 2 * 60 * 60, False, False, False, False)
+        timer = Timer(2 * 60 * 60, razbanb, [[message.chat.id, message.from_user.id]])
         timer.start()
     except telebot.apihelper.ApiException:
         time.sleep(1)
@@ -1803,7 +1848,8 @@ def grammar_check(reaction, message):
             if word in text:
                 if not random.randint(0, 3):
                     try:
-                        bot.restrict_chat_member(message.chat.id, message.from_user.id, 1 * 60 * 60, False, False, False,
+                        bot.restrict_chat_member(message.chat.id, message.from_user.id, 1 * 60 * 60, False, False,
+                                                 False,
                                                  False)
                         bot.send_message(message.chat.id, "ПОДУМОЙ НАД СВОИМ ПОВЕДЕНИЕМ.",
                                          reply_to_message_id=message.message_id)
@@ -1823,7 +1869,7 @@ reaction_funcs = {"task_rework": task_rework, "task_fail": task_fail, "task_comp
                   "kick_misha": kick_misha, "message_above": message_above, "alpha_change": alpha_change,
                   "dura_approve": dura_approve, "dura_fail": dura_fail, "dura_win": dura_win, "why_yellow": why_yellow,
                   "grammar_check": grammar_check
-}
+                  }
 
 
 def notify(message):
@@ -1841,7 +1887,7 @@ def notify(message):
 
 def task_check(message):
     # return #remove this
-    #if message.chat.id not in [vip_chat_id]:
+    # if message.chat.id not in [vip_chat_id]:
     return
     for func in current_task_funcs:
         player, result = func(message, True)
@@ -1855,7 +1901,8 @@ def task_check(message):
             if not other_tasks:
                 try:
                     if player.taskset.message.chat.id == message.chat.id:
-                        bot.send_message(message.chat.id, "ТЕСТОВЫЙ АВТОЗАЧЁТ!", reply_to_message_id=player.taskset.message.message_id)
+                        bot.send_message(message.chat.id, "ТЕСТОВЫЙ АВТОЗАЧЁТ!",
+                                         reply_to_message_id=player.taskset.message.message_id)
                     else:
                         raise telebot.apihelper.ApiException("Wrong chat", "my_task", "Exception")
                 except telebot.apihelper.ApiException:
@@ -1866,7 +1913,8 @@ def task_check(message):
         elif result == "-":
             try:
                 if player.taskset.message.chat.id == message.chat.id:
-                    bot.forward_message(tipa_tri_skobki_chat, player.taskset.message.chat.id, player.taskset.message.message_id)
+                    bot.forward_message(tipa_tri_skobki_chat, player.taskset.message.chat.id,
+                                        player.taskset.message.message_id)
                     bot.send_message(tipa_tri_skobki_chat, "ТЕСТОВЫЙ АВТОБАЯЗИД!")
                 else:
                     raise telebot.apihelper.ApiException("Wrong chat", "my_task", "Exception")
@@ -1878,27 +1926,33 @@ def task_check(message):
             current_task_funcs.remove(func)
             remove_task_check(player, message)
 
-#CHANGE CHAT IN LEVEL_UP(), NO() AND message_parsing_to_bday_game(message)!!1
+
+# CHANGE CHAT IN LEVEL_UP(), NO() AND message_parsing_to_bday_game(message)!!1
 level = -1
+
+
 def level_up():
     global level
     level += 1
     print(level)
-    if level <= len(config.questions)-1:
+    if level <= len(config.questions) - 1:
         question = "ДЕРЖИ ВОПРОС:\n" + config.questions[level]
         bot.send_message(vip_chat_id, question)
     elif level == len(config.questions):
         bot.send_message(vip_chat_id, "ТЫ ПОДЕБИЛ")
+
 
 @bot.message_handler(commands=["NEXT", "next"])
 def next_level(message):
     if message.from_user.username in config.root:
         level_up()
 
+
 @bot.message_handler(commands=["no", "NO"])
 def send_fuck(message):
     if message.from_user.username in config.root:
         bot.send_sticker(vip_chat_id, random.choice(config.fuck_list))
+
 
 @bot.message_handler(commands=["level", "LEVEL"])
 def to_level(message):
@@ -1906,15 +1960,14 @@ def to_level(message):
     try:
         num = int(text)
         global level
-        level = num-1
-        if num <= len(config.questions)-1:
+        level = num - 1
+        if num <= len(config.questions) - 1:
             bot.send_message(debug_chat_id, "ЕСЛИ НАЖАТЬ НЕКСТ, ТО В ЧАТ ОТПРАВИТСЯ СЛЕДУЮЩЕЕ ЗАДАНИЕ:\n" +
-                             config.questions[level+1])
+                             config.questions[level + 1])
         else:
             bot.send_message(debug_chat_id, "ЗАДАНИЙ БОЛЬШЕ НЕТ")
     except telebot.apihelper.ApiException:
         bot.send_message(debug_chat_id, "ПЕРЕДЕВЫВАЙ")
-
 
 
 @bot.message_handler(commands=["R", "r"])
@@ -1935,6 +1988,7 @@ def bot_AI(message):
         global last_mess
         last_mess = message.from_user.id
 
+
 @bot.message_handler(content_types=["sticker"])
 def sticker_parsing(message):
     notify(message)
@@ -1945,7 +1999,7 @@ def sticker_parsing(message):
                     reaction_funcs[reaction[5]](reaction, message)
                 else:
                     react(reaction, message)
-    #if message.chat.id == debug_chat_id or message.chat.id == config.cifr_chat:
+    # if message.chat.id == debug_chat_id or message.chat.id == config.cifr_chat:
     #    bot.send_message(message.chat.id, '\'' + message.sticker.file_id + '\'\n',# + message.sticker.set_name,
     #                     reply_to_message_id=message.message_id)
     task_check(message)
@@ -1980,23 +2034,25 @@ def message_parsing(message):
                 level_up()
 
 
-
-#@bot.message_handler(content_types=["voice"])
+# @bot.message_handler(content_types=["voice"])
 def voice_parsing(message):
     if message.chat.id == debug_chat_id:
         bot.send_message(message.chat.id, '\'' + message.voice.file_id + '\'', reply_to_message_id=message.message_id)
     bot_AI(message)
 
+
 @bot.message_handler(content_types=["document"])
 def doc_parsing(message):
     if message.chat.id == debug_chat_id:
-        bot.send_message(message.chat.id, '\'' + message.document.file_id + '\'', reply_to_message_id=message.message_id)
+        bot.send_message(message.chat.id, '\'' + message.document.file_id + '\'',
+                         reply_to_message_id=message.message_id)
     bot_AI(message)
 
 
 @bot.message_handler(content_types=["photo", "audio", "video", "video_note"])
 def other_parsing(message):
     bot_AI(message)
+
 
 if __name__ == '__main__':
     f = open('players.json', 'r')
