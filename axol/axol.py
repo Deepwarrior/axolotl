@@ -438,12 +438,13 @@ def log_output(message):
         root_log = ""
 
 
-@bot.message_handler(content_types=["new_chat_member"])
+@bot.message_handler(content_types=["new_chat_members"])
 def new_member(message):
-    if message.new_chat_member.id in config.whitelist:
-        bot.send_message(message.chat.id, "ОУРА!", reply_to_message_id=message.message_id)
-    else:
-        bot.send_message(message.chat.id, "ОНЕТ!", reply_to_message_id=message.message_id)
+    for member in message.new_chat_members:
+        if member in config.whitelist:
+            bot.send_message(message.chat.id, "ОУРА!", reply_to_message_id=message.message_id)
+        else:
+            bot.send_message(message.chat.id, "ОНЕТ!", reply_to_message_id=message.message_id)
 
 
 @bot.message_handler(content_types=["left_chat_member"])
