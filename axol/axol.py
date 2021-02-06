@@ -817,6 +817,17 @@ def love(message):
         bot.send_message(message.chat.id, answer)
 
 
+@bot.message_handler(commands=["butt"])
+def buttons(message):
+    silent_mode = True
+    markup = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+    reg_button = telebot.types.KeyboardButton('💫 ЗАРЕГАТЬСЯ')
+    send_card_button = telebot.types.KeyboardButton('💌 ОТПРАВИТЬ ВАЛЕНТИНКУ')
+    check_task_button = telebot.types.KeyboardButton('💘 УЗНАТЬ СВОЁ ЗАДАНИЕ')
+    markup.add(reg_button, send_card_button, check_task_button)
+    bot.send_message(message.chat.id, "ЧЕГО ТЕБЕ, КОТИК?", reply_markup=markup)
+
+
 @bot.message_handler(commands=["love_all"])
 def love_all(message):
     if message.from_user.id == message.chat.id and message.from_user.username in config.root:
@@ -1978,6 +1989,8 @@ def fast_reply(message):
 
 
 def bot_AI(message):
+    if love_mute(message):
+        return
     if message.text:
         text = message.text.upper()
     else:
@@ -1987,6 +2000,16 @@ def bot_AI(message):
         bot.send_message(spy_chat, "/mess " + str(message.from_user.id) + '  ' + message.from_user.first_name)
         global last_mess
         last_mess = message.from_user.id
+
+
+def love_mute(message):
+    player = findplayer(message.from_user)
+    if player.islove:
+        return True
+    love_marks = ['💫', '💌', '💘']
+    if message.text and message.text[0] in love_marks:
+        return True
+    return False
 
 
 @bot.message_handler(content_types=["sticker"])
