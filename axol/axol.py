@@ -14,6 +14,7 @@ import operator
 import math
 import chat_utils
 import types
+from telebot import types as teletypes
 
 
 def sxor(s1, s2):
@@ -726,41 +727,95 @@ def femka(message):
         bot.send_message(message.chat.id, ideal_spisok)
 
 
+# todo: replace with neovip
 love_chats = [debug_chat_id]
 
 
-@bot.message_handler(commands=["love_reg"])
-def love_reg(message):
-    if message.from_user.id == message.chat.id:
-        player = findplayer(message.from_user)
-        if not player.islove:
-            player.islove = True
-            bot.send_message(message.chat.id, "СПАСИБО ЗА РЕГИСТРАЦИЮ, КОТИК \u2764 \u2764 \u2764")
-        else:
-            bot.send_message(message.chat.id, "ТЫ УЖЕ В СПИСКЕ, ОЖИДАЙ НАЧАЛА ИГРЫ \u2764")
+@bot.message_handler(commands=["love_butts"])
+def love_buttons(message):
+    if message.from_user.id != message.chat.id:
+        bot.send_message(message.chat.id, "ДАВАЙ ПООБЩАЕМСЯ В ЛИЧКЕ ;)")
+        return
+    markup = teletypes.InlineKeyboardMarkup(row_width=2)
+    reg_button = teletypes.InlineKeyboardButton("💫 ЗАРЕГАТЬСЯ", callback_data="reg_data")
+    send_card_button = teletypes.InlineKeyboardButton("💌 ОТПРАВИТЬ ВАЛЕНТИНКУ", callback_data="card_data")
+    check_task_button = teletypes.InlineKeyboardButton("💘 УЗНАТЬ ЗАДАНИЕ", callback_data="task_data")
+    markup.add(*[reg_button, send_card_button, check_task_button])
+
+    bot.send_message(message.chat.id, "ЧЕГО ТЕБЕ, КОТИК?", reply_markup=markup)
+
+
+@bot.callback_query_handler(func=lambda call: call.data == "reg_data")
+def reg_callback(call):
+    love_reg(call.message, call.from_user)
+
+
+def love_reg(message, user):
+    player = findplayer(user)
+    if not player.islove:
+        player.islove = True
+        bot.send_message(message.chat.id, "СПАСИБО ЗА РЕГИСТРАЦИЮ, КОТИК \u2764 \u2764 \u2764")
     else:
-        bot.send_message(message.chat.id, "ПРИШЛИ МНЕ ЭТО В ЛИЧКУ ;)")
+        bot.send_message(message.chat.id, "ТЫ УЖЕ В СПИСКЕ, ОЖИДАЙ НАЧАЛА ИГРЫ \u2764")
 
 
-@bot.message_handler(commands=["love_send"])
+@bot.callback_query_handler(func=lambda call: call.data == "card_data")
+def card_callback(call):
+    force_send_card = teletypes.ForceReply()
+    bot.send_message(call.message.chat.id, "С УДОВОЛЬСТВИЕМ ДОСТАВЛЮ ТВОЮ ВАЛЕНТИКУ! \u2764 "
+                                           "\nНАПИШИ ТЕКСТ ИЛИ ОТПРАВЬ <s>NUDES</s> ФОТОЧКУ, ГОЛОС, КРУГЛОВИДЕО: "
+                                           "Я ЗАБОТЛИВО УПАКУЮ И ДОСТАВЛЮ ЧТО УГОДНО. В ЧАТИК И АНОНИМНО ;) "
+                                           "\n\n ЕСЛИ НЕ ХОЧЕШЬ НИЧЕГО ОТПРАВЛЯТЬ, ПРОСТО НЕ ОТВЕЧАЙ НА ЭТО СООБЩЕНИЕ",
+                     reply_markup=force_send_card, parse_mode="HTML")
+
+
+@bot.message_handler(
+    content_types=['text', 'sticker', 'photo', 'video', 'video_note', 'voice', 'audio', 'document', 'animation'],
+    func=lambda message: check_valentine(message))
 def love_send(message):
-    text = str(message.text[11:])
-    if not message.from_user.id == message.chat.id:
-        return
-    if not text or text == "rakon_bot":
-        bot.send_message(message.chat.id, "НЕ СТЕСНЯЙСЯ, ВЫРАЗИ СВОИ ЧУВСТВА!")
-        return
-    text = "#валентинка" + "\n" + text
-    try:
-        for chat in love_chats:
-            bot.send_message(chat, text)
-    except telebot.apihelper.ApiException:
-        bot.send_message(message.chat.id, "НЕ ВЫШЛО ОТПРАВИТЬ СООБЩЕНИЕ :(")
+    hashtag = "#валентинка"
+    for chat in love_chats:
+        if message.content_type == 'text':
+            bot.send_message(chat, hashtag + "\n" + message.text)
+        else:
+            bot.send_message(chat, hashtag + "\n")
+            if message.content_type == 'sticker':
+                bot.send_sticker(chat, message.sticker.file_id)
+            if message.content_type == 'photo':
+                bot.send_photo(chat, message.photo[0].file_id, caption=message.caption)
+            if message.content_type == 'video':
+                bot.send_video(chat, message.video, caption=message.caption)
+            if message.content_type == 'video_note':
+                bot.send_video_note(chat, message.video_note.file_id)
+            if message.content_type == 'voice':
+                bot.send_voice(chat, message.voice.file_id)
+            if message.content_type == 'audio':
+                bot.send_audio(chat, message.audio.file_id, caption=message.caption)
+            if message.content_type == 'document':
+                bot.send_document(chat, message.document.file_id, caption=message.caption)
+            if message.content_type == 'animation':
+                bot.send_animation(chat, message.animation.file_id, caption=message.caption)
 
 
+def check_valentine(message):
+    return message.reply_to_message \
+           and message.reply_to_message.from_user.id == bot.get_me().id \
+           and message.from_user.id == message.chat.id
+
+
+@bot.callback_query_handler(func=lambda call: call.data == "task_data")
+def task_callback(call):
+    player = findplayer(call.from_user)
+    answer = love_task_info(player)
+    if not answer:
+        answer = "ПОКА МНЕ НЕЧЕГО ТЕБЕ ПОКАЗАТЬ"
+    bot.send_message(call.message.chat.id, answer)
+
+
+# love commands for root
 @bot.message_handler(commands=["love_set"])
 def love_set(self):
-    if check_love_tasks_exist():
+    if check_love_tasks_exist():  # todo setting love tasks again requires explicitly clear already existed tasks
         return
     players_in_love = []
     for player in active_players:
@@ -795,7 +850,7 @@ def love_set(self):
             continue
 
 
-@bot.message_handler(commands=["love"])
+@bot.message_handler(commands=["love_list"])
 def love(message):
     answer = "LOVE IS EVERYWHERE: \n"
     if message.from_user.username in config.root:
@@ -817,41 +872,33 @@ def love(message):
         bot.send_message(message.chat.id, answer)
 
 
-@bot.message_handler(commands=["butt"])
-def buttons(message):
-    silent_mode = True
-    markup = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-    reg_button = telebot.types.KeyboardButton('💫 ЗАРЕГАТЬСЯ')
-    send_card_button = telebot.types.KeyboardButton('💌 ОТПРАВИТЬ ВАЛЕНТИНКУ')
-    check_task_button = telebot.types.KeyboardButton('💘 УЗНАТЬ СВОЁ ЗАДАНИЕ')
-    markup.add(reg_button, send_card_button, check_task_button)
-    bot.send_message(message.chat.id, "ЧЕГО ТЕБЕ, КОТИК?", reply_markup=markup)
-
-
 @bot.message_handler(commands=["love_all"])
 def love_all(message):
     if message.from_user.id == message.chat.id and message.from_user.username in config.root:
         lovers = ""
         for player in active_players:
-            if player.pair:
-                try:
-                    status = bot.get_chat_member(love_chats, player.user.id)
-                except telebot.apihelper.ApiException:
-                    continue
-                if status and status.status in ["member", "creator",
-                                                "administrator"] and not player.user.username == "rakon_bot":
-                    if player.user.first_name:
-                        lovers += str(player.user.first_name) + '\t'
-                    if player.user.last_name:
-                        lovers += str(player.user.last_name) + '\t'
-                    if player.user.username:
-                        lovers += '@' + str(player.user.username) + '\t'
-                    lovers += "И ПОЛОВИНКА " + player.pair + '\t'
-                    lovers += "С ЗАДАНИЕМ "
-                    lovers += player.love_task + '.\t'
-                    lovers += '\n' * 2
+            lover = love_task_info(player)
+            if not lover:
+                continue
+            lovers += lover
+            lovers += '\n' * 2
         if lovers:
             bot.send_message(message.chat.id, lovers)
+
+
+def love_task_info(player):
+    lover = ""
+    if player.pair:
+        if player.user.first_name:
+            lover += str(player.user.first_name) + '\t'
+        if player.user.last_name:
+            lover += str(player.user.last_name) + '\t'
+        if player.user.username:
+            lover += '@' + str(player.user.username) + '\t'
+        lover += "И ПОЛОВИНКА " + player.pair + '\t'
+        lover += "С ЗАДАНИЕМ "
+        lover += player.love_task + '.\t'
+    return lover
 
 
 def check_love_tasks_exist():
@@ -2006,10 +2053,6 @@ def love_mute(message):
     player = findplayer(message.from_user)
     if player.islove:
         return True
-    love_marks = ['💫', '💌', '💘']
-    if message.text and message.text[0] in love_marks:
-        return True
-    return False
 
 
 @bot.message_handler(content_types=["sticker"])
