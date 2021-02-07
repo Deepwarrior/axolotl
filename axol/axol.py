@@ -38,7 +38,7 @@ alukr_chat = -1001031232765
 tipa_tri_skobki_chat = -1001246951967
 bitva_magov_chat = -1001272922314
 chto_chat = -1001479011046
-allow_chats = [-1001160037336, -1001492970087, debug_chat_id, -1001149068208, igroklub_chat, alukr_chat, chto_chat]
+allow_chats = [-1001160037336, -1001492970087, debug_chat_id, -1001149068208, igroklub_chat, alukr_chat, chto_chat, -1001489975901]
 all_timers = []
 current_task_funcs = []
 dura_chat = [bitva_magov_chat]
@@ -99,13 +99,13 @@ def kakavozik():
 
 
 def remind():
-    try:
-        mess = bot.send_message(debug_chat_id, "КАЖЕТСЯ, МЫ СТАЛИ ЗАБЫВАТЬ...")
-        something = random.randint(0, mess.message_id)
-        bot.send_message(debug_chat_id, "/НАПОМИНАЕТ О ВЕЧНОМ ОБНОВЛЕНИИ ЛИКУЮЩЕЙ ПРИРОДЫ/",
-                         reply_to_message_id=something)
-    except telebot.apihelper.ApiException:
-        print("Ne to")
+    for chat in [debug_chat_id, vip_chat_id]:
+        try:
+            mess = bot.send_message(chat, "КАЖЕТСЯ, МЫ СТАЛИ ЗАБЫВАТЬ...")
+            something = random.randint(0, mess.message_id)
+            bot.send_message(chat, "/НАПОМИНАЕТ О ВЕЧНОМ ОБНОВЛЕНИИ ЛИКУЮЩЕЙ ПРИРОДЫ/", reply_to_message_id=something)
+        except telebot.apihelper.ApiException:
+            print("Ne to")
 
 
 def nostalgy():
@@ -452,12 +452,13 @@ def log_output(message):
         root_log = ""
 
 
-@bot.message_handler(content_types=["new_chat_member"])
+@bot.message_handler(content_types=["new_chat_members"])
 def new_member(message):
-    if message.new_chat_member.id in config.whitelist:
-        bot.send_message(message.chat.id, "ОУРА!", reply_to_message_id=message.message_id)
-    else:
-        bot.send_message(message.chat.id, "ОНЕТ!", reply_to_message_id=message.message_id)
+    for member in message.new_chat_members:
+        if member in config.whitelist:
+            bot.send_message(message.chat.id, "ОУРА!", reply_to_message_id=message.message_id)
+        else:
+            bot.send_message(message.chat.id, "ОНЕТ!", reply_to_message_id=message.message_id)
 
 
 @bot.message_handler(content_types=["left_chat_member"])
@@ -2068,7 +2069,7 @@ def sticker_parsing(message):
     # if message.chat.id == debug_chat_id or message.chat.id == config.cifr_chat:
     #    bot.send_message(message.chat.id, '\'' + message.sticker.file_id + '\'\n',# + message.sticker.set_name,
     #                     reply_to_message_id=message.message_id)
-    task_check(message)
+    #task_check(message)
     player = findplayer(message.from_user)
     player.last_mess = time.time()
     bot_AI(message)
@@ -2087,7 +2088,7 @@ def message_parsing(message):
                         else:
                             react(reaction, message)
                         break
-    task_check(message)
+    #task_check(message)
     player = findplayer(message.from_user)
     player.last_mess = time.time()
     bot_AI(message)
