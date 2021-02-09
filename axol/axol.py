@@ -817,7 +817,9 @@ def task_callback(call):
 def love_set(message):
     if message.from_user.username not in config.root:
         return
-    if check_love_tasks_exist():  # todo setting love tasks again requires explicitly clear already existed tasks
+    if check_love_tasks_exist():
+        bot.send_message(message.chat.id,
+                         "Я НЕ ВЫДАЛ НОВЫЕ ЗАДАНИЯ. ЧТОБЫ ОЧИСТИТЬ СПИСОК СТАРЫХ ЗАДАНИЙ, НАЖМИ /love_clear")
         return
     players_in_love = []
     for player in active_players:
@@ -890,6 +892,16 @@ def love_all(message):
             lovers += '\n' * 2
         if lovers:
             bot.send_message(message.chat.id, lovers)
+
+
+@bot.message_handler(commands=["love_clear"])
+def love_clear(message):
+    if message.from_user.username not in config.root:
+        return
+    for player in active_players:
+        player.islove = False
+        player.pair = None
+        player.love_task = None
 
 
 def love_task_info(player):
