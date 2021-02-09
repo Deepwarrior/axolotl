@@ -728,7 +728,7 @@ def femka(message):
 
 
 # todo: replace with neovip
-love_chats = [debug_chat_id]
+love_chat = debug_chat_id
 
 
 @bot.message_handler(commands=["love_butts"])
@@ -774,27 +774,26 @@ def card_callback(call):
     func=lambda message: check_valentine(message))
 def love_send(message):
     hashtag = "#валентинка"
-    for chat in love_chats:
-        if message.content_type == 'text':
-            bot.send_message(chat, hashtag + "\n" + message.text)
-        else:
-            bot.send_message(chat, hashtag + "\n")
-            if message.content_type == 'sticker':
-                bot.send_sticker(chat, message.sticker.file_id)
-            if message.content_type == 'photo':
-                bot.send_photo(chat, message.photo[0].file_id, caption=message.caption)
-            if message.content_type == 'video':
-                bot.send_video(chat, message.video, caption=message.caption)
-            if message.content_type == 'video_note':
-                bot.send_video_note(chat, message.video_note.file_id)
-            if message.content_type == 'voice':
-                bot.send_voice(chat, message.voice.file_id)
-            if message.content_type == 'audio':
-                bot.send_audio(chat, message.audio.file_id, caption=message.caption)
-            if message.content_type == 'document':
-                bot.send_document(chat, message.document.file_id, caption=message.caption)
-            if message.content_type == 'animation':
-                bot.send_animation(chat, message.animation.file_id, caption=message.caption)
+    if message.content_type == 'text':
+        bot.send_message(love_chat, hashtag + "\n" + message.text)
+    else:
+        bot.send_message(love_chat, hashtag + "\n")
+        if message.content_type == 'sticker':
+            bot.send_sticker(love_chat, message.sticker.file_id)
+        if message.content_type == 'photo':
+            bot.send_photo(love_chat, message.photo[0].file_id, caption=message.caption)
+        if message.content_type == 'video':
+            bot.send_video(love_chat, message.video, caption=message.caption)
+        if message.content_type == 'video_note':
+            bot.send_video_note(love_chat, message.video_note.file_id)
+        if message.content_type == 'voice':
+            bot.send_voice(love_chat, message.voice.file_id)
+        if message.content_type == 'audio':
+            bot.send_audio(love_chat, message.audio.file_id, caption=message.caption)
+        if message.content_type == 'document':
+            bot.send_document(love_chat, message.document.file_id, caption=message.caption)
+        if message.content_type == 'animation':
+            bot.send_animation(love_chat, message.animation.file_id, caption=message.caption)
 
 
 def check_valentine(message):
@@ -825,7 +824,7 @@ def love_set(message):
     for player in active_players:
         if player.islove:
             try:
-                status = bot.get_chat_member(love_chats, player.user.id)
+                status = bot.get_chat_member(love_chat, player.user.id)
             except telebot.apihelper.ApiException:
                 continue
             if status and status.status in ["member", "creator", "administrator"] \
@@ -863,7 +862,7 @@ def love(message):
         for player in active_players:
             if player.islove:
                 try:
-                    status = bot.get_chat_member(love_chats, player.user.id)
+                    status = bot.get_chat_member(love_chat, player.user.id)
                 except telebot.apihelper.ApiException:
                     continue
                 if status and status.status in ["member", "creator",
