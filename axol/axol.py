@@ -851,6 +851,7 @@ def love_set(message):
             bot.send_message(player.user.id, player.love_task + ' \u2764 \u2764 \u2764')
         except telebot.apihelper.ApiException:
             continue
+    backup(None)
 
 
 @bot.message_handler(commands=["love_list"])
