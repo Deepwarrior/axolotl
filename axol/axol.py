@@ -814,7 +814,9 @@ def task_callback(call):
 
 # love commands for root
 @bot.message_handler(commands=["love_set"])
-def love_set(self):
+def love_set(message):
+    if message.from_user.username not in config.root:
+        return
     if check_love_tasks_exist():  # todo setting love tasks again requires explicitly clear already existed tasks
         return
     players_in_love = []
@@ -852,6 +854,8 @@ def love_set(self):
 
 @bot.message_handler(commands=["love_list"])
 def love(message):
+    if message.from_user.username not in config.root:
+        return
     answer = "LOVE IS EVERYWHERE: \n"
     if message.from_user.username in config.root:
         for player in active_players:
@@ -874,6 +878,8 @@ def love(message):
 
 @bot.message_handler(commands=["love_all"])
 def love_all(message):
+    if message.from_user.username not in config.root:
+        return
     if message.from_user.id == message.chat.id and message.from_user.username in config.root:
         lovers = ""
         for player in active_players:
