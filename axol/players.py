@@ -11,6 +11,7 @@ class Player:
                  islove=False, love_task=None, pair=None, gnome_status=-1, message=None,
                  dura_status=0, dura_num=0, isdura=False, has_a_shield=False, can_get_a_shield=True, dura_task=None,
                  dura_started=False, taskset=None, last_optional_task=0):
+        self.love_task = None
         self.user = Namespace(**user) if isinstance(user, dict) else user
         self.task_completed = task_completed
         self.last_mess = last_mess
