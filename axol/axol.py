@@ -728,8 +728,7 @@ def femka(message):
         bot.send_message(message.chat.id, ideal_spisok)
 
 
-# todo: replace with neovip
-love_chat = debug_chat_id
+love_chat = -1001468425190
 
 
 @bot.message_handler(commands=["love_butts"])
@@ -739,7 +738,7 @@ def love_buttons(message):
         return
     markup = teletypes.InlineKeyboardMarkup(row_width=2)
     reg_button = teletypes.InlineKeyboardButton("💫 ЗАРЕГАТЬСЯ", callback_data="reg_data")
-    send_card_button = teletypes.InlineKeyboardButton("💌 ОТПРАВИТЬ ВАЛЕНТИНКУ", callback_data="card_data")
+    send_card_button = teletypes.InlineKeyboardButton("💌 ОТПРАВИТЬ ВАЛЕНТИНКУ", callback_data="mock_data")
     check_task_button = teletypes.InlineKeyboardButton("💘 УЗНАТЬ ЗАДАНИЕ", callback_data="task_data")
     markup.add(*[reg_button, send_card_button, check_task_button])
 
@@ -751,10 +750,17 @@ def reg_callback(call):
     love_reg(call.message, call.from_user)
 
 
+@bot.callback_query_handler(func=lambda call: call.data == "mock_data")
+def mock_callback(call):
+    bot.send_message(call.message.chat.id, "ПОЧТОВЫЙ ЯЩИК ДЛЯ ВАЛЕНТИНОК ОТКРОЕТСЯ 14 ФЕВРАЛЯ, У ТЕБЯ ЕСТЬ ВРЕМЯ "
+                                           "ПОДГОТОВИТЬ ЗАМЕЧАТЕЛЬНЫЙ СЮРПРИЗ \u2764")
+
+
 def love_reg(message, user):
     player = findplayer(user)
     if not player.islove:
         player.islove = True
+        backup(None)
         bot.send_message(message.chat.id, "СПАСИБО ЗА РЕГИСТРАЦИЮ, КОТИК \u2764 \u2764 \u2764")
     else:
         bot.send_message(message.chat.id, "ТЫ УЖЕ В СПИСКЕ, ОЖИДАЙ НАЧАЛА ИГРЫ \u2764")
@@ -903,6 +909,7 @@ def love_clear(message):
         player.islove = False
         player.pair = None
         player.love_task = None
+    bot.send_message(message.chat.id, "СПИСОК ОЧИЩЕН")
 
 
 def love_task_info(player):
