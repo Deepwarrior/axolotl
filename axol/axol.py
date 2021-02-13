@@ -738,7 +738,7 @@ def love_buttons(message):
         return
     markup = teletypes.InlineKeyboardMarkup(row_width=2)
     reg_button = teletypes.InlineKeyboardButton("💫 ЗАРЕГАТЬСЯ", callback_data="reg_data")
-    send_card_button = teletypes.InlineKeyboardButton("💌 ОТПРАВИТЬ ВАЛЕНТИНКУ", callback_data="mock_data")
+    send_card_button = teletypes.InlineKeyboardButton("💌 ОТПРАВИТЬ ВАЛЕНТИНКУ", callback_data="card_data")
     check_task_button = teletypes.InlineKeyboardButton("💘 УЗНАТЬ ЗАДАНИЕ", callback_data="task_data")
     markup.add(*[reg_button, send_card_button, check_task_button])
 
@@ -771,7 +771,8 @@ def card_callback(call):
     force_send_card = teletypes.ForceReply()
     bot.send_message(call.message.chat.id, "С УДОВОЛЬСТВИЕМ ДОСТАВЛЮ ТВОЮ ВАЛЕНТИКУ! \u2764 "
                                            "\nНАПИШИ ТЕКСТ ИЛИ ОТПРАВЬ <s>NUDES</s> ФОТОЧКУ, ГОЛОС, КРУГЛОВИДЕО: "
-                                           "Я ЗАБОТЛИВО УПАКУЮ И ДОСТАВЛЮ ЧТО УГОДНО. В ЧАТИК И АНОНИМНО ;) "
+                                           "Я ЗАБОТЛИВО УПАКУЮ И ОТПРАВЛЮ ЧТО УГОДНО. ВАЛЕНТИНКИ ДРУГИХ ИГРОЧКОВ "
+                                           "МОЖЕШЬ НАЙТИ В ЧАТИКЕ ПО ХЕШТЕГУ #валентинка "
                                            "\n\n ЕСЛИ НЕ ХОЧЕШЬ НИЧЕГО ОТПРАВЛЯТЬ, ПРОСТО НЕ ОТВЕЧАЙ НА ЭТО СООБЩЕНИЕ",
                      reply_markup=force_send_card, parse_mode="HTML")
 
@@ -843,11 +844,11 @@ def love_set(message):
         player = players_in_love[i]
         pair = players_in_love[(i + 1) % lovers]
         player.pair = ""
-        if player.user.first_name:
+        if pair.user.first_name:
             player.pair += str(pair.user.first_name) + '\t'
-        if player.user.last_name:
+        if pair.user.last_name:
             player.pair += str(pair.user.last_name) + '\t'
-        if player.user.username:
+        if pair.user.username:
             player.pair += '@' + str(pair.user.username) + '\t'
         player.love_task = random.choice(config.love_tasks)
         try:
@@ -857,6 +858,7 @@ def love_set(message):
             bot.send_sticker(player.user.id, 'CAADAgADUgADsjRGHr5CgRYMzRQNAg')
             bot.send_message(player.user.id, player.love_task + ' \u2764 \u2764 \u2764')
         except telebot.apihelper.ApiException:
+            bot.send_message(debug_chat_id, "НЕ УДАЛОСЬ ОТПРАВИТЬ ЗАДАНИЕ ИГРОЧКУ @" + str(player.user.username))
             continue
     backup(None)
 
