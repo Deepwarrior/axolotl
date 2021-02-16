@@ -733,6 +733,8 @@ love_chat = -1001468425190
 
 @bot.message_handler(commands=["love_butts"])
 def love_buttons(message):
+    bot.send_message(message.chat.id, "Я ТОЖЕ ЛЮБЛЮ ЖОПКИ, ДА")
+    return
     if message.from_user.id != message.chat.id:
         bot.send_message(message.chat.id, "ДАВАЙ ПООБЩАЕМСЯ В ЛИЧКЕ ;)")
         return
@@ -747,13 +749,9 @@ def love_buttons(message):
 
 @bot.callback_query_handler(func=lambda call: call.data == "reg_data")
 def reg_callback(call):
+    bot.send_message(call.message.chat.id, "ТЫ ОПОЗДАЛ")
+    return
     love_reg(call.message, call.from_user)
-
-
-@bot.callback_query_handler(func=lambda call: call.data == "mock_data")
-def mock_callback(call):
-    bot.send_message(call.message.chat.id, "ПОЧТОВЫЙ ЯЩИК ДЛЯ ВАЛЕНТИНОК ОТКРОЕТСЯ 14 ФЕВРАЛЯ, У ТЕБЯ ЕСТЬ ВРЕМЯ "
-                                           "ПОДГОТОВИТЬ ЗАМЕЧАТЕЛЬНЫЙ СЮРПРИЗ \u2764")
 
 
 def love_reg(message, user):
@@ -768,6 +766,8 @@ def love_reg(message, user):
 
 @bot.callback_query_handler(func=lambda call: call.data == "card_data")
 def card_callback(call):
+    bot.send_message(call.message.chat.id, "ОТПРАВИЛ ТЕБЕ ЗА ЩЕКУ, ПРОВЕРЯЙ")
+    return
     force_send_card = teletypes.ForceReply()
     bot.send_message(call.message.chat.id, "С УДОВОЛЬСТВИЕМ ДОСТАВЛЮ ТВОЮ ВАЛЕНТИКУ! \u2764 "
                                            "\nНАПИШИ ТЕКСТ ИЛИ ОТПРАВЬ <s>NUDES</s> ФОТОЧКУ, ГОЛОС, КРУГЛОВИДЕО: "
@@ -812,6 +812,8 @@ def check_valentine(message):
 
 @bot.callback_query_handler(func=lambda call: call.data == "task_data")
 def task_callback(call):
+    bot.send_message(call.message.chat.id, "/my_task")
+    return
     player = findplayer(call.from_user)
     answer = love_task_info(player)
     if not answer:
