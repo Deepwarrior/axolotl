@@ -736,12 +736,14 @@ love_chat = -1001468425190
 
 @bot.message_handler(commands=["love_butts"])
 def love_buttons(message):
+    bot.send_message(message.chat.id, "Я ТОЖЕ ЛЮБЛЮ ЖОПКИ, ДА")
+    return
     if message.from_user.id != message.chat.id:
         bot.send_message(message.chat.id, "ДАВАЙ ПООБЩАЕМСЯ В ЛИЧКЕ ;)")
         return
     markup = teletypes.InlineKeyboardMarkup(row_width=2)
     reg_button = teletypes.InlineKeyboardButton("💫 ЗАРЕГАТЬСЯ", callback_data="reg_data")
-    send_card_button = teletypes.InlineKeyboardButton("💌 ОТПРАВИТЬ ВАЛЕНТИНКУ", callback_data="mock_data")
+    send_card_button = teletypes.InlineKeyboardButton("💌 ОТПРАВИТЬ ВАЛЕНТИНКУ", callback_data="card_data")
     check_task_button = teletypes.InlineKeyboardButton("💘 УЗНАТЬ ЗАДАНИЕ", callback_data="task_data")
     markup.add(*[reg_button, send_card_button, check_task_button])
 
@@ -750,13 +752,9 @@ def love_buttons(message):
 
 @bot.callback_query_handler(func=lambda call: call.data == "reg_data")
 def reg_callback(call):
+    bot.send_message(call.message.chat.id, "ТЫ ОПОЗДАЛ")
+    return
     love_reg(call.message, call.from_user)
-
-
-@bot.callback_query_handler(func=lambda call: call.data == "mock_data")
-def mock_callback(call):
-    bot.send_message(call.message.chat.id, "ПОЧТОВЫЙ ЯЩИК ДЛЯ ВАЛЕНТИНОК ОТКРОЕТСЯ 14 ФЕВРАЛЯ, У ТЕБЯ ЕСТЬ ВРЕМЯ "
-                                           "ПОДГОТОВИТЬ ЗАМЕЧАТЕЛЬНЫЙ СЮРПРИЗ \u2764")
 
 
 def love_reg(message, user):
@@ -771,10 +769,13 @@ def love_reg(message, user):
 
 @bot.callback_query_handler(func=lambda call: call.data == "card_data")
 def card_callback(call):
+    bot.send_message(call.message.chat.id, "ОТПРАВИЛ ТЕБЕ ЗА ЩЕКУ, ПРОВЕРЯЙ")
+    return
     force_send_card = teletypes.ForceReply()
     bot.send_message(call.message.chat.id, "С УДОВОЛЬСТВИЕМ ДОСТАВЛЮ ТВОЮ ВАЛЕНТИКУ! \u2764 "
                                            "\nНАПИШИ ТЕКСТ ИЛИ ОТПРАВЬ <s>NUDES</s> ФОТОЧКУ, ГОЛОС, КРУГЛОВИДЕО: "
-                                           "Я ЗАБОТЛИВО УПАКУЮ И ДОСТАВЛЮ ЧТО УГОДНО. В ЧАТИК И АНОНИМНО ;) "
+                                           "Я ЗАБОТЛИВО УПАКУЮ И ОТПРАВЛЮ ЧТО УГОДНО. ВАЛЕНТИНКИ ДРУГИХ ИГРОЧКОВ "
+                                           "МОЖЕШЬ НАЙТИ В ЧАТИКЕ ПО ХЕШТЕГУ #валентинка "
                                            "\n\n ЕСЛИ НЕ ХОЧЕШЬ НИЧЕГО ОТПРАВЛЯТЬ, ПРОСТО НЕ ОТВЕЧАЙ НА ЭТО СООБЩЕНИЕ",
                      reply_markup=force_send_card, parse_mode="HTML")
 
@@ -814,6 +815,8 @@ def check_valentine(message):
 
 @bot.callback_query_handler(func=lambda call: call.data == "task_data")
 def task_callback(call):
+    bot.send_message(call.message.chat.id, "/my_task")
+    return
     player = findplayer(call.from_user)
     answer = love_task_info(player)
     if not answer:
@@ -846,11 +849,11 @@ def love_set(message):
         player = players_in_love[i]
         pair = players_in_love[(i + 1) % lovers]
         player.pair = ""
-        if player.user.first_name:
+        if pair.user.first_name:
             player.pair += str(pair.user.first_name) + '\t'
-        if player.user.last_name:
+        if pair.user.last_name:
             player.pair += str(pair.user.last_name) + '\t'
-        if player.user.username:
+        if pair.user.username:
             player.pair += '@' + str(pair.user.username) + '\t'
         player.love_task = random.choice(config.love_tasks)
         try:
@@ -860,6 +863,7 @@ def love_set(message):
             bot.send_sticker(player.user.id, 'CAADAgADUgADsjRGHr5CgRYMzRQNAg')
             bot.send_message(player.user.id, player.love_task + ' \u2764 \u2764 \u2764')
         except telebot.apihelper.ApiException:
+            bot.send_message(debug_chat_id, "НЕ УДАЛОСЬ ОТПРАВИТЬ ЗАДАНИЕ ИГРОЧКУ @" + str(player.user.username))
             continue
     backup(None)
 
@@ -1959,8 +1963,8 @@ reaction_funcs = {"task_rework": task_rework, "task_fail": task_fail, "task_comp
                   "mem_react": mem_react, "anti_task": anti_task, "set_admin": set_admin, "whois": whois,
                   "stop_natalka": stop_natalka, "kick_citrus": kick_citrus, "kick_rels": kick_rels,
                   "kick_misha": kick_misha, "message_above": message_above, "alpha_change": alpha_change,
-                  "dura_approve": dura_approve, "dura_fail": dura_fail, "dura_win": dura_win, "why_yellow": why_yellow,
-                  "grammar_check": grammar_check
+                  "dura_approve": dura_approve, "dura_fail": dura_fail, "dura_win": dura_win,
+                  "why_yellow": ask_why_yellow, "grammar_check": grammar_check
                   }
 
 
