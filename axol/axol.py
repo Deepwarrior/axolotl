@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import re
+
 import config
 import os
 import telebot
@@ -38,7 +40,8 @@ alukr_chat = -1001031232765
 tipa_tri_skobki_chat = -1001246951967
 bitva_magov_chat = -1001272922314
 chto_chat = -1001479011046
-allow_chats = [-1001160037336, -1001492970087, debug_chat_id, -1001149068208, igroklub_chat, alukr_chat, chto_chat, -1001489975901]
+allow_chats = [-1001160037336, -1001492970087, debug_chat_id, -1001149068208, igroklub_chat, alukr_chat, chto_chat,
+               -1001489975901]
 all_timers = []
 current_task_funcs = []
 dura_chat = [bitva_magov_chat]
@@ -1920,13 +1923,18 @@ def dura_win(reaction, message):
             bot.send_sticker(message.chat.id, 'CAADAgAD2QADhzHUD6cgyh0aiKpjAg')
 
 
-def why_yellow(reaction, message):
-    answer = ""
-    for word in message.text.upper().split():
-        if "ЖОЛТ" in word:
-            answer += "ДА ПОЧЕМУ %s-ТО" % word
-            break
-    bot.send_message(message.chat.id, answer)
+def ask_why_yellow(reaction, message):
+    question = why_yellow(message.text)
+    if question:
+        bot.send_message(message.chat.id, question)
+
+
+def why_yellow(text):
+    result = ""
+    yellow = re.findall("[А-Я]*ЖОЛТ[А-Я]*", text.upper())
+    if yellow:
+        result += "ДА ПОЧЕМУ %s-ТО" % random.choice(yellow)
+    return result
 
 
 def grammar_check(reaction, message):
@@ -1955,8 +1963,8 @@ reaction_funcs = {"task_rework": task_rework, "task_fail": task_fail, "task_comp
                   "mem_react": mem_react, "anti_task": anti_task, "set_admin": set_admin, "whois": whois,
                   "stop_natalka": stop_natalka, "kick_citrus": kick_citrus, "kick_rels": kick_rels,
                   "kick_misha": kick_misha, "message_above": message_above, "alpha_change": alpha_change,
-                  "dura_approve": dura_approve, "dura_fail": dura_fail, "dura_win": dura_win, "why_yellow": why_yellow,
-                  "grammar_check": grammar_check
+                  "dura_approve": dura_approve, "dura_fail": dura_fail, "dura_win": dura_win,
+                  "why_yellow": ask_why_yellow, "grammar_check": grammar_check
                   }
 
 
@@ -2098,7 +2106,7 @@ def sticker_parsing(message):
     # if message.chat.id == debug_chat_id or message.chat.id == config.cifr_chat:
     #    bot.send_message(message.chat.id, '\'' + message.sticker.file_id + '\'\n',# + message.sticker.set_name,
     #                     reply_to_message_id=message.message_id)
-    #task_check(message)
+    # task_check(message)
     player = findplayer(message.from_user)
     player.last_mess = time.time()
     bot_AI(message)
@@ -2117,7 +2125,7 @@ def message_parsing(message):
                         else:
                             react(reaction, message)
                         break
-    #task_check(message)
+    # task_check(message)
     player = findplayer(message.from_user)
     player.last_mess = time.time()
     bot_AI(message)
