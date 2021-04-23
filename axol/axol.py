@@ -64,7 +64,7 @@ def zrena():
     timer = Timer(day, zrena)
     timer.start()
 
-    dlanechats = [dlan_chat, -1001200533121, -1001488372630]
+    dlanechats = [dlan_chat, -1001200533121, -1001142944044]
     for chat in dlanechats:
         try:
             rrena_bot.send_sticker(chat, 'CAADAgADLQADwt_QFaDEtP5SpCA4Ag')
@@ -75,7 +75,7 @@ def zrena():
 
 
 def skakanidy():
-    chat = -1001488372630
+    chat = -1001142944044
     try:
         rrena_bot.send_sticker(chat, 'CAADAgADAQADwt_QFTJzIDG-COPZAg')
         message = "ЧЕРЕЗ МИНУТУ ДЛАНЕПРЫГ. ВСЕМ ПИЛИТЬ MARRKUS"
@@ -90,7 +90,7 @@ def skakanidy():
 
 
 def kakavozik():
-    chat = -1001488372630
+    chat = -1001142944044
     try:
         rrena_bot.send_sticker(chat, 'CAADAgADNwADwt_QFXi2yLdkj-Y0FgQ')
         mess = rrena_bot.send_message(chat, "МОЙ ДАНЖ. МОЙ РУЛЬ. МОЯ ОТВЕТСТВЕННОСТЬ.")
