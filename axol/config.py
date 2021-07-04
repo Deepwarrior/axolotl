@@ -49,6 +49,11 @@ hermite_gaussian_modes = ['CAADAgADEQADkostA3DN6NzApx5JAg', 'CAADAgADEgADkostA9s
                         'CAADAgADFQADkostAzDcVqz6x2uLAg', 'CAADAgADFgADkostAwePB0bp3pSeAg',
                         'CAADAgADFwADkostA-f4qlzLnrlgAg', 'CAADAgADGAADkostA2DEeFePrPEjAg',
                         'CAADAgADGQADkostA-es84ySG9OSAg', 'CAADAgADGgADkostA7wf1LT8G0OKAg']
+
+catching_hands = ['CAACAgIAAxkBAAIfj2Dhr5le-2-RIfh0F5lvObNpzkEOAAKQDAAClbdISpDRkcowtEBDIAQ',
+                  'CAACAgIAAxkBAAIfkWDhr5vcvyWZ3y4atykH1qHczciQAAJ-DAACCpBJSm7YYJEOpGKiIAQ',
+                  'CAACAgIAAxkBAAIfk2Dhr51AcF6-4pEl1hFjs4-ymqPCAAI2CwACsvxRSqdq31wSCMJLIAQ']
+
 # format: message_list, sticker_list, user, reaction_messages_list, reaction_stickers_list, func for executing
 # "[[], [], 0, [], [], None],"
 reactions = [

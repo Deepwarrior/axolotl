@@ -2093,6 +2093,23 @@ def love_mute(message):
         return True
 
 
+caught = False
+
+
+def catch(message):
+    if message.chat.id != vip_chat_id:
+        return
+    global caught
+    if caught:
+        caught = False
+        bot.send_sticker(message.chat.id, random.choice(config.catching_hands))
+    else:
+        if random.randint(0, 1000) != 228:
+            return
+        caught = True
+        bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAIfjWDhr5dRAZlK_8xkJUEvrepeAW7_AAL_DAACtTNJSgfaJegf7oIIIAQ')
+
+
 @bot.message_handler(content_types=["sticker"])
 def sticker_parsing(message):
     notify(message)
@@ -2110,6 +2127,7 @@ def sticker_parsing(message):
     player = findplayer(message.from_user)
     player.last_mess = time.time()
     bot_AI(message)
+    catch(message)
 
 
 @bot.message_handler(content_types=["text"])
@@ -2129,6 +2147,7 @@ def message_parsing(message):
     player = findplayer(message.from_user)
     player.last_mess = time.time()
     bot_AI(message)
+    catch(message)
 
     if message.chat.id == vip_chat_id:
         text = message.text.upper()
@@ -2151,11 +2170,13 @@ def doc_parsing(message):
         bot.send_message(message.chat.id, '\'' + message.document.file_id + '\'',
                          reply_to_message_id=message.message_id)
     bot_AI(message)
+    catch(message)
 
 
 @bot.message_handler(content_types=["photo", "audio", "video", "video_note"])
 def other_parsing(message):
     bot_AI(message)
+    catch(message)
 
 
 if __name__ == '__main__':
