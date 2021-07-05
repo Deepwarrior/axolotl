@@ -49,6 +49,8 @@ fur_fur_fur_chat = -1001132289884
 dlan_chat = -1001172376896
 spy_chat = -1001231436175
 
+neftepepe_chat = -1001468425190
+
 last_mess = 0
 
 zrenki = [vip_chat_id, -1001345532965, fur_fur_fur_chat, dlan_chat, -1001117989911]
@@ -2093,21 +2095,29 @@ def love_mute(message):
         return True
 
 
-caught = False
-
-
 def catch(message):
-    if message.chat.id != vip_chat_id:
+    if message.chat.id != neftepepe_chat:
         return
-    global caught
-    if caught:
-        caught = False
-        bot.send_sticker(message.chat.id, random.choice(config.catching_hands))
-    else:
-        if random.randint(0, 1000) != 228:
-            return
-        caught = True
-        bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAIfjWDhr5dRAZlK_8xkJUEvrepeAW7_AAL_DAACtTNJSgfaJegf7oIIIAQ')
+    if random.randint(0, 1000) != 228:
+        return
+    catching_message = bot.send_sticker(message.chat.id,
+                                        'CAACAgIAAxkBAAIfjWDhr5dRAZlK_8xkJUEvrepeAW7_AAL_DAACtTNJSgfaJegf7oIIIAQ')
+    timer = Timer(20, podcleanitb_sledy, [catching_message])
+    timer.start()
+    bot.register_next_step_handler(catching_message, gotcha, timer=timer)
+
+
+def gotcha(message, timer):
+    timer.cancel()
+    bot.send_sticker(message.chat.id, random.choice(config.catching_hands))
+
+
+def podcleanitb_sledy(message):
+    try:
+        bot.clear_step_handler(message)
+        bot.delete_message(message.chat.id, message.message_id)
+    except telebot.apihelper.ApiException:
+        pass
 
 
 @bot.message_handler(content_types=["sticker"])
