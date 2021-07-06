@@ -49,6 +49,8 @@ fur_fur_fur_chat = -1001132289884
 dlan_chat = -1001172376896
 spy_chat = -1001231436175
 
+neftepepe_chat = -1001468425190
+
 last_mess = 0
 
 zrenki = [vip_chat_id, -1001345532965, fur_fur_fur_chat, dlan_chat, -1001117989911]
@@ -2093,6 +2095,31 @@ def love_mute(message):
         return True
 
 
+def catch(message):
+    if message.chat.id != neftepepe_chat:
+        return
+    if random.randint(0, 1000) != 228:
+        return
+    catching_message = bot.send_sticker(message.chat.id,
+                                        'CAACAgIAAxkBAAIfjWDhr5dRAZlK_8xkJUEvrepeAW7_AAL_DAACtTNJSgfaJegf7oIIIAQ')
+    timer = Timer(20, podcleanitb_sledy, [catching_message])
+    timer.start()
+    bot.register_next_step_handler(catching_message, gotcha, timer=timer)
+
+
+def gotcha(message, timer):
+    timer.cancel()
+    bot.send_sticker(message.chat.id, random.choice(config.catching_hands))
+
+
+def podcleanitb_sledy(message):
+    try:
+        bot.clear_step_handler(message)
+        bot.delete_message(message.chat.id, message.message_id)
+    except telebot.apihelper.ApiException:
+        pass
+
+
 @bot.message_handler(content_types=["sticker"])
 def sticker_parsing(message):
     notify(message)
@@ -2110,6 +2137,7 @@ def sticker_parsing(message):
     player = findplayer(message.from_user)
     player.last_mess = time.time()
     bot_AI(message)
+    catch(message)
 
 
 @bot.message_handler(content_types=["text"])
@@ -2129,6 +2157,7 @@ def message_parsing(message):
     player = findplayer(message.from_user)
     player.last_mess = time.time()
     bot_AI(message)
+    catch(message)
 
     if message.chat.id == vip_chat_id:
         text = message.text.upper()
@@ -2151,11 +2180,13 @@ def doc_parsing(message):
         bot.send_message(message.chat.id, '\'' + message.document.file_id + '\'',
                          reply_to_message_id=message.message_id)
     bot_AI(message)
+    catch(message)
 
 
 @bot.message_handler(content_types=["photo", "audio", "video", "video_note"])
 def other_parsing(message):
     bot_AI(message)
+    catch(message)
 
 
 if __name__ == '__main__':
