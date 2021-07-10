@@ -2166,6 +2166,7 @@ if __name__ == '__main__':
     f.close()
     zrena_timers_init()
     random.seed()
+    bot.skip_pending = True
     # bot.send_message(debug_chat_id, '*CAADAgADMgADsj* _RGHiKRfQaAeEsnAg_', parse_mode="Markdown")
     for chat in allow_chats:
         try:
