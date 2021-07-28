@@ -165,6 +165,12 @@ def jsonDefault(object):
     return object.__dict__
 
 
+@bot.message_handler(commands=["start"])
+def start(message):
+    if message.chat.id == message.from_user.id:
+        bot.send_message(message.chat.id, "ТЫ КТО?")
+
+
 # find and append players
 def findplayer(user):
     for player in active_players:
