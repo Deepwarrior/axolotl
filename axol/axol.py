@@ -105,12 +105,20 @@ def kakavozik():
 
 def remind():
     for chat in [debug_chat_id, vip_chat_id]:
-        try:
-            mess = bot.send_message(chat, "КАЖЕТСЯ, МЫ СТАЛИ ЗАБЫВАТЬ...")
-            something = random.randint(0, mess.message_id)
-            bot.send_message(chat, "/НАПОМИНАЕТ О ВЕЧНОМ ОБНОВЛЕНИИ ЛИКУЮЩЕЙ ПРИРОДЫ/", reply_to_message_id=something)
-        except telebot.apihelper.ApiException:
-            print("Ne to")
+        succeed = False
+        mess = bot.send_message(chat, "КАЖЕТСЯ, МЫ СТАЛИ ЗАБЫВАТЬ...")
+        limit = 100
+        for i in range(limit):
+            try:
+                reminder = random.randint(0, mess.message_id)
+                bot.send_message(chat, "/НАПОМИНАЕТ О ВЕЧНОМ ОБНОВЛЕНИИ ЛИКУЮЩЕЙ ПРИРОДЫ/",
+                                 reply_to_message_id=reminder)
+                succeed = True
+                break
+            except telebot.apihelper.ApiException:
+                pass
+        if not succeed:
+            print("Limit %d exceeded while trying to find nostalgy message!" % limit)
 
 
 def nostalgy():
