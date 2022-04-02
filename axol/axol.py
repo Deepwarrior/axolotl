@@ -2,6 +2,7 @@
 import re
 
 import config
+import converter
 import os
 import telebot
 import random
@@ -730,6 +731,148 @@ def femka(message):
             ideal_spisok += text + i.upper() + '\n'
         bot.send_message(message.chat.id, ideal_spisok)
 
+
+class Deal:
+    def __init__(self, message):
+        self.from_value = None
+        self.from_string = None
+        self.to_value = None
+        self.to_string = None
+        self.sum = None
+        self.id = str(message.chat.id) + "_" + str(message.id)
+
+
+deals = {}
+currency = {"Доллар 💵": "USD", "Евро 💶": "EUR", "Рубль 🇷🇺": "RUR", "Гривна 🇺🇦": "UAH"}
+
+
+@bot.message_handler(commands=["convert"])
+def convert(message):
+    try:
+        start_convert(message)
+    except telebot.apihelper.ApiException:
+        bot.send_message(message.chat.id, "Something went wrong", reply_markup=teletypes.ReplyKeyboardRemove())
+
+
+def start_convert(message, deal_id=None, forward_call=True):
+    markup = teletypes.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
+    for curr in currency.keys():
+        markup.add(curr)
+    markup.add('Отмена ❌')
+    msg = bot.send_message(message.chat.id, "ЧТО", reply_markup=markup)
+
+    if forward_call:
+        deal = Deal(message)
+        deals[deal.id] = deal
+        deal_id = deal.id
+    bot.register_next_step_handler(msg, from_call, deal_id=deal_id)
+
+
+def from_call(message, deal_id, forward_call=True):
+    deal = deals.get(deal_id)
+    if not deal:
+        return
+
+    if forward_call:
+        from_key = message.text
+        from_value = currency.get(from_key)
+        if not from_value:
+            cancel_convert(message, deal)
+            return
+        deal.from_value = from_value
+        deal.from_string = from_key
+
+    markup = teletypes.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
+    for curr in currency.keys():
+        if not curr == deal.from_string:
+            markup.add(curr)
+    set_operations_buttons(markup)
+
+    msg = bot.send_message(message.chat.id, "КУДА", reply_markup=markup)
+    bot.register_next_step_handler(msg, to_call, deal_id=deal.id)
+
+
+def to_call(message, deal_id, forward_call=True):
+    deal = deals.get(deal_id)
+    if not deal:
+        return
+
+    if forward_call:
+        to_key = message.text
+        to_value = currency.get(to_key)
+        if not to_value:
+            operation = convert_operations.get(to_key)
+            if not operation:
+                cancel_convert(message, deal)
+            else:
+                operation.__call__(message, deal, step=to_call)
+            return
+
+        deal.to_value = to_value
+        deal.to_string = to_key
+    markup = teletypes.ReplyKeyboardMarkup()
+    set_operations_buttons(markup)
+    msg = bot.send_message(message.chat.id, "СКОЛЬКО (НАТУРАЛЬНОЕ ЧИСЛО)",
+                           reply_markup=markup)
+    bot.register_next_step_handler(msg, sum_call, deal_id=deal_id)
+
+
+def sum_call(message, deal_id):
+    deal = deals.get(deal_id)
+    if not deal:
+        return
+
+    sum_text = message.text
+    if sum_text.isdigit():
+        sum_value = float(sum_text)
+        if sum_value < 1 or sum_value > 10e9:
+            cancel_convert(message, deal, text="ВРЁШЬ, НЕТ У ТЕБЯ ТАКИХ ДЕНЕГ")
+        else:
+            deal.sum = sum_value
+            proceed_deal(message, deal_id)
+    else:
+        operation = convert_operations.get(sum_text)
+        if not operation:
+            bot.send_message(message.chat.id, "ПОНИМАЮ ТОЛЬКО НАТУРАЛЬНЫЕ ЧИСЛА")
+            backward_convert(message, deal, step=proceed_deal)
+        else:
+            operation.__call__(message, deal, step=sum_call)
+
+
+def proceed_deal(message, deal_id):
+    deal = deals.get(deal_id)
+    if not deal:
+        return
+    text = "ЗАПРОС НА КОНВЕРТАЦИЮ:" \
+           "\nЧТО: " + deal.from_string + "\nКУДА: " + deal.to_string + "\nСКОЛЬКО: " + str(deal.sum)
+    result = converter.convert(deal.from_value, deal.to_value, deal.sum)
+    text += "\nМОЙ ОТВЕТ: " + str(result)
+
+    bot.send_message(message.chat.id, text, reply_markup=teletypes.ReplyKeyboardRemove())
+
+
+def cancel_convert(message, deal, text="ОТМЕНА, ОТМЕНА!", step=None):
+    delete_deal(deal)
+    bot.send_message(message.chat.id, text, reply_markup=teletypes.ReplyKeyboardRemove())
+
+
+def set_operations_buttons(markup):
+    for op in convert_operations.keys():
+        markup.add(op)
+
+
+def backward_convert(message, deal, step):
+    step_idx = steps.index(step)
+    prev_step = steps.__getitem__(step_idx - 2)
+    prev_step.__call__(message, deal.id, forward_call=False)
+
+
+def delete_deal(deal):
+    deals.pop(deal.id)
+
+
+convert_operations = {'Отмена ❌': cancel_convert, 'Назад 👈': backward_convert}
+steps = [start_convert, from_call, to_call, sum_call, proceed_deal]
 
 love_chat = -1001468425190
 
