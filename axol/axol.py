@@ -2,7 +2,7 @@
 import re
 
 import config
-import converter
+from converter import convert
 import os
 import telebot
 import random
@@ -845,7 +845,7 @@ def proceed_deal(message, deal_id):
         return
     text = "ЗАПРОС НА КОНВЕРТАЦИЮ:" \
            "\nЧТО: " + deal.from_string + "\nКУДА: " + deal.to_string + "\nСКОЛЬКО: " + str(deal.sum)
-    result = converter.convert(deal.from_value, deal.to_value, deal.sum)
+    result = convert(deal.from_value, deal.to_value, deal.sum)
     text += "\nМОЙ ОТВЕТ: " + str(result)
 
     bot.send_message(message.chat.id, text, reply_markup=teletypes.ReplyKeyboardRemove())
