@@ -57,6 +57,7 @@ zrenki = [vip_chat_id, -1001345532965, fur_fur_fur_chat, dlan_chat, -10011179899
 
 
 def zrena():
+    return
     for chat in zrenki:
         try:
             bot.send_sticker(chat, 'CAADAgADtAADP_vRD1iCbwT85WNIAg')
@@ -77,6 +78,7 @@ def zrena():
 
 
 def skakanidy():
+    return
     chat = -1001142944044
     try:
         rrena_bot.send_sticker(chat, 'CAADAgADAQADwt_QFTJzIDG-COPZAg')
@@ -92,6 +94,7 @@ def skakanidy():
 
 
 def kakavozik():
+    return
     chat = -1001142944044
     try:
         rrena_bot.send_sticker(chat, 'CAADAgADNwADwt_QFXi2yLdkj-Y0FgQ')
